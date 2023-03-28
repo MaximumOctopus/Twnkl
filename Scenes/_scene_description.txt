@@ -1,0 +1,185 @@
+// ============================================
+// camera
+// ============================================
+
+{camera
+width=
+height=
+focallength=
+from=x, y, z
+to=x, y, z
+up=x, y, z
+}
+
+// ============================================
+// light
+// ============================================
+
+{arealight
+colour=r, g, b
+position=x, y, z
+}
+
+{pointlight
+colour=r, g, b
+position=x, y, z
+}
+
+// ============================================
+// primitive
+// ============================================
+
+{objectcone
+name=
+}
+
+{objectcube
+name=
+}
+
+{objectcylinder
+name=
+minimum=
+maximum=
+closed=
+}
+
+{objectplane
+name=
+}
+
+{objectsphere
+name=
+}
+
+// ============================================
+// object with loaded geometry (obj file)
+// ============================================
+
+{objectmodel
+name=
+filename=
+}
+
+// ============================================
+// transform (applied to objects and patterns)
+// ============================================
+
+{transform
+type=translate
+xyz=x, y, z
+}
+
+{transform
+type=scale
+xyz=x, y, z
+}
+
+{transform
+type=rotatex
+angle=								// in radians
+}
+
+{transform
+type=rotatey
+angle=								// in radians
+}
+
+{transform
+type=rotatez
+angle=								// in radians
+}
+
+// ============================================
+// material
+// ============================================
+// all parameters are optional
+// default values are
+//     {material
+//     colour=1, 1, 1
+//     ambient=0.1
+//     diffuse=0.9
+//     reflectivity=0
+//     refractiveindex=1
+//     shininess=200
+//     specular=0.9
+//     transparency=0.0
+//     }
+
+{material
+colour=r, g, b
+ambient=							// 0.0 to 1.0
+diffuse=							// 0.0 to 1.0
+reflectivity=						// 0.0 to 1.0	
+refractiveindex=					// 1.0 to 5.0
+shininess=							// 0 and above (200-300 is a sweetspot)
+specular=							// 0.0 to 1.0
+transparency=						// 0.0 to 1.0
+}
+
+// ============================================
+// pattern #1
+// ============================================
+
+{patternchecker
+colour=r, g, b
+colour=r, g, b
+}
+
+{patterngradient
+colour=r, g, b
+colour=r, g, b
+}
+
+{patterngradient2
+colour=r, g, b
+colour=r, g, b
+}
+
+{patternring
+colour=r, g, b
+colour=r, g, b
+}
+
+{patternstripey
+colour=r, g, b
+colour=r, g, b
+}
+
+// ============================================
+// pattern #2
+// ============================================
+
+{cylinderchecker
+colour=r, g, b
+colour=r, g, b
+width=
+height=
+}
+
+{sphericalchecker
+colour=r, g, b
+colour=r, g, b
+width=
+height=
+}
+
+// ============================================
+// pattern #3
+// ============================================
+
+{planartexture
+process=greyscale
+filename=
+}
+
+// works best when width is 2x height (eg 256x128)
+{sphericaltexture
+process=greyscale
+filename=
+}
+
+{cubictexture
+process=greyscale
+filename=
+}

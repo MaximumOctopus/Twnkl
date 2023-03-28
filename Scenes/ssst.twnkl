@@ -1,0 +1,65 @@
+// demo from bonus chapter, rendering soft shadows
+//  http://raytracerchallenge.com/bonus/area-light.html
+{camera
+width=400
+height=160
+focallength=0.7854
+from=-3, 1, 2.5
+to=0, 0.5, 0
+up=0, 1, 0
+}
+{arealight
+colour=1.5, 1.5, 1.5
+position=-1, 2, 4
+uvector=2, 0, 0
+vvector=0, 2, 0
+}
+{objectplane
+name=floor
+}
+{material
+colour=1,1,1
+ambient=0.025
+diffuse=0.67
+specular=0
+}
+{objectsphere
+name=sphere
+}
+{material
+colour=1,0,0
+ambient=0.1
+specular=0
+diffuse=0.6
+reflectivity=0.3
+}
+{transform
+type=translate
+xyz=0.5, 0.5, 0
+}
+{transform
+type=scale
+xyz=0.5, 0.5, 0.5
+}
+{objectsphere
+name=sphere2
+}
+{material
+colour=0.5,0.5,1
+ambient=0.1
+specular=0
+diffuse=0.6
+reflectivity=0.3
+}
+{transform
+type=translate
+xyz=-0.25, 0.33, 0
+}
+{transform
+type=scale
+xyz=0.33, 0.33, 0.33
+}
+{transform
+type=scale
+xyz=0.33, 0.33, 0.33
+}

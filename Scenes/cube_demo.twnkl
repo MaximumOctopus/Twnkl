@@ -1,0 +1,191 @@
+// twnkl file for the scene found on the official forums
+// https://forum.raytracerchallenge.com/thread/4/reflection-refraction-scene-description
+{camera
+width=400
+height=200
+focallength=1.152
+from=-2.6, 1.5, -3.9
+to=-0.6, 1, -0.8
+up=0.0, 1.0, 0.0
+}
+{pointlight
+colour=1.0, 1.0, 1.0
+position=-4.9, 4.9, -1
+}
+{objectplane
+name=Floor
+}
+{transform
+type=rotatey
+angle=0.31415
+}
+{material
+specular=0
+reflectivity=0.4
+}
+{patternchecker
+colour=0.35, 0.35, 0.35
+colour=0.65, 0.65, 0.65
+}
+{objectplane
+name=ceiling
+}
+{transform
+type=translate
+xyz=0, 5.0, 0
+}
+{material
+colour=0.8, 0.8, 0.8
+ambient=0.3
+specular=0
+diffuse=0.4
+reflectivity=0.3
+}
+{patternstripey
+colour=0.45, 0.45, 0.45
+colour=0.55, 0.55, 0.55
+}
+{transform
+type=rotatey
+angle=1.5708
+}
+{transform
+type=scale
+xyz=0.25, 0.25, 0.25
+}
+{objectplane
+name=westwall
+}
+{transform
+type=translate
+xyz=-5.0, 0, 0
+}
+{transform
+type=rotatez
+angle=1.5708
+}
+{transform
+type=rotatey
+angle=1.5708
+}
+{material
+ambient=0
+diffuse=0.4
+specular=0
+reflectivity=0.3
+}
+{patternstripey
+colour=0.45, 0.45, 0.45
+colour=0.55, 0.55, 0.55
+}
+{transform
+type=scale
+xyz=0.25, 0.25, 0.25
+}
+{transform
+type=rotatey
+angle=1.5708
+}
+{objectplane
+name=eastwall
+}
+{transform
+type=translate
+xyz=5.0, 0, 0
+}
+{transform
+type=rotatez
+angle=1.5708
+}
+{transform
+type=rotatey
+angle=1.5708
+}
+{material
+ambient=0
+diffuse=0.4
+specular=0
+reflectivity=0.3
+}
+{patternstripey
+colour=0.45, 0.45, 0.45
+colour=0.55, 0.55, 0.55
+}
+{transform
+type=scale
+xyz=0.25, 0.25, 0.25
+}
+{transform
+type=rotatey
+angle=1.5708
+}
+{objectplane
+name=northwall
+}
+{transform
+type=translate
+xyz=0, 0, 5.0
+}
+{transform
+type=rotatex
+angle=1.5708
+}
+{material
+ambient=0
+diffuse=0.4
+specular=0
+reflectivity=0.3
+}
+{patternstripey
+colour=0.45, 0.45, 0.45
+colour=0.55, 0.55, 0.55
+}
+{transform
+type=scale
+xyz=0.25, 0.25, 0.25
+}
+{transform
+type=rotatey
+angle=1.5708
+}
+{objectplane
+name=southwall
+}
+{transform
+type=translate
+xyz=0, 0, -5.0
+}
+{transform
+type=rotatex
+angle=1.5708
+}
+{material
+ambient=0
+diffuse=0.4
+specular=0
+reflectivity=0.3
+}
+{patternstripey
+colour=0.45, 0.45, 0.45
+colour=0.55, 0.55, 0.55
+}
+{transform
+type=scale
+xyz=0.25, 0.25, 0.25
+}
+{transform
+type=rotatey
+angle=1.5708
+}
+{objectcube
+name=cube
+}
+{transform
+type=translate
+xyz=1.6, 1.0, 1.0
+}
+{material
+colour=0.8, 0.2, 0.3
+shininess=100
+reflectivity=0.4
+}

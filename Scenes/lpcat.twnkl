@@ -1,0 +1,51 @@
+// low poly cat texture test
+// https://thangs.com/designer/%C3%81rnost%20Mr%C3%A1zek/3d-model/Low%20Poly%20Cat-426527
+//
+{camera
+width=400
+height=200
+focallength=1.152
+from=-2.6, 1.5, -3.9
+to=-0.6, 1, -0.8
+up=0.0, 1.0, 0.0
+}
+{pointlight
+colour=1.0, 1.0, 1.0
+position=-4.9, 4.9, -1
+}
+{objectplane
+name=Floor
+}
+{transform
+type=rotatey
+angle=0.31415
+}
+{material
+specular=0
+reflectivity=0.4
+}
+{patternchecker
+colour=0.35, 0.35, 0.35
+colour=0.65, 0.65, 0.65
+}
+{objectmodel
+name=cat
+filename=objects/lpcat.obj
+}
+{transform
+type=translate
+xyz=-1.5, 0.0, 1.5
+}
+{transform
+type=scale
+xyz=0.02, 0.02, 0.02
+}
+{transform
+type=rotatex
+angle=4.71238898
+}
+{material
+colour=0.8, 0.5, 0.3
+shininess=50
+reflectivity=0.1
+}
