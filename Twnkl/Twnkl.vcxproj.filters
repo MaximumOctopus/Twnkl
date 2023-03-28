@@ -1,0 +1,404 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Matrix">
+      <UniqueIdentifier>{032636b3-fd16-4650-820a-efa23068faa4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Matrix">
+      <UniqueIdentifier>{b72c696b-1c70-4781-be8b-aa459b321fb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Intersects">
+      <UniqueIdentifier>{f065b120-e576-4fe4-b54a-424e2923d01d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Intersects">
+      <UniqueIdentifier>{8b440bc9-8496-44f0-9200-0461d9393479}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scene">
+      <UniqueIdentifier>{5fd80fb3-7d23-44bc-a9cd-384fe06ac233}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Scene">
+      <UniqueIdentifier>{3fb467ea-45c2-4671-96c4-238f791c9ab3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Properties">
+      <UniqueIdentifier>{ea2c4563-11b5-43bf-90f6-a7fb5d58256b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Properties">
+      <UniqueIdentifier>{2742c9de-a710-4f6a-b7a2-36a8e7e59984}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Parameters">
+      <UniqueIdentifier>{be7626a1-8007-4da9-b420-cc6ec8e6dc0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Parameters">
+      <UniqueIdentifier>{6e47cc92-36cc-47c3-b202-06c2d747ab62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Patterns">
+      <UniqueIdentifier>{2bd76fc5-4c52-4ea1-9a84-5e18092d4f13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Patterns">
+      <UniqueIdentifier>{c4945b3e-9962-47f4-b904-9d84e0221335}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Help">
+      <UniqueIdentifier>{89f7d14a-d9e9-4a6c-bac3-aad8a79cc379}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Help">
+      <UniqueIdentifier>{b89dba97-ab5f-4607-839d-a915e46328cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility">
+      <UniqueIdentifier>{99bc2e05-052d-4a1a-99b5-ee05353d4abc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utility">
+      <UniqueIdentifier>{e9a7d613-996f-43e5-901e-874abf378eaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Patterns\Mapped">
+      <UniqueIdentifier>{5a5aa440-0af7-471b-9b66-3b32988610bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Patterns\Mapped">
+      <UniqueIdentifier>{1ad270fd-0bc0-4599-9749-449908d4d107}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Patterns\Mapped\Sphere">
+      <UniqueIdentifier>{75e2b098-4c8b-42a1-93c6-ae5ef35e1369}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Patterns\Mapped\Sphere">
+      <UniqueIdentifier>{a4821332-f182-435c-84ec-bd74341bb6d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Patterns\Mapped\Plane">
+      <UniqueIdentifier>{561f5443-dcc3-4a25-82cc-b101c3ba00fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Patterns\Mapped\Plane">
+      <UniqueIdentifier>{11bb3e0c-c9d2-4a6a-89b6-592c8f61a674}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Patterns\Mapped\Cylinder">
+      <UniqueIdentifier>{941fb423-f59e-448c-840a-948757f07aa7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Patterns\Mapped\Cylinder">
+      <UniqueIdentifier>{5754938c-3e37-4e1d-afb1-dc374a6c42b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Patterns\Mapped\Cube">
+      <UniqueIdentifier>{a865a7f8-6b30-41c1-801a-bb85730c2b1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Patterns\Mapped\Cube">
+      <UniqueIdentifier>{46c01964-5e9a-47b6-a55f-4d7b08abe46a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Primitives">
+      <UniqueIdentifier>{988825da-9574-4285-9026-3c53aae9c968}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Primitives">
+      <UniqueIdentifier>{5f5e4774-56a6-446a-88aa-362f4150d048}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Lights">
+      <UniqueIdentifier>{cbf9b34d-e3b2-42e6-9feb-ba2cff5a9418}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Lights">
+      <UniqueIdentifier>{c02a6fe9-f178-42bb-bfca-fc507de7215d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Twnkl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix4.cpp">
+      <Filter>Source Files\Matrix</Filter>
+    </ClCompile>
+    <ClCompile Include="Intersections.cpp">
+      <Filter>Source Files\Intersects</Filter>
+    </ClCompile>
+    <ClCompile Include="Intersect.cpp">
+      <Filter>Source Files\Intersects</Filter>
+    </ClCompile>
+    <ClCompile Include="Computation.cpp">
+      <Filter>Source Files\Intersects</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion.cpp">
+      <Filter>Source Files\Matrix</Filter>
+    </ClCompile>
+    <ClCompile Include="PhongMaterial.cpp">
+      <Filter>Source Files\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="Colour.cpp">
+      <Filter>Source Files\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="Ray.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Configuration.cpp">
+      <Filter>Source Files\Parameters</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Source Files\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Sphere.cpp">
+      <Filter>Source Files\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Plane.cpp">
+      <Filter>Source Files\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Stripey.cpp">
+      <Filter>Source Files\Patterns</Filter>
+    </ClCompile>
+    <ClCompile Include="Pattern.cpp">
+      <Filter>Source Files\Patterns</Filter>
+    </ClCompile>
+    <ClCompile Include="Gradient.cpp">
+      <Filter>Source Files\Patterns</Filter>
+    </ClCompile>
+    <ClCompile Include="Ring.cpp">
+      <Filter>Source Files\Patterns</Filter>
+    </ClCompile>
+    <ClCompile Include="Checkerboard.cpp">
+      <Filter>Source Files\Patterns</Filter>
+    </ClCompile>
+    <ClCompile Include="Gradient2.cpp">
+      <Filter>Source Files\Patterns</Filter>
+    </ClCompile>
+    <ClCompile Include="Help.cpp">
+      <Filter>Source Files\Help</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>Source Files\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="TestPattern.cpp">
+      <Filter>Source Files\Patterns</Filter>
+    </ClCompile>
+    <ClCompile Include="DateUtility.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Formatting.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Cylinder.cpp">
+      <Filter>Source Files\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Cone.cpp">
+      <Filter>Source Files\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="SmoothTriangle.cpp">
+      <Filter>Source Files\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Triangle.cpp">
+      <Filter>Source Files\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Ini.cpp">
+      <Filter>Source Files\Parameters</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Source Files\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="SphericalCheckerboard.cpp">
+      <Filter>Source Files\Patterns\Mapped\Sphere</Filter>
+    </ClCompile>
+    <ClCompile Include="SphericalTexture.cpp">
+      <Filter>Source Files\Patterns\Mapped\Sphere</Filter>
+    </ClCompile>
+    <ClCompile Include="CylinderCheckerboard.cpp">
+      <Filter>Source Files\Patterns\Mapped\Cylinder</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeTexture.cpp">
+      <Filter>Source Files\Patterns\Mapped\Cube</Filter>
+    </ClCompile>
+    <ClCompile Include="PlanarTexture.cpp">
+      <Filter>Source Files\Patterns\Mapped\Plane</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureLoader.cpp">
+      <Filter>Source Files\Patterns\Mapped</Filter>
+    </ClCompile>
+    <ClCompile Include="CylinderTexture.cpp">
+      <Filter>Source Files\Patterns\Mapped\Cylinder</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneLoader.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Bounds.cpp">
+      <Filter>Source Files\Matrix</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="AreaLight.cpp">
+      <Filter>Source Files\Lights</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>Source Files\Lights</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix4.h">
+      <Filter>Header Files\Matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="Intersections.h">
+      <Filter>Header Files\Intersects</Filter>
+    </ClInclude>
+    <ClInclude Include="Intersect.h">
+      <Filter>Header Files\Intersects</Filter>
+    </ClInclude>
+    <ClInclude Include="Computation.h">
+      <Filter>Header Files\Intersects</Filter>
+    </ClInclude>
+    <ClInclude Include="Quaternion.h">
+      <Filter>Header Files\Matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="PhongMaterial.h">
+      <Filter>Header Files\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="Colour.h">
+      <Filter>Header Files\Properties</Filter>
+    </ClInclude>
+    <ClInclude Include="Ray.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Configuration.h">
+      <Filter>Header Files\Parameters</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfigurationConstants.h">
+      <Filter>Header Files\Parameters</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Plane.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Stripey.h">
+      <Filter>Header Files\Patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="Pattern.h">
+      <Filter>Header Files\Patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="Gradient.h">
+      <Filter>Header Files\Patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="Ring.h">
+      <Filter>Header Files\Patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="Checkerboard.h">
+      <Filter>Header Files\Patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="Gradient2.h">
+      <Filter>Header Files\Patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="Help.h">
+      <Filter>Header Files\Help</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="TestPattern.h">
+      <Filter>Header Files\Patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="DateUtility.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Formatting.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Cylinder.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Cone.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Triangle.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="SmoothTriangle.h">
+      <Filter>Header Files\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Ini.h">
+      <Filter>Header Files\Parameters</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bounds.h">
+      <Filter>Header Files\Matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="SphericalCheckerboard.h">
+      <Filter>Header Files\Patterns\Mapped\Sphere</Filter>
+    </ClInclude>
+    <ClInclude Include="SphericalTexture.h">
+      <Filter>Header Files\Patterns\Mapped\Sphere</Filter>
+    </ClInclude>
+    <ClInclude Include="CylinderCheckerboard.h">
+      <Filter>Header Files\Patterns\Mapped\Cylinder</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeTexture.h">
+      <Filter>Header Files\Patterns\Mapped\Cube</Filter>
+    </ClInclude>
+    <ClInclude Include="PlanarTexture.h">
+      <Filter>Header Files\Patterns\Mapped\Plane</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureLoader.h">
+      <Filter>Header Files\Patterns\Mapped</Filter>
+    </ClInclude>
+    <ClInclude Include="CylinderTexture.h">
+      <Filter>Header Files\Patterns\Mapped\Cylinder</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneLoader.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="AreaLight.h">
+      <Filter>Header Files\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>Header Files\Lights</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Twnkl.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
