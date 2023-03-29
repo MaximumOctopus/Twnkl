@@ -11,17 +11,6 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 
-#include "../Twnkl/Gradient.cpp"
-#include "../Twnkl/Gradient2.cpp"
-#include "../Twnkl/Ring.cpp"
-#include "../Twnkl/Stripey.cpp"
-#include "../Twnkl/SphericalCheckerboard.cpp"
-
-#include "../Twnkl/Cone.cpp"
-#include "../Twnkl/Cube.cpp"
-#include "../Twnkl/Cylinder.cpp"
-#include "../Twnkl/Model.cpp"
-
 #include "../Twnkl/Camera.cpp"
 #include "../Twnkl/Computation.cpp"
 #include "../Twnkl/Colour.cpp"
@@ -64,7 +53,9 @@ namespace TwnklTestsChapter11
 
 			Computation c = i.PrepareComputation(0, r);
 
-			Assert::IsTrue(c.ReflectVector.Equals(Quaternion(0, sqrt(2) / 2, sqrt(2) / 2, 0)));
+			Quaternion expected(0, sqrt(2) / 2, sqrt(2) / 2, 0);
+
+			Assert::IsTrue(c.ReflectVector.Equals(expected));
 		}
 
 		TEST_METHOD(Page144_1)
@@ -558,7 +549,7 @@ namespace TwnklTestsChapter11
 
 			Computation c = i.PrepareComputation(0, r);
 
-			Assert::IsTrue(c.UnderPoint.z > (0.0001 / 2) && c.Point.z < c.UnderPoint.z);
+			Assert::IsTrue(c.UnderPoint.z > (0.0001 / 2) && c.OverPoint.z < c.UnderPoint.z);
 		}
 
 		TEST_METHOD(Page155)

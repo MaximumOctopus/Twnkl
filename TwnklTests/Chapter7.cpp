@@ -51,7 +51,7 @@ namespace TwnklTestsChapter7
 
 			Logger::WriteMessage(output.c_str());
 
-			Assert::IsTrue(Quaternion(0, 0, -1, 1).Equals(c.Point));
+			Assert::IsTrue(Quaternion(0, 0, -1, 1).Equals(c.OverPoint));  // should be point (optimised-out)
 		}
 
 		TEST_METHOD(Page95)
@@ -72,7 +72,7 @@ namespace TwnklTestsChapter7
 
 			Computation c = i.PrepareComputation(0, r);
 
-			std::wstring output = c.EyeVector.ToString() + L" " + c.Point.ToString();
+			std::wstring output = c.EyeVector.ToString() + L" " + c.OverPoint.ToString(); // should be point (optimised-out)
 
 			Logger::WriteMessage(output.c_str());
 

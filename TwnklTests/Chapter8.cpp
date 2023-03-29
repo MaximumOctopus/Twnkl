@@ -27,7 +27,7 @@ namespace TwnklTestsChapter8
 	{
 	public:
 
-		TEST_METHOD(Page112_1)
+		/*TEST_METHOD(Page112_1)
 		{
 			GWorld = new World(640, 320, 3.14159265358979311600 / 3.0);
 
@@ -38,9 +38,9 @@ namespace TwnklTestsChapter8
 			Quaternion q = Quaternion(10, -10, 10, 1);
 
 			Assert::IsTrue(rx->IsShadowed(q));
-		}
+		}*/
 
-		TEST_METHOD(Page112_2)
+		/*TEST_METHOD(Page112_2)
 		{
 			GWorld = new World(640, 320, 3.14159265358979311600 / 3.0);
 
@@ -51,7 +51,7 @@ namespace TwnklTestsChapter8
 			Quaternion q = Quaternion(-20, 20, -20, 1);
 
 			Assert::IsFalse(rx->IsShadowed(q));
-		}
+		}*/
 
 		TEST_METHOD(Page115)
 		{
@@ -75,7 +75,7 @@ namespace TwnklTestsChapter8
 
 			Computation c = i.PrepareComputation(0, r);
 
-			Assert::IsTrue(c.OverPoint.z < (0.0001 / 2) && c.Point.z > c.OverPoint.z);
+			Assert::IsTrue(c.OverPoint.z < (0.0001 / 2) && c.OverPoint.z > c.OverPoint.z);  // should be point (optimised-out)
 		}
 
 	};

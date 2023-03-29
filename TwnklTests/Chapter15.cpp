@@ -29,7 +29,9 @@ namespace TwnklTestsChapter15
 			Triangle tringle = Triangle(L"");
 			tringle.SetPoints(Quaternion(0, 1, 0, 1), Quaternion(-1, 0, 0, 1), Quaternion(1, 0, 0, 1));
 
-			Assert::IsTrue(tringle.e1.Equals(Quaternion(-1, -1, 0, 0)));
+			Quaternion expected(-1, -1, 0, 0);
+
+			Assert::IsTrue(tringle.e1.Equals(expected));
 		}
 
 		TEST_METHOD(Page208_2)
@@ -37,7 +39,9 @@ namespace TwnklTestsChapter15
 			Triangle tringle = Triangle(L"");
 			tringle.SetPoints(Quaternion(0, 1, 0, 1), Quaternion(-1, 0, 0, 1), Quaternion(1, 0, 0, 1));
 
-			Assert::IsTrue(tringle.e2.Equals(Quaternion(1, -1, 0, 0)));
+			Quaternion expected(1, -1, 0, 0);
+
+			Assert::IsTrue(tringle.e2.Equals(expected));
 		}
 
 		TEST_METHOD(Page208_3)
@@ -45,7 +49,9 @@ namespace TwnklTestsChapter15
 			Triangle tringle = Triangle(L"");
 			tringle.SetPoints(Quaternion(0, 1, 0, 1), Quaternion(-1, 0, 0, 1), Quaternion(1, 0, 0, 1));
 
-			Assert::IsTrue(tringle.Normal.Equals(Quaternion(0, 0, -1, 0)));
+			Quaternion expected(0, 0, -1, 0);
+
+			Assert::IsTrue(tringle.Normal.Equals(expected));
 		}
 
 		TEST_METHOD(Page209_1)

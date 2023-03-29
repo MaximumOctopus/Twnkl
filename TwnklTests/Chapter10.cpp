@@ -35,7 +35,9 @@ namespace TwnklTestsChapter10
 			TestPattern* tp = new TestPattern(L"TestPattern");
 			p->SetPattern(tp);
 
-			Colour col = tp->ColourAt(s, Quaternion(2, 3, 4, 1));
+			Quaternion qpos(2, 3, 4, 1);
+
+			Colour col = tp->ColourAt(s, qpos);
 
 			Logger::WriteMessage(col.ToString().c_str());
 
@@ -52,7 +54,9 @@ namespace TwnklTestsChapter10
 			tp->Finalise();
 			p->SetPattern(tp);
 
-			Colour col = tp->ColourAt(s, Quaternion(2, 3, 4, 1));
+			Quaternion qpos(2, 3, 4, 1);
+
+			Colour col = tp->ColourAt(s, qpos);
 
 			Logger::WriteMessage(col.ToString().c_str());
 
@@ -71,7 +75,9 @@ namespace TwnklTestsChapter10
 			tp->Finalise();
 			p->SetPattern(tp);
 
-			Colour col = tp->ColourAt(s, Quaternion(2.5, 3, 3.5, 1));
+			Quaternion qpos(2.5, 3, 3.5, 1);
+
+			Colour col = tp->ColourAt(s, qpos);
 
 			Logger::WriteMessage(col.ToString().c_str());
 

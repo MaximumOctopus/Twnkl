@@ -105,18 +105,26 @@ namespace TwnklTestsMatrix
 		{
 			Quaternion q = Quaternion(5, 10, 15, 20);
 
-			q.Add(Quaternion(3, 4, -5, 10));
+			Quaternion add(3, 4, -5, 10);
 
-			Assert::IsTrue(q.Equals(Quaternion(8, 14, 10, 30)));
+			q.Add(add);
+
+			Quaternion expected(8, 14, 10, 30);
+
+			Assert::IsTrue(q.Equals(expected));
 		}
 
 		TEST_METHOD(QuaternionSub)
 		{
 			Quaternion q = Quaternion(5, 10, 15, 20);
 
-			q.Sub(Quaternion(3, 4, -5, 10));
+			Quaternion sub(3, 4, -5, 10);
 
-			Assert::IsTrue(q.Equals(Quaternion(2, 6, 20, 10)));
+			q.Sub(sub);
+
+			Quaternion expected(2, 6, 20, 10);
+
+			Assert::IsTrue(q.Equals(expected));
 		}
 
 		TEST_METHOD(QuaternionScale)
@@ -125,7 +133,9 @@ namespace TwnklTestsMatrix
 
 			q.Scale(5);
 
-			Assert::IsTrue(q.Equals(Quaternion(25, 50, 75, 100)));
+			Quaternion expected(25, 50, 75, 100);
+
+			Assert::IsTrue(q.Equals(expected));
 		}
 
 		TEST_METHOD(QuaternionScale2)
@@ -134,7 +144,9 @@ namespace TwnklTestsMatrix
 
 			q.Scale(-2);
 
-			Assert::IsTrue(q.Equals(Quaternion(-10, -20, -30, -40)));
+			Quaternion expected(-10, -20, -30, -40);
+
+			Assert::IsTrue(q.Equals(expected));
 		}
 
 		TEST_METHOD(Page80_1)
@@ -149,7 +161,9 @@ namespace TwnklTestsMatrix
 
 			Quaternion q = o.NormalAt(n);
 
-			Assert::IsTrue(q.Equals(Quaternion(0, 0.70711, -0.70711, 0)));
+			Quaternion expected(0, 0.70711, -0.70711, 0);
+
+			Assert::IsTrue(q.Equals(expected));
 		}
 
 		TEST_METHOD(Page80_2)
@@ -158,7 +172,9 @@ namespace TwnklTestsMatrix
 
 			Matrix4 m = Matrix4(0, 1.0, 0.5, 1.0);
 
-			o.SetTransform(m.MultM(Matrix4(2, 0.6283185307)));
+			Matrix4 zrotate(2, 0.6283185307);
+
+			o.SetTransform(m.MultM(zrotate));
 
 			o.CreateInverseTransform();
 
@@ -166,7 +182,9 @@ namespace TwnklTestsMatrix
 
 			Quaternion q = o.NormalAt(l);
 
-			Assert::IsTrue(q.Equals(Quaternion(0, 0.97014, -0.24254, 0)));
+			Quaternion expected(0, 0.97014, -0.24254, 0);
+
+			Assert::IsTrue(q.Equals(expected));
 		}
 
 		TEST_METHOD(Page83_1)
@@ -176,7 +194,9 @@ namespace TwnklTestsMatrix
 
 			Quaternion r = v.Reflect(n);
 
-			Assert::IsTrue(r.Equals(Quaternion(1, 1, 0, 0)));
+			Quaternion expected(1, 1, 0, 0);
+
+			Assert::IsTrue(r.Equals(expected));
 		}
 
 
@@ -187,7 +207,9 @@ namespace TwnklTestsMatrix
 
 			Quaternion r = v.Reflect(n);
 
-			Assert::IsTrue(r.Equals(Quaternion(1, 0, 0, 0)));
+			Quaternion expected(1, 0, 0, 0);
+
+			Assert::IsTrue(r.Equals(expected));
 		}
 	};
 }
