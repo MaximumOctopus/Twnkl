@@ -1,4 +1,4 @@
-// cylinder test texture
+// cylinder texture test
 //
 {camera
 width=400
@@ -36,6 +36,14 @@ closed=yes
 {transform
 type=translate
 xyz=0.6, 0.0, 1.0
+}
+{transform
+type=scale
+xyz=1.0, 2.0, 1.0
+}
+{transform
+type=rotatey
+angle=4.712389
 }
 {material
 colour=0.8, 0.5, 0.3
