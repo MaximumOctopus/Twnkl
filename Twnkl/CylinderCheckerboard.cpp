@@ -60,7 +60,7 @@ std::pair<double, double> CylinderCheckerboard::CylindricalMap(Quaternion& p)
 	double u = 1.0 - (raw_u + 0.5);
 
 	// let v go from 0 to 1 between whole units of y
-	double v = static_cast<int>(floor(p.y)) % 1;
+	double v = fmod(p.y, 1.0);
 
 	return { u, v };
 }

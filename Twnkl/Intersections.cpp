@@ -42,6 +42,27 @@ int Intersections::LowestNonNegative()
 }
 
 
+// must only be used on a sorted list!
+// is the lowest value above zero also less than distance?
+bool Intersections::LowestNonNegativeLessDistance(double distance)
+{
+	for (int t = 0; t < List.size(); t++)
+	{
+		if (List[t].Tvalue > 0)
+		{
+			if (List[t].Tvalue < distance)
+			{
+				return true;
+			}
+
+			return false;
+		}
+	}
+
+	return false;
+}
+
+
 Computation Intersections::PrepareComputation(int hit_object_id, Ray& r)
 {
 	//std::wcout << L"PC() List " << ToString() << L"\n";

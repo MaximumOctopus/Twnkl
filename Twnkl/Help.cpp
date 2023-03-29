@@ -38,8 +38,8 @@ namespace Help
 		std::wcout << L"                                 default is 0 (off)\n";
 		std::wcout << L"    /recursion:x               : reflection/refraction ray recursion\n";
 		std::wcout << L"                                 default is 5\n";
-		std::wcout << L"    /shadow:x                  : shadow detail\n";
-		std::wcout << L"                                 default is 0 (off)\n";
+		std::wcout << L"    /shadow:x                  : shadow detail (only valid for area lights)\n";
+		std::wcout << L"                                 default is 5\n";
 		std::wcout << L"\n";
 		std::wcout << L"    /debug	                   : shows various debug output\n";
 		std::wcout << L"                                 (includes scene debug)\n";

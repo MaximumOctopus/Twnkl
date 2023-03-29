@@ -36,8 +36,6 @@ int wmain(int argc, wchar_t* argv[])
 
 	GConfiguration = new Configuration(argc, argv);
 
-	//return 0;
-
 	GWorld = new World(GConfiguration->Render.ImageWidth, GConfiguration->Render.ImageHeight, 1.152);
 
 	SceneLoader loader(GConfiguration->Render.SceneFileName, GConfiguration->Render.ShadowDetail);
@@ -46,16 +44,16 @@ int wmain(int argc, wchar_t* argv[])
 	{
 		if (!GWorld->Finalise())
 		{
-		//	if (GConfiguration->Meta.Debug)
-//			{
+			if (GConfiguration->Meta.Debug)
+			{
 				GWorld->ToString();
-	//		}
+			}
 
 			if (GWorld->Objects.size() > 0 && GWorld->Lights.size() > 0)
 			{
 				Renderer rx = Renderer();
 
-				rx.Render(0);
+				rx.Render(GConfiguration->Render.SamplesPerPixel);
 
 				if (!GWorld->SaveCanvasToFile(Utility::ProcessFileName(GConfiguration->Render.ImageFileName)))
 				{

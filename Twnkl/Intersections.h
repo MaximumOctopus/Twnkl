@@ -30,6 +30,7 @@ public:
 	void Sort();
 
 	[[nodiscard]] int LowestNonNegative();
+	[[nodiscard]] bool LowestNonNegativeLessDistance(double);
 
 	[[nodiscard]] Computation PrepareComputation(int, Ray&);
 

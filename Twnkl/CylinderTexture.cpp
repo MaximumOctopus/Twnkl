@@ -46,13 +46,13 @@ Colour CylinderTexture::UVColourAt(double u, double v)
 
 std::pair<double, double> CylinderTexture::CylindricalMap(Quaternion& p)
 {
-	// compute the azimuthal angle, same as with spherical_map()
+	// compute the azimuthal angle, same as sphericalmap()
 	double theta = atan2(p.x, p.z);
 	double raw_u = theta / (2.0 * 3.1415926535);
 	double u = 1.0 - (raw_u + 0.5);
 
 	// let v go from 0 to 1 between whole units of y
-	double v = static_cast<int>(floor(p.y)) % 1;
+	double v = fmod(p.y, 1.0);
 
 	return { u, v };
 }
@@ -60,5 +60,5 @@ std::pair<double, double> CylinderTexture::CylindricalMap(Quaternion& p)
 
 std::wstring CylinderTexture::ToString()
 {
-	return L"#1 " + Colours[0].ToString() + L" #2 " + Colours[1].ToString();
+	return L"Dimensions " + std::to_wstring(Width) + L" x " + std::to_wstring(Height);
 }

@@ -179,10 +179,13 @@ Ray Renderer::RayForPixelSS(double x, double y)
 }
 
 
+// =================================================================================
+// == Lighting =====================================================================
+// =================================================================================
+
+
 Colour Renderer::ReflectedColour(Computation& c, int recursion)
 {
-	//std::wcout << L"reflectivity " << GWorld->Objects[c.ObjectID]->Material->Reflectivity << L"\n";
-
 	if (GWorld->Objects[c.ObjectID]->Material->Reflectivity < epsilon || recursion <= 0)
 	{
 		return Colour(0, 0, 0);
@@ -225,8 +228,6 @@ Colour Renderer::RefractedColour(Computation& c, int recursion)
 		0);
 
 	Ray refract_ray = Ray(c.UnderPoint.x, c.UnderPoint.y, c.UnderPoint.z, direction.x, direction.y, direction.z);
-
-	//std::wcout << L"    RC() " << c.ObjectID << L" col " << cat.ToString() << L" * " << cat.Mult(GWorld->Objects[c.ObjectID]->Material->Transparency).ToString() << L"\n";
 
 	const Colour cat = ColourAt(refract_ray, recursion - 1).Mult(GWorld->Objects[c.ObjectID]->Material->Transparency);
 
@@ -357,16 +358,7 @@ bool Renderer::IsShadowed(Quaternion& position, Quaternion& point)
 	
 	IntersectsWorld(r);
 
-	int i = intersections.LowestNonNegative();
-
-	if (i == -1) return false;
-
-	if (intersections.List[i].Tvalue < distance)
-	{
-		return true;
-	}
-
-	return false;
+	return intersections.LowestNonNegativeLessDistance(distance);
 }
 
 

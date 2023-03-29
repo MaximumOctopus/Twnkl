@@ -118,20 +118,6 @@ Colour CubeTexture::ColourAt(Object* o, Quaternion& q)
 	else 
 		uv = CubeUVDown(pattern_point);
 
-	// colour test
-	/*if (uv.second > 0.8)
-	{
-		if (uv.first < 0.2) return Colour(1.0, 0, 0);
-		if (uv.first > 0.8) return Colour(1.0, 1.0, 0);
-	}
-	else if (uv.second < 0.2)
-	{
-		if (uv.first < 0.2) return Colour(0, 1.0, 0);
-		if (uv.first > 0.8) return Colour(0, 1.0, 1.0);
-	}
-
-	return Colour(1.0, 1.0, 1.0);*/
-
 	return UVColourAt(/*cube_map.faces[face]*/ uv.first, uv.second);
 }
 
@@ -145,13 +131,12 @@ Colour CubeTexture::UVColourAt(double u, double v)
 	int x = abs(static_cast<int>(u * (Width - 1)));
 	int y = abs(static_cast<int>(v * (Height - 1)));
 
-	// be sure and round x and y to the nearest whole number
 	return Texture[y * Width + x];
 }
 
 
 std::wstring CubeTexture::ToString()
 {
-	return L"Texture " + std::to_wstring(Width) + L" x " + std::to_wstring(Height);
+	return L"Dimensions " + std::to_wstring(Width) + L" x " + std::to_wstring(Height);
 }
 

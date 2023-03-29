@@ -27,6 +27,8 @@ public:
 
 	Cone(std::wstring);
 
+	void SetParameters(int, int, bool);
+
 	void LocalIntersect(Intersections&, Ray&) override;
 
 	[[nodiscard]] Quaternion LocalNormalAt(Quaternion&) override;

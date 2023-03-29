@@ -28,6 +28,7 @@
 #include "Checkerboard.h"
 #include "CubeTexture.h"
 #include "CylinderCheckerboard.h"
+#include "CylinderTexture.h"
 #include "Gradient.h"
 #include "Gradient2.h"
 #include "PlanarTexture.h"
@@ -107,6 +108,23 @@ Colour SceneLoader::ColourFrom(const std::wstring input)
 	}
 
 	return Colour(components[0], components[1], components[2]);
+}
+
+
+
+SceneLoader::Chunk SceneLoader::GetDataBlockChunkFrom(const std::wstring name)
+{
+	for (int t = 0; t < BlockTitlesCount; t++)
+	{
+		if (BlockTitles[t] == name)
+		{
+			return BlockChunk[t];
+		}
+	}
+
+	std::wcout << name << L"\n";
+	
+	return Chunk::None;
 }
 
 
@@ -265,6 +283,26 @@ void SceneLoader::ObjectSetPattern(Chunk chunk, Colour a, Colour b, double u, do
 
 		break;
 	}
+	case Chunk::CylinderTexture:
+	{
+		CylinderTexture* p = new CylinderTexture(L"CylinderTexture");
+
+		TextureLoader tl;
+
+		if (tl.Go(&p->Texture, file_name, greyscale))
+		{
+			p->Width = tl.TextureWidth;
+			p->Height = tl.TextureHeight;
+
+			GWorld->Objects.back()->Material->SetPattern(p);
+		}
+		else
+		{
+			std::wcout << L"error loading texture \"" << file_name << L"\"\n";
+		}
+
+		break;
+	}
 	}
 }
 
@@ -294,8 +332,13 @@ void SceneLoader::AddObject(Chunk chunk, std::wstring name, std::wstring file_na
 		GWorld->Objects.push_back(new Plane(name));
 		break;
 	case Chunk::ObjectCone:
-		GWorld->Objects.push_back(new Cone(name));
+	{
+		Cone* cone = new Cone(name);
+		cone->SetParameters(min, max, closed);
+
+		GWorld->Objects.push_back(cone);
 		break;
+	}
 	case Chunk::ObjectCube:
 		GWorld->Objects.push_back(new Cube(name));
 		break;
@@ -320,6 +363,17 @@ void SceneLoader::AddObject(Chunk chunk, std::wstring name, std::wstring file_na
 		break;
 	}
 	}
+}
+
+
+bool SceneLoader::ValidateParameter(bool condition, std::wstring parameter, int line)
+{
+	if (!condition)
+	{
+		std::wcout << L"  Error               : \"" << parameter << L"\" found in incorrect data block at line " << line << L"\n";
+	}
+
+	return condition;
 }
 
 
@@ -404,10 +458,118 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail)
 						break;
 					case FileProperty::DataBegin:
 					{
+						std::wstring chunk = s.substr(1);
+
+						mode = GetDataBlockChunkFrom(chunk);
+
 						switch (mode)
 						{
+						case Chunk::ObjectSphere:
+						case Chunk::ObjectPlane:
+						case Chunk::ObjectCube:
+						case Chunk::ObjectCone:
+						case Chunk::ObjectCylinder:
+						case Chunk::ObjectModel:
+						case Chunk::ObjectModelSmooth:
+							last_object = mode;
+							break;
+						case Chunk::Material:
+							mode = Chunk::Material;
+
+							Colours[0].r = 1.0;
+							Colours[0].g = 1.0;
+							Colours[0].b = 1.0;
+
+							ambient = __DefaultMaterialAmbient;
+							diffuse = __DefaultMaterialDiffuse;
+							reflectivity = __DefaultMaterialReflectivity;
+							refractiveindex = __DefaultMaterialRefractiveIndex;
+							shininess = __DefaultMaterialShininess;
+							specular = __DefaultMaterialSpecular;
+							transparent = __DefaultMaterialTransparency;
+
+							MaterialCount++;
+							break;
+						case Chunk::PatternChecker:
+						case Chunk::PatternGradient:
+						case Chunk::PatternGradient2:
+						case Chunk::PatternRing:
+						case Chunk::PatternStripey:
+						case Chunk::CylinderChecker:
+						case Chunk::SphericalChecker:
+						case Chunk::SphericalTexture:
+						case Chunk::PlanarTexture:
+						case Chunk::CubicTexture:
+						case Chunk::CylinderTexture:
+							last_object = mode;
+							PatternCount++;
+							break;
+						case Chunk::Transform:
+							TransformCount++;
+							break;
+						case Chunk::PointLight:
+						case Chunk::AreaLight:
+							last_object = mode;
+							break;
+						case Chunk::Camera:
+							break;
+						case Chunk::None:
+							last_object = mode;
+							break;
+						}
+						break;
+					}
+					case FileProperty::DataEnd:
+					{
+						switch (mode)
+						{
+						case Chunk::ObjectSphere:
+						case Chunk::ObjectPlane:
+						case Chunk::ObjectCone:
+						case Chunk::ObjectCube:
+						case Chunk::ObjectCylinder:
+						case Chunk::ObjectModel:
+						case Chunk::ObjectModelSmooth:
+							AddObject(mode, Name, FileName, Minimum, Maximum, Closed);
+							break;
+						case Chunk::Material:
+							GWorld->Objects.back()->Material = new PhongMaterial(Colours[0].r, Colours[0].g, Colours[0].b,
+								ambient, diffuse, reflectivity, refractiveindex, shininess, specular, transparent);
+							break;
+						case Chunk::PatternChecker:
+						case Chunk::PatternGradient:
+						case Chunk::PatternGradient2:
+						case Chunk::PatternRing:
+						case Chunk::PatternStripey:
+						case Chunk::SphericalChecker:
+						case Chunk::CylinderChecker:
+						case Chunk::SphericalTexture:
+						case Chunk::PlanarTexture:
+						case Chunk::CubicTexture:
+						case Chunk::CylinderTexture:
+							ObjectSetPattern(mode, Colours[0], Colours[1], u, v, FileName, process);
+							break;
 						case Chunk::Transform:
 						{
+							switch (tt)
+							{
+							case TransformType::Scale:
+								Transform = Matrix4(0, XYZ.x, XYZ.y, XYZ.z);
+								break;
+							case TransformType::Translate:
+								Transform = Matrix4(1, XYZ.x, XYZ.y, XYZ.z);
+								break;
+							case TransformType::RotateX:
+								Transform = Matrix4(0, angle);
+								break;
+							case TransformType::RotateY:
+								Transform = Matrix4(1, angle);
+								break;
+							case TransformType::RotateZ:
+								Transform = Matrix4(2, angle);
+								break;
+							}
+
 							// are there transforms to add to the last object?
 							switch (last_object)
 							{
@@ -435,6 +597,12 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail)
 							case Chunk::PatternGradient2:
 							case Chunk::PatternRing:
 							case Chunk::PatternStripey:
+							case Chunk::SphericalChecker:
+							case Chunk::CylinderChecker:
+							case Chunk::SphericalTexture:
+							case Chunk::PlanarTexture:
+							case Chunk::CubicTexture:
+							case Chunk::CylinderTexture:
 							{
 								if (GWorld->Objects.back()->Material->SurfacePattern->TransformSet)
 								{
@@ -447,202 +615,6 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail)
 
 								break;
 							}
-							}
-							break;
-						}
-						}
-
-						// ======
-
-						std::wstring chunk = s.substr(1);
-
-						if (chunk == L"objectsphere")
-						{
-							mode = Chunk::ObjectSphere;
-							last_object = Chunk::ObjectSphere;
-						}
-						else if (chunk == L"objectplane")
-						{
-							mode = Chunk::ObjectPlane;
-							last_object = Chunk::ObjectPlane;
-						}
-						else if (chunk == L"objectcube")
-						{
-							mode = Chunk::ObjectCube;
-							last_object = Chunk::ObjectCube;
-						}
-						else if (chunk == L"objectcone")
-						{
-							mode = Chunk::ObjectCone;
-							last_object = Chunk::ObjectCone;
-						}
-						else if (chunk == L"objectcylinder")
-						{
-							mode = Chunk::ObjectCylinder;
-							last_object = Chunk::ObjectCylinder;
-						}
-						else if (chunk == L"objectmodel")
-						{
-							mode = Chunk::ObjectModel;
-							last_object = Chunk::ObjectModel;
-						}
-						else if (chunk == L"objectmodelsmooth")
-						{
-							mode = Chunk::ObjectModelSmooth;
-							last_object = Chunk::ObjectModelSmooth;
-						}
-						else if (chunk == L"material")
-						{
-							mode = Chunk::Material;
-
-							Colours[0].r = 1.0;
-							Colours[0].g = 1.0;
-							Colours[0].b = 1.0;
-
-							ambient = __DefaultMaterialAmbient;
-							diffuse = __DefaultMaterialDiffuse;
-							reflectivity = __DefaultMaterialReflectivity;
-							refractiveindex = __DefaultMaterialRefractiveIndex;
-							shininess = __DefaultMaterialShininess;
-							specular = __DefaultMaterialSpecular;
-							transparent = __DefaultMaterialTransparency;
-
-							MaterialCount++;
-						}
-						else if (chunk == L"patternchecker")
-						{
-							mode = Chunk::PatternChecker;
-							last_object = Chunk::PatternChecker;
-
-							PatternCount++;
-						}
-						else if (chunk == L"patterngradient")
-						{
-							mode = Chunk::PatternGradient;
-							last_object = Chunk::PatternGradient;
-
-							PatternCount++;
-						}
-						else if (chunk == L"patterngradient2")
-						{
-							mode = Chunk::PatternGradient2;
-							last_object = Chunk::PatternGradient2;
-
-							PatternCount++;
-						}
-						else if (chunk == L"patternring")
-						{
-							mode = Chunk::PatternRing;
-							last_object = Chunk::PatternRing;
-
-							PatternCount++;
-						}
-						else if (chunk == L"patternstripey")
-						{
-							mode = Chunk::PatternStripey;
-							last_object = Chunk::PatternStripey;
-
-							PatternCount++;
-						}
-						else if (chunk == L"sphericalchecker")
-						{
-							mode = Chunk::SphericalChecker;
-							last_object = Chunk::SphericalChecker;
-
-							PatternCount++;
-						}
-						else if (chunk == L"sphericaltexture")
-						{
-							mode = Chunk::SphericalTexture;
-							last_object = Chunk::SphericalTexture;
-
-							PatternCount++;
-						}
-						else if (chunk == L"planartexture")
-						{
-							mode = Chunk::PlanarTexture;
-							last_object = Chunk::PlanarTexture;
-
-							PatternCount++;
-						}
-						else if (chunk == L"cubictexture")
-						{
-							mode = Chunk::CubicTexture;
-							last_object = Chunk::CubicTexture;
-
-							PatternCount++;
-						}
-						else if (chunk == L"transform")
-						{
-							mode = Chunk::Transform;
-
-							TransformCount++;
-						}
-						else if (chunk == L"pointlight")
-						{
-							mode = Chunk::PointLight;
-							last_object = Chunk::PointLight;
-						}
-						else if (chunk == L"arealight")
-						{
-							mode = Chunk::AreaLight;
-							last_object = Chunk::AreaLight;
-							}
-						else
-						{
-							mode = Chunk::None;
-							last_object = Chunk::None;
-						}
-
-						break;
-					}
-					case FileProperty::DataEnd:
-					{
-						switch (mode)
-						{
-						case Chunk::ObjectSphere:
-						case Chunk::ObjectPlane:
-						case Chunk::ObjectCone:
-						case Chunk::ObjectCube:
-						case Chunk::ObjectCylinder:
-						case Chunk::ObjectModel:
-						case Chunk::ObjectModelSmooth:
-							AddObject(mode, Name, FileName, Minimum, Maximum, Closed);
-							break;
-						case Chunk::Material:
-							GWorld->Objects.back()->Material = new PhongMaterial(Colours[0].r, Colours[0].g, Colours[0].b,
-								ambient, diffuse, reflectivity, refractiveindex, shininess, specular, transparent);
-							break;
-						case Chunk::PatternChecker:
-						case Chunk::PatternGradient:
-						case Chunk::PatternGradient2:
-						case Chunk::PatternRing:
-						case Chunk::PatternStripey:
-						case Chunk::SphericalChecker:
-						case Chunk::SphericalTexture:
-						case Chunk::PlanarTexture:
-						case Chunk::CubicTexture:
-							ObjectSetPattern(mode, Colours[0], Colours[1], u, v, FileName, process);
-							break;
-						case Chunk::Transform:
-						{
-							switch (tt)
-							{
-							case TransformType::Scale:
-								Transform = Matrix4(0, XYZ.x, XYZ.y, XYZ.z);
-								break;
-							case TransformType::Translate:
-								Transform = Matrix4(1, XYZ.x, XYZ.y, XYZ.z);
-								break;
-							case TransformType::RotateX:
-								Transform = Matrix4(0, angle);
-								break;
-							case TransformType::RotateY:
-								Transform = Matrix4(1, angle);
-								break;
-							case TransformType::RotateZ:
-								Transform = Matrix4(2, angle);
-								break;
 							}
 
 							break;
@@ -671,18 +643,15 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail)
 						break;
 					}
 					case FileProperty::Colour:						// colour in the form r,g,b
-						if (mode == Chunk::Material || mode == Chunk::PointLight || mode == Chunk::AreaLight ||
-							mode == Chunk::PatternChecker || mode == Chunk::PatternGradient || mode == Chunk::PatternGradient2 || mode == Chunk::PatternRing || mode == Chunk::PatternStripey ||
-							mode == Chunk::SphericalChecker)
+						if (ValidateParameter(mode == Chunk::Material || mode == Chunk::PointLight || mode == Chunk::AreaLight ||
+							mode == Chunk::PatternChecker || mode == Chunk::CylinderChecker || mode == Chunk::PatternGradient || mode == Chunk::PatternGradient2 || mode == Chunk::PatternRing || mode == Chunk::PatternStripey ||
+							mode == Chunk::SphericalChecker,
+							L"colour", Line))
 						{
 
 							Colours[ColourIndex] = ColourFrom(value);
 
 							ColourIndex++;
-						}
-						else
-						{
-							std::wcout << L"  Error               : \"colour\" found in incorrect data block on line " << Line << L"\n";
 						}
 						break;
 					case FileProperty::Position:
@@ -691,87 +660,56 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail)
 						break;
 					}
 					case FileProperty::Name:
-						if (mode == Chunk::ObjectSphere || mode == Chunk::ObjectPlane || mode == Chunk::ObjectCone || mode == Chunk::ObjectCube || mode == Chunk::ObjectCylinder || mode == Chunk::ObjectModel)
+						if (ValidateParameter(mode == Chunk::ObjectSphere || mode == Chunk::ObjectPlane || mode == Chunk::ObjectCone || mode == Chunk::ObjectCube || mode == Chunk::ObjectCylinder || mode == Chunk::ObjectModel,
+							L"name", Line))
 						{
 							Name = value;
 						}
-						else
-						{
-							std::wcout << L"  Error               : \"name\" found in incorrect data block at line " << Line << L"\n";
-						}
 						break;
 					case FileProperty::Ambience:					// ambient
-						if (mode == Chunk::Material)
+						if (ValidateParameter(mode == Chunk::Material, L"ambience", Line))
 						{
 							ambient = stod(value);
 						}
-						else
-						{
-							std::wcout << L"  Error               : \"ambience\" found in incorrect data block at line " << Line << L"\n";
-						}
 						break;
 					case FileProperty::Diffuse:						// difuse
-						if (mode == Chunk::Material)
+						if (ValidateParameter(mode == Chunk::Material, L"diffuse", Line))
 						{
 							diffuse = stod(value);
 						}
-						else
-						{
-							std::wcout << L"  Error               : \"diffuse\" found in incorrect data block at line " << Line << L"\n";
-						}
 						break;
 					case FileProperty::Reflectivity:				// reflectivity
-						if (mode == Chunk::Material)
+						if (ValidateParameter(mode == Chunk::Material, L"reflectivity", Line))
 						{
 							reflectivity = stod(value);
 						}
-						else
-						{
-							std::wcout << L"  Error               : \"reflectivity\" found in incorrect data block at line " << Line << L"\n";
-						}
 						break;
 					case FileProperty::RefractiveIndex:				// index of refraction
-						if (mode == Chunk::Material)
+						if (ValidateParameter(mode == Chunk::Material, L"refractiveindex", Line))
 						{
 							refractiveindex = stod(value);
 						}
-						else
-						{
-							std::wcout << L"  Error               : \"refractiveindex\" found in incorrect data block at line " << Line << L"\n";
-						}
 						break;
 					case FileProperty::Shininess:					// shininess
-						if (mode == Chunk::Material)
+						if (ValidateParameter(mode == Chunk::Material, L"shininess", Line))
 						{
 							shininess = stod(value);
 						}
-						else
-						{
-							std::wcout << L"  Error               : \"shininess\" found in incorrect data block at line " << Line << L"\n";
-						}
 						break;
 					case FileProperty::Specular:					// specular
-						if (mode == Chunk::Material)
+						if (ValidateParameter(mode == Chunk::Material, L"specular", Line))
 						{
 							specular = stod(value);
 						}
-						else
-						{
-							std::wcout << L"  Error               : \"specular\" found in incorrect data block at line " << Line << L"\n";
-						}
 						break;
 					case FileProperty::Transparency:				// transparency
-						if (mode == Chunk::Material)
+						if (ValidateParameter(mode == Chunk::Material, L"transparency", Line))
 						{
 							transparent = stod(value);
 						}
-						else
-						{
-							std::wcout << L"  Error               : \"transparency\" found in incorrect data block at line " << Line << L"\n";
-						}
 						break;
 					case FileProperty::TransformType:
-						if (mode == Chunk::Transform)
+						if (ValidateParameter(mode == Chunk::Transform, L"type", Line))
 						{
 							tt = TransformTypeFrom(value);
 
@@ -780,13 +718,9 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail)
 								std::wcout << L"  Error               : invalid transform type \"" << value << "\" found at line " << Line << L"\n";
 							}
 						}
-						else
-						{
-							std::wcout << L"  Error               : \"type\" found in incorrect data block at line " << Line << L"\n";
-						}
 						break;
 					case FileProperty::Angle:
-						if (mode == Chunk::Transform)
+						if (ValidateParameter(mode == Chunk::Transform, L"angle", Line))
 						{
 							if (tt == TransformType::RotateX || tt == TransformType::RotateY || tt == TransformType::RotateZ)
 							{
@@ -797,13 +731,9 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail)
 								std::wcout << L"  Error               : \"angle\" only valid for rotatex, rotatey, and rotatez transforms. line " << Line << L"\n";
 							}
 						}
-						else
-						{
-							std::wcout << L"  Error               : \"angle\" found in incorrect data block at line " << Line << L"\n";
-						}
 						break;
 					case FileProperty::XYZ:
-						if (mode == Chunk::PointLight || mode == Chunk::AreaLight || mode == Chunk::ObjectSphere || mode == Chunk::ObjectPlane || mode == Chunk::ObjectCone || mode == Chunk::ObjectCube || mode == Chunk::ObjectCylinder || mode == Chunk::Transform)
+						if (ValidateParameter(mode == Chunk::Transform, L"xyz", Line))
 						{
 							if (tt == TransformType::Scale || tt == TransformType::Translate)
 							{
@@ -814,22 +744,30 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail)
 								std::wcout << L"  Error               : \"xyz\" only valid for translate and scale transforms. line " << Line << L"\n";
 							}
 						}
-						else
-						{
-							std::wcout << L"  Error               : \"xyz\" found in incorrect data block at line " << Line << L"\n";
-						}
 						break;
 					case FileProperty::FocalLength:
-						GWorld->Cam->FoV = stod(value);
+						if (ValidateParameter(mode == Chunk::Camera, L"focallength", Line))
+						{
+							GWorld->Cam->FoV = stod(value);
+						}
 						break;
 					case FileProperty::CameraFrom:
-						CameraFrom = XYZFrom(value, 1);
+						if (ValidateParameter(mode == Chunk::Camera, L"from", Line))
+						{
+							CameraFrom = XYZFrom(value, 1);
+						}
 						break;
 					case FileProperty::CameraUp:
-						CameraUp = XYZFrom(value, 0);
+						if (ValidateParameter(mode == Chunk::Camera, L"up", Line))
+						{
+							CameraUp = XYZFrom(value, 0);
+						}
 						break;
 					case FileProperty::CameraTo:
-						CameraTo = XYZFrom(value, 1);
+						if (ValidateParameter(mode == Chunk::Camera, L"to", Line))
+						{
+							CameraTo = XYZFrom(value, 1);
+						}
 						break;
 					case FileProperty::CanvasWidth:
 						if (GWorld->Cam->Width == 0)				// allows command-line parameter to override scene parameters
@@ -844,41 +782,33 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail)
 						}
 						break;
 					case FileProperty::Minimum:
-						if (mode == Chunk::ObjectCylinder)
+						if (ValidateParameter(mode == Chunk::ObjectCone || mode == Chunk::ObjectCylinder, L"minimum", Line))
 						{
 							Minimum = stoi(value);
 						}
 						break;
 					case FileProperty::Maximum:
-						if (mode == Chunk::ObjectCylinder)
+						if (ValidateParameter(mode == Chunk::ObjectCone || mode == Chunk::ObjectCylinder, L"maximum", Line))
 						{
 							Maximum = stoi(value);
 						}
 						break;
 					case FileProperty::Closed:
-						if (mode == Chunk::ObjectCylinder)
+						if (ValidateParameter(mode == Chunk::ObjectCone || mode == Chunk::ObjectCylinder, L"closed", Line))
 						{
 							Closed = true;
 						}
 						break;
 					case FileProperty::UVector:
-						if (mode == Chunk::AreaLight)
+						if (ValidateParameter(mode == Chunk::AreaLight, L"uvector", Line))
 						{
 							UVector = XYZFrom(value, 0);
 						}
-						else
-						{
-							std::wcout << L"  Error               : \"uvector\" found in incorrect data block at line " << Line << L"\n";
-						}
 						break;
 					case FileProperty::VVector:
-						if (mode == Chunk::AreaLight)
+						if (ValidateParameter(mode == Chunk::AreaLight, L"vvector", Line))
 						{
 							VVector = XYZFrom(value, 0);
-						}
-						else
-						{
-							std::wcout << L"  Error               : \"vvector\" found in incorrect data block at line " << Line << L"\n";
 						}
 						break;
 					case FileProperty::TextureWidth:
@@ -888,26 +818,18 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail)
 						v = stod(value);
 						break;
 					case FileProperty::FileName:
-						if (mode == Chunk::ObjectModel || mode == Chunk::SphericalTexture || mode == Chunk::PlanarTexture || mode == Chunk::CubicTexture)
+						if (ValidateParameter(mode == Chunk::ObjectModel || mode == Chunk::SphericalTexture || mode == Chunk::PlanarTexture || mode == Chunk::CubicTexture || mode == Chunk::CylinderTexture, L"filename", Line))
 						{
 							FileName = value;
 						}
-						else
-						{
-							std::wcout << L"  Error               : \"filename\" found in incorrect data block at line " << Line << L"\n";
-						}
 						break;
 					case FileProperty::Process:
-						if (mode == Chunk::SphericalTexture || mode == Chunk::PlanarTexture)
+						if (ValidateParameter(mode == Chunk::SphericalTexture || mode == Chunk::PlanarTexture, L"process", Line))
 						{
 							if (value == L"greyscale")
 							{
 								process = ImageProcess::Greyscale;
 							}
-						}
-						else
-						{
-							std::wcout << L"  Error               : \"process\" found in incorrect data block at line " << Line << L"\n";
 						}
 						break;
 					}

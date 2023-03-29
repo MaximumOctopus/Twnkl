@@ -11,7 +11,6 @@
 
 #pragma once
 
-
 #include "Colour.h"
 #include "Quaternion.h"
 
@@ -23,7 +22,9 @@ public:
 	int Samples = 0;
 
 	Colour Intensity;
-	Quaternion Position;
+	Quaternion Position;			// position for point light
+									// any corner of rectangle for area light
+									// uvec and vvec define the two perpendicular components of the rectangle from the corner position
 
 	Quaternion uvec;
 	Quaternion vvec;

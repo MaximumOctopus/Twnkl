@@ -18,12 +18,20 @@ Cone::Cone(std::wstring name) : Object(name)
 }
 
 
+void Cone::SetParameters(int min, int max, bool caps)
+{
+    Minimum = min;
+    Maximum = max;
+    Closed = caps;
+}
+
+
 bool Cone::CheckCap(double t, double y, Ray& r)
 {
     auto x = r.Origin.x + t * r.Direction.x;
     auto z = r.Origin.z + t * r.Direction.z;
 
-    return (pow(x, 2) + pow(z, 2)) <= y;
+    return x * x + z * z <= y * y;
 }
 
 
@@ -64,16 +72,14 @@ void Cone::LocalIntersect(Intersections& i, Ray& rt)
 
     if (abs(a) < epsilon && abs(b) >= epsilon)
     {
-        double t = -c / 2 * b;
-
-        Intersections xs;
+        double t = -c / (2 * b);
 
         i.List.push_back(Intersect(t, this));
 
         return;
     }
 
-    double disc = pow(b, 2) - 4 * a * c;
+    double disc = b * b - 4 * a * c;
 
     if (disc < 0) 
     { 
@@ -109,7 +115,7 @@ void Cone::LocalIntersect(Intersections& i, Ray& rt)
 // calculates the normal at a space in world space
 Quaternion Cone::LocalNormalAt(Quaternion& world_point)
 {
-    double dist = pow(world_point.x, 2) + pow(world_point.z, 2);
+    double dist = world_point.x * world_point.x + world_point.z * world_point.z;
 
     if (dist < 1 && world_point.y >= (Maximum - epsilon))
     {
@@ -119,17 +125,15 @@ Quaternion Cone::LocalNormalAt(Quaternion& world_point)
     {
         return { 0, -1, 0, 0 };
     }
-    else 
+     
+    double y = sqrt(dist);
+
+    if (world_point.y > 0) 
     {
-        double y = sqrt(pow(world_point.x, 2) + pow(world_point.z, 2));
-
-        if (world_point.y > 0) 
-        {
-            y = -y; 
-        }
-
-        return Quaternion(world_point.x, y, world_point.z, 0);
+        y = -y; 
     }
+
+    return Quaternion(world_point.x, y, world_point.z, 0);
 }
 
 
@@ -141,5 +145,5 @@ void Cone::PostSetup(int i)
 
 std::wstring Cone::ToString()
 {
-    return L"Cone.";
+    return L"Cone. Min " + std::to_wstring(Minimum) + L", Max " + std::to_wstring(Maximum);
 }
