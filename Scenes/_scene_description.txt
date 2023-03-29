@@ -31,6 +31,9 @@ position=x, y, z
 
 {objectcone
 name=
+minimum=
+maximum=
+closed=
 }
 
 {objectcube

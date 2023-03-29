@@ -59,7 +59,3 @@ xyz=-0.25, 0.33, 0
 type=scale
 xyz=0.33, 0.33, 0.33
 }
-{transform
-type=scale
-xyz=0.33, 0.33, 0.33
-}
