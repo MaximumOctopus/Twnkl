@@ -8,7 +8,7 @@
   Source code, example scenes and textures
     https://github.com/MaximumOctopus/Twnkl
 
-  March 28th 2023
+  March 30th 2023
 ==========================================================================================================================
 ==========================================================================================================================
 
@@ -54,6 +54,13 @@ All of my software is free and open source; please consider donating to a local 
 ==========================================================================================================================
 
 Release History
+
+0.6 / March 30th 2023
+
+Added three Perlin noise pattern options.
+Added cube checkerboard pattern
+Simplified scene file pattern syntax.
+Scene loader tidy
 
 
 0.5 / March 28th 2023
