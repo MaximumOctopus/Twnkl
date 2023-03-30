@@ -139,6 +139,28 @@ colour=r, g, b
 colour=r, g, b
 }
 
+// for sphere, works best when texture width (u) is 2x height (v) (eg 256x128)
+{patternperlin
+colour=r,g,best
+u=
+v=
+}
+
+// for sphere, works best when texture width (u) is 2x height (v) (eg 256x128)
+{patternperlin2
+colour=r,g,best
+u=
+v=
+}
+
+// for sphere, works best when texture width (u) is 2x height (v) (eg 256x128)
+{patternperlin3
+colour=r,g,best
+u=
+v=
+phase=								// default is 10, higher values equal harsher transitions
+}
+
 {patternring
 colour=r, g, b
 colour=r, g, b
@@ -153,14 +175,8 @@ colour=r, g, b
 // pattern #2
 // ============================================
 
-{cylinderchecker
-colour=r, g, b
-colour=r, g, b
-width=
-height=
-}
-
-{sphericalchecker
+// cylinder or sphere
+{patternchecker
 colour=r, g, b
 colour=r, g, b
 width=
@@ -171,18 +187,9 @@ height=
 // pattern #3
 // ============================================
 
-{planartexture
-process=greyscale
-filename=
-}
-
-// works best when width is 2x height (eg 256x128)
-{sphericaltexture
-process=greyscale
-filename=
-}
-
-{cubictexture
+// for sphere, plane, cylinder, cone, cube
+// for sphere, works best when texture width is 2x height (eg 256x128)
+{patterntexture
 process=greyscale
 filename=
 }
