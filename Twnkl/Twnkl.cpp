@@ -65,9 +65,14 @@ int wmain(int argc, wchar_t* argv[])
 				std::wcout << L"Scene must have at least one object and one light!!\n";
 			}
 		}
+		else
+		{
+			std::wcout << L"Errors found during finalise phase. Likely missing materials.\n";
+		}
 	}
 
 	delete GWorld;
+	delete GConfiguration;
 
 	return 0;
 }

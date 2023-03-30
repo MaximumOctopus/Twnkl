@@ -17,7 +17,6 @@
 class CylinderTexture : public Pattern
 {
 	Colour UVColourAt(double, double);
-	std::pair<double, double> CylindricalMap(Quaternion&);
 
 public:
 

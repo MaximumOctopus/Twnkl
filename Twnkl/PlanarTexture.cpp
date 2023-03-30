@@ -65,6 +65,6 @@ std::pair<double, double> PlanarTexture::PlanarMap(Quaternion& p)
 
 std::wstring PlanarTexture::ToString()
 {
-	return L"#1 " + Colours[0].ToString() + L" #2 " + Colours[1].ToString();
+	return L"Dimensions " + std::to_wstring(Width) + L" x " + std::to_wstring(Height);
 }
 

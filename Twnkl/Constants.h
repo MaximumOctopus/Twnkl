@@ -34,3 +34,6 @@ static double __DefaultMaterialTransparency = 0.0;
 static int __DefaultRendererShadowDetail = 5;
 static int __DefaultRendererLightRecursion = 5;
 static int __DefaultRendererSamplesPerPixel = 0;
+
+static double __DefaultPerlinScale = 1.0;
+static double __DefaultPerlinPhase = 10.0;

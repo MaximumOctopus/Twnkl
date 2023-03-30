@@ -48,6 +48,8 @@ public:
 
 	Quaternion() noexcept;
 
+	Quaternion(double, double);
+
 	Quaternion(double, double, double, double) noexcept;
 
 	[[nodiscard]] bool Equals(Quaternion&);

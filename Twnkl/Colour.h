@@ -37,5 +37,7 @@ public:
 
 	[[nodiscard]] std::wstring ToString();
 
+	void Reset();
+
 	[[nodiscard]] bool Equals(Colour);
 };

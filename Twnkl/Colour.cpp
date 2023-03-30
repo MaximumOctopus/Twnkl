@@ -78,6 +78,14 @@ std::wstring Colour::ToString()
 }
 
 
+void Colour::Reset()
+{
+	r = 1.0;
+	g = 1.0;
+	b = 1.0;
+}
+
+
 bool Colour::Equals(Colour c)
 {
 	double rr = abs(r - c.r);

@@ -22,6 +22,17 @@ Quaternion::Quaternion() noexcept
 }
 
 
+// create random between from and to
+Quaternion::Quaternion(double min, double max)
+{
+	x = min + (max - min) * (rand() / (RAND_MAX + 1.0));
+	y = min + (max - min) * (rand() / (RAND_MAX + 1.0));
+	z = min + (max - min) * (rand() / (RAND_MAX + 1.0));
+
+	w = 0;
+}
+
+
 Quaternion::Quaternion(double xx, double yy, double zz, double ww)  noexcept
 {
 	x = xx;
@@ -98,12 +109,6 @@ void Quaternion::Normalise()
 
 double Quaternion::Dot(Quaternion& q)
 {
-	
-//	if (abs(w) > 0.0001 || abs(q.w) > 0.0001)
-//	{
-	//	std::wcout << L"non-zero w in quaternion!! " << w << L" / " << q.w << L"\n";
-//	}
-
 	return (x * q.x) + (y * q.y) + (z * q.z) + (w * q.w);
 }
 

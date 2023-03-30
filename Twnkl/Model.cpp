@@ -36,9 +36,10 @@ void Model::LocalIntersect(Intersections& i, Ray& rt)
 }
 
 
+// not used, each triangle's localnormalat is called instead
 Quaternion Model::LocalNormalAt(Quaternion& q)
 {
-	return Quaternion(); // to do
+	return Quaternion();
 }
 
 
@@ -98,8 +99,6 @@ std::tuple<int, int, int> Model::VectorsFrom(const std::wstring input, int refer
 		}
 	}
 
-	//std::wcout << L"vf: " << components[0] << L" : " << components[1] << L" : " << components[2] << L" : " << L"\n";
-
 	return { components[0], components[1], components[2] };
 }
 
@@ -149,7 +148,6 @@ Quaternion Model::XYZFrom(const std::wstring input)
 }
 
 
-//
 void Model::Load(std::wstring file_name)
 {
 	std::wifstream file(file_name);

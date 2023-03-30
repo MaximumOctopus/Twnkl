@@ -17,7 +17,6 @@
 class SphericalTexture : public Pattern
 {
 	Colour UVColourAt(double, double);
-	std::pair<double, double> SphericalMap(Quaternion&);
 
 public:
 

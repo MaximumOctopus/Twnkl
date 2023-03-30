@@ -131,5 +131,5 @@ void Cylinder::PostSetup(int i)
 
 std::wstring Cylinder::ToString()
 {
-    return L"Cylinder.";
+    return L"Cylinder. Min " + std::to_wstring(Minimum) + L", Max " + std::to_wstring(Maximum);
 }

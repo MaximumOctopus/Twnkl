@@ -12,6 +12,7 @@
 #include <iostream>
 
 #include "CylinderTexture.h"
+#include "PatternCommon.h"
 
 
 CylinderTexture::CylinderTexture(std::wstring name) : Pattern(name)
@@ -25,7 +26,7 @@ Colour CylinderTexture::ColourAt(Object* o, Quaternion& q)
 	Quaternion object_point = o->InverseTransform.MultQ(q);
 	Quaternion pattern_point = InverseTransform.MultQ(object_point);
 
-	std::pair<double, double> uv = CylindricalMap(pattern_point);
+	std::pair<double, double> uv = PatternCommon::CylindricalMap(pattern_point);
 
 	return UVColourAt(uv.first, uv.second);
 }
@@ -41,20 +42,6 @@ Colour CylinderTexture::UVColourAt(double u, double v)
 
 	// be sure and round x and y to the nearest whole number
 	return Texture[y * Width + x];
-}
-
-
-std::pair<double, double> CylinderTexture::CylindricalMap(Quaternion& p)
-{
-	// compute the azimuthal angle, same as sphericalmap()
-	double theta = atan2(p.x, p.z);
-	double raw_u = theta / (2.0 * 3.1415926535);
-	double u = 1.0 - (raw_u + 0.5);
-
-	// let v go from 0 to 1 between whole units of y
-	double v = fmod(p.y, 1.0);
-
-	return { u, v };
 }
 
 

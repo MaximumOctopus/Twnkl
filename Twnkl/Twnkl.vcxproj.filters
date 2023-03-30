@@ -249,6 +249,21 @@
     <ClCompile Include="TextureLoader.cpp">
       <Filter>Source Files\Patterns\Mapped</Filter>
     </ClCompile>
+    <ClCompile Include="PatternCommon.cpp">
+      <Filter>Source Files\Patterns</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeCheckerboard.cpp">
+      <Filter>Source Files\Patterns\Mapped\Cube</Filter>
+    </ClCompile>
+    <ClCompile Include="Perlin.cpp">
+      <Filter>Source Files\Patterns</Filter>
+    </ClCompile>
+    <ClCompile Include="Perlin2.cpp">
+      <Filter>Source Files\Patterns</Filter>
+    </ClCompile>
+    <ClCompile Include="Perlin3.cpp">
+      <Filter>Source Files\Patterns</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h">
@@ -394,6 +409,21 @@
     </ClInclude>
     <ClInclude Include="PointLight.h">
       <Filter>Header Files\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="Perlin.h">
+      <Filter>Header Files\Patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="PatternCommon.h">
+      <Filter>Header Files\Patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeCheckerboard.h">
+      <Filter>Header Files\Patterns\Mapped\Cube</Filter>
+    </ClInclude>
+    <ClInclude Include="Perlin2.h">
+      <Filter>Header Files\Patterns</Filter>
+    </ClInclude>
+    <ClInclude Include="Perlin3.h">
+      <Filter>Header Files\Patterns</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

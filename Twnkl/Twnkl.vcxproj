@@ -138,6 +138,7 @@
     <ClCompile Include="Cone.cpp" />
     <ClCompile Include="Configuration.cpp" />
     <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="CubeCheckerboard.cpp" />
     <ClCompile Include="CubeTexture.cpp" />
     <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="CylinderCheckerboard.cpp" />
@@ -152,6 +153,10 @@
     <ClCompile Include="Intersect.cpp" />
     <ClCompile Include="Intersections.cpp" />
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="PatternCommon.cpp" />
+    <ClCompile Include="Perlin.cpp" />
+    <ClCompile Include="Perlin2.cpp" />
+    <ClCompile Include="Perlin3.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="SceneLoader.cpp" />
     <ClCompile Include="TextureLoader.cpp" />
@@ -190,6 +195,7 @@
     <ClInclude Include="ConfigurationConstants.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="CubeCheckerboard.h" />
     <ClInclude Include="CubeTexture.h" />
     <ClInclude Include="Cylinder.h" />
     <ClInclude Include="CylinderCheckerboard.h" />
@@ -204,6 +210,10 @@
     <ClInclude Include="Intersect.h" />
     <ClInclude Include="Intersections.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="PatternCommon.h" />
+    <ClInclude Include="Perlin.h" />
+    <ClInclude Include="Perlin2.h" />
+    <ClInclude Include="Perlin3.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="SceneLoader.h" />
     <ClInclude Include="TextureLoader.h" />

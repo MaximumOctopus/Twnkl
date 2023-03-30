@@ -411,6 +411,12 @@ bool Configuration::LoadConfiguration(const std::wstring file_name)
 			Render.SamplesPerPixel = IntegerKey;
 		}
 
+		IntegerKey = config->ReadInteger(L"Meta", L"Debug", 0);
+		if (config->LastKeyExist)
+		{
+			Meta.Debug = IntegerKey;
+		}
+
 		delete config;
 
 		return true;
@@ -460,6 +466,7 @@ bool Configuration::SaveConfiguration(const std::wstring file_name)
 		ofile << Formatting::to_utf8(L"// Created " + DateUtility::DateTime(kDisplayModeConsole) + L"\n");
 		ofile << Formatting::to_utf8(L"// Original command-line input: " + GetAsCommandLineParameters() + L"\n\n");
 
+		ofile << Formatting::to_utf8(L"[Render]\n");
 		ofile << Formatting::to_utf8(L"Scene=" + Render.SceneFileName + L"\n");
 		ofile << Formatting::to_utf8(L"Image=" + Render.ImageFileName + L"\n");
 		ofile << Formatting::to_utf8(L"Width=" + std::to_wstring(Render.ImageWidth) + L"\n");
@@ -468,6 +475,9 @@ bool Configuration::SaveConfiguration(const std::wstring file_name)
 		ofile << Formatting::to_utf8(L"Shadows=" + std::to_wstring(Render.ShadowDetail) + L"\n");
 		ofile << Formatting::to_utf8(L"LightRecursion=" + std::to_wstring(Render.LightRecursion) + L"\n");
 		ofile << Formatting::to_utf8(L"SamplesPerPiexl=" + std::to_wstring(Render.SamplesPerPixel) + L"\n");
+
+		ofile << Formatting::to_utf8(L"[Meta]\n");
+		ofile << Formatting::to_utf8(L"Debug=" + std::to_wstring(Meta.Debug) + L"\n");
 
 		ofile.close();
 
