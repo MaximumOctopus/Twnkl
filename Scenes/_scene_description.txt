@@ -1,4 +1,10 @@
 // ============================================
+// Twnkl scene spec.
+// March 31st 2023
+// ============================================
+
+
+// ============================================
 // camera
 // ============================================
 
@@ -129,6 +135,16 @@ colour=r, g, b
 colour=r, g, b
 }
 
+// modified perlin
+{patternfractal
+{
+colour=r, g, b
+frequency=							// default is 1.0
+amplitude=							// default is 1.0
+lacunarity=							// default is 2.0
+persistence=						// default is 0.5
+}
+
 {patterngradient
 colour=r, g, b
 colour=r, g, b
@@ -144,6 +160,7 @@ colour=r, g, b
 colour=r,g,best
 u=
 v=
+scale=								// default is 1.0
 }
 
 // for sphere, works best when texture width (u) is 2x height (v) (eg 256x128)
@@ -151,6 +168,7 @@ v=
 colour=r,g,best
 u=
 v=
+scale=								// default is 1.0
 }
 
 // for sphere, works best when texture width (u) is 2x height (v) (eg 256x128)
@@ -159,11 +177,19 @@ colour=r,g,best
 u=
 v=
 phase=								// default is 10, higher values equal harsher transitions
+scale=								// default is 1.0
 }
 
 {patternring
 colour=r, g, b
 colour=r, g, b
+}
+
+// perlin simplex. setting simple=yes will limit the pattern to the two colours specified (with no gradient between)
+{patternsimplex
+colour=r, g, b
+colour=r, g, b
+simple=yes
 }
 
 {patternstripey
