@@ -1,6 +1,6 @@
 // ============================================
 // Twnkl scene spec.
-// March 31st 2023
+// April 3rd 2023
 // ============================================
 
 
@@ -22,11 +22,13 @@ up=x, y, z
 // ============================================
 
 {arealight
+name=
 colour=r, g, b
 position=x, y, z
 }
 
 {pointlight
+name=
 colour=r, g, b
 position=x, y, z
 }
@@ -139,6 +141,7 @@ colour=r, g, b
 {patternfractal
 {
 colour=r, g, b
+colour=r, g, b
 frequency=							// default is 1.0
 amplitude=							// default is 1.0
 lacunarity=							// default is 2.0
@@ -197,21 +200,12 @@ colour=r, g, b
 colour=r, g, b
 }
 
-// ============================================
-// pattern #2
-// ============================================
-
-// cylinder or sphere
 {patternchecker
 colour=r, g, b
 colour=r, g, b
 width=
 height=
 }
-
-// ============================================
-// pattern #3
-// ============================================
 
 // for sphere, plane, cylinder, cone, cube
 // for sphere, works best when texture width is 2x height (eg 256x128)

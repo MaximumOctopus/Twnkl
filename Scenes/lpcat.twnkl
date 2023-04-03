@@ -10,6 +10,7 @@ to=-0.6, 1, -0.8
 up=0.0, 1.0, 0.0
 }
 {pointlight
+name=PointLight
 colour=1.0, 1.0, 1.0
 position=-4.9, 4.9, -1
 }

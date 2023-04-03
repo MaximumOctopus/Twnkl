@@ -9,6 +9,7 @@ to=-0.6, 1, -0.8
 up=0.0, 1.0, 0.0
 }
 {arealight
+name=AreaLight
 colour=1.0, 1.0, 1.0
 position=4.9, 1.9, -1
 }
