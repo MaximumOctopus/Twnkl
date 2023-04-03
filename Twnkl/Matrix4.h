@@ -18,9 +18,6 @@ class Quaternion;
 #include "Quaternion.h"
 
 
-enum class MatrixType { None = 0, Scale = 1, Translate = 2, RotateX = 3, RotateY = 4, RotateZ = 5 };
-
-
 class Matrix4
 {
 public:

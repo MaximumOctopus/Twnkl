@@ -17,6 +17,10 @@
 
 namespace Utility
 {
+	#ifdef _GUI
+	[[nodiscard]] std::wstring GetFileName();
+	#endif
+
 	[[nodiscard]] int CurrentYear();
 
 	[[nodiscard]] std::wstring GetFileExtension(const std::wstring&);

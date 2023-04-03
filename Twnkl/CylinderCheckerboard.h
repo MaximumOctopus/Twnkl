@@ -20,7 +20,6 @@ class CylinderCheckerboard : public Pattern
 	double Height = 0;
 
 	Colour UVColourAt(double, double);
-	std::pair<double, double> CylindricalMap(Quaternion&);
 
 public:
 

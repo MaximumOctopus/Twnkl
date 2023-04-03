@@ -153,12 +153,15 @@
     <ClCompile Include="Intersect.cpp" />
     <ClCompile Include="Intersections.cpp" />
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Noise.cpp" />
     <ClCompile Include="PatternCommon.cpp" />
     <ClCompile Include="Perlin.cpp" />
     <ClCompile Include="Perlin2.cpp" />
     <ClCompile Include="Perlin3.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="SceneLoader.cpp" />
+    <ClCompile Include="Fractal.cpp" />
+    <ClCompile Include="Simplex.cpp" />
     <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="PlanarTexture.cpp" />
     <ClCompile Include="SphericalCheckerboard.cpp" />
@@ -202,6 +205,7 @@
     <ClInclude Include="CylinderTexture.h" />
     <ClInclude Include="DateUtility.h" />
     <ClInclude Include="Debug.h" />
+    <ClInclude Include="Fast.h" />
     <ClInclude Include="Formatting.h" />
     <ClInclude Include="Gradient.h" />
     <ClInclude Include="Gradient2.h" />
@@ -210,12 +214,15 @@
     <ClInclude Include="Intersect.h" />
     <ClInclude Include="Intersections.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="Noise.h" />
     <ClInclude Include="PatternCommon.h" />
     <ClInclude Include="Perlin.h" />
     <ClInclude Include="Perlin2.h" />
     <ClInclude Include="Perlin3.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="SceneLoader.h" />
+    <ClInclude Include="Fractal.h" />
+    <ClInclude Include="Simplex.h" />
     <ClInclude Include="TextureLoader.h" />
     <ClInclude Include="Pattern.h" />
     <ClInclude Include="PhongMaterial.h" />
@@ -234,6 +241,7 @@
     <ClInclude Include="SphericalTexture.h" />
     <ClInclude Include="Stripey.h" />
     <ClInclude Include="TestPattern.h" />
+    <ClInclude Include="TransformConfiguration.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="World.h" />

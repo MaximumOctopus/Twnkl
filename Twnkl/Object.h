@@ -20,6 +20,7 @@ class PhongMaterial;
 #include "Matrix4.h"
 #include "Quaternion.h"
 #include "Ray.h"
+#include "TransformConfiguration.h"
 
 
 enum class Primative { None = 0, Sphere = 1, Plane = 2 };
@@ -27,6 +28,8 @@ enum class Primative { None = 0, Sphere = 1, Plane = 2 };
 
 class Object
 {
+	std::vector<TransformConfiguration> Transforms;
+
 public:
 
 	Object* Parent = nullptr;
@@ -42,18 +45,20 @@ public:
 
 	int ID = 0;
 
-	bool TransformSet = false;
-
 	Object(std::wstring);
 
-	void SetTransform(Matrix4);
 	void SetMaterial(PhongMaterial);
 
 	// cache the inverse transform for speeeed
+	void ProcessTransforms();
+	void AddTransform(TransformConfiguration);
 	void CreateInverseTransform();
 
-	Quaternion WorldToObject(Quaternion&);
-	Quaternion NormalToWorld(Quaternion&);
+	int TransformsCount();
+	[[nodiscard]] TransformConfiguration TransformAt(int);
+
+	[[nodiscard]] Quaternion WorldToObject(Quaternion&);
+	[[nodiscard]] Quaternion NormalToWorld(Quaternion&);
 
 	void Intersects(Intersections&, Ray&);
 	[[nodiscard]] Quaternion NormalAt(Quaternion&);

@@ -11,23 +11,22 @@
 
 #pragma once
 
+#include "Noise.h"
 #include "Pattern.h"
 
 
-class CubeTexture : public Pattern
+class Fractal : public Pattern
 {
-	Colour UVColourAt(double, double);
+	Noise* noize;
 
 public:
 
-	Colour* Texture = nullptr;
+    Fractal(std::wstring);
+	~Fractal();
 
-	int Width = 0;
-	int Height = 0;
-
-	CubeTexture(std::wstring);
+	void SetFALP(double, double, double, double);
 
 	[[nodiscard]] Colour ColourAt(Object*, Quaternion&) override;
 
-	[[nodiscard]] std::wstring ToString() override;
+	[[nodiscard]] virtual std::wstring ToString() override;
 };

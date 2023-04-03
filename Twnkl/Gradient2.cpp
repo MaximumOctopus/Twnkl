@@ -9,6 +9,7 @@
 // 
 // 
 
+#include "Fast.h"
 #include "Gradient2.h"
 
 
@@ -23,9 +24,9 @@ Colour Gradient2::ColourAt(Object* o, Quaternion& q)
 	Quaternion object_point = o->InverseTransform.MultQ(q);
 	Quaternion pattern_point = InverseTransform.MultQ(object_point);
 
-	double factor = 2 * pattern_point.x - floor(2 * pattern_point.x);
+	double factor = 2 * pattern_point.x - Fast::Floor(2 * pattern_point.x);
 
-	if (abs(pattern_point.x - floor(pattern_point.x)) < 0.5)
+	if (std::abs(pattern_point.x - Fast::Floor(pattern_point.x)) < 0.5)
 	{
 		Colour c1(Colours[1].Sub(Colours[0]));
 

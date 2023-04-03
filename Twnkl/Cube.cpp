@@ -25,7 +25,7 @@ std::pair<double, double> Cube::CheckAxis(double origin, double direction)
 
 	double tmin{ 0 }, tmax{ 0 };
 	
-	if (abs(direction) >= epsilon) 
+	if (std::abs(direction) >= epsilon)
 	{
 		tmin = tminNumerator / direction;
 		tmax = tmaxNumerator / direction;
@@ -67,13 +67,13 @@ void Cube::LocalIntersect(Intersections& i, Ray& rt)
 // calculates the normal at a space in world space
 Quaternion Cube::LocalNormalAt(Quaternion& world_point)
 {
-	auto maxc = std::max(std::max(abs(world_point.x), abs(world_point.y)), abs(world_point.z));
+	auto maxc = std::max(std::max(std::abs(world_point.x), std::abs(world_point.y)), std::abs(world_point.z));
 
-	if (abs(maxc) - abs(world_point.x) <= epsilon)
+	if (std::abs(maxc) - std::abs(world_point.x) <= epsilon)
 	{
 		return { world_point.x, 0, 0, 0 };
 	}
-	else if (abs(maxc) - abs(world_point.y) <= epsilon)
+	else if (std::abs(maxc) - std::abs(world_point.y) <= epsilon)
 	{
 		return { 0, world_point.y, 0, 0 };
 	}

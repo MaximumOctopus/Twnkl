@@ -34,10 +34,10 @@ Colour PlanarTexture::ColourAt(Object* o, Quaternion& q)
 Colour PlanarTexture::UVColourAt(double u, double v)
 {
 	// flip v over so it matches the image layout, with y at the top
-	v = 1.0 - abs(v);
+	v = 1.0 - std::abs(v);
 
-	int x = abs(static_cast<int>(u * (Width - 1)));
-	int y = abs(static_cast<int>(v * (Height - 1)));
+	int x = std::abs(static_cast<int>(u * (Width - 1)));
+	int y = std::abs(static_cast<int>(v * (Height - 1)));
 
 	// be sure and round x and y to the nearest whole number
 	return Texture[y * Width + x];
@@ -48,12 +48,12 @@ std::pair<double, double> PlanarTexture::PlanarMap(Quaternion& p)
 {
 	if (p.x < 0)
 	{
-		p.x = 1.0 - abs(fmod(p.x, 1));
+		p.x = 1.0 - std::abs(fmod(p.x, 1));
 	}
 
 	if (p.z < 0)
 	{
-		p.z = 1.0 - abs(fmod(p.z, 1));
+		p.z = 1.0 - std::abs(fmod(p.z, 1));
 	}
 
 	double u = fmod(p.x, 1);

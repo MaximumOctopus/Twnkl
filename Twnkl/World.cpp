@@ -14,6 +14,7 @@
 
 #ifdef _DEBUG
 #include "Plane.h"
+#include "PointLight.h"
 #include "Sphere.h"
 #include "TestPattern.h"
 #endif
@@ -45,19 +46,19 @@ bool World::Finalise()
 	{
 		Objects[t]->ID = t;
 
-		Objects[t]->CreateInverseTransform();
+		Objects[t]->ProcessTransforms();
 
 		// sanity checking...
 		if (Objects[t]->Material != nullptr)
 		{		
-			if (Objects[t]->Material->RefractiveIndex == 0)
+			if (Objects[t]->Material->RefractiveIndex < epsilon)
 			{
 				std::wcout << L"    Object (" << t << L", " << Objects[t]->Name << L") has zero IoR! This will cause rendering issues.\n";
 			}
 
 			if (Objects[t]->Material->HasPattern)
 			{
-				Objects[t]->Material->SurfacePattern->Finalise();
+				Objects[t]->Material->SurfacePattern->ProcessTransforms();
 			}
 
 			Objects[t]->PostSetup(t);
@@ -71,6 +72,10 @@ bool World::Finalise()
 	}
 
 	// now set camera and allocate memory for canvas
+	if (Canvas != nullptr)
+	{
+		delete Canvas;
+	}
 
 	Canvas = new Colour[Cam->Width * Cam->Height];
 
@@ -83,43 +88,6 @@ bool World::Finalise()
 // =================================================================================
 // == File Output ==================================================================
 // =================================================================================
-
-
-std::string World::ColourToPPM(Colour c)
-{
-	int r = static_cast<int>(c.r * 255);
-	int g = static_cast<int>(c.g * 255);
-	int b = static_cast<int>(c.b * 255);
-
-	if (r > 255)
-	{
-		r = 255;
-	}
-	else if (r < 0)
-	{
-		r = 0;
-	}
-
-	if (g > 255)
-	{
-		g = 255;
-	}
-	else if (g < 0)
-	{
-		g = 0;
-	}
-
-	if (b > 255)
-	{
-		b = 255;
-	}
-	else if (b < 0)
-	{
-		b = 0;
-	}
-
-	return std::to_string(r) + " " + std::to_string(g) + " " + std::to_string(b) + " ";
-}
 
 
 // https://netpbm.sourceforge.net/doc/ppm.html
@@ -141,7 +109,7 @@ bool World::SaveCanvasToFile(const std::wstring file_name)
 
 			for (int x = 0; x < Cam->Width; x++)
 			{
-				row += ColourToPPM(Canvas[y * GWorld->Cam->Width + x]);
+				row += Canvas[y * GWorld->Cam->Width + x].RGBString();
 			}
 
 			file << row << "\n";
@@ -180,6 +148,32 @@ void World::ToString()
 		std::wcout << L" Object " << t << L" (" << Objects[t]->Name << L", " << Objects[t]->ID << L")\n";
 		std::wcout << L"    Detail     : " << Objects[t]->ToString() << L"\n";
 		std::wcout << L"    Position   : " << Objects[t]->Position.ToString() << L"\n";
+
+		if (Objects[t]->TransformsCount() != 0)
+		{
+			std::wcout << L"    Transforms\n";
+
+			for (int x = 0; x < Objects[t]->TransformsCount(); x++)
+			{
+				TransformConfiguration tc = Objects[t]->TransformAt(x);
+				
+				std::wcout << L"        Type            : " << tc.TypeAsString() << L"\n";
+
+				switch (tc.Type)
+				{
+				case TransformType::Scale:
+				case TransformType::Translate:
+					std::wcout << L"        XYZ             : " << tc.XYZ.ToString() << L"\n";
+					break;
+				case TransformType::RotateX:
+				case TransformType::RotateY:
+				case TransformType::RotateZ:
+					std::wcout << L"        Angle           : " << tc.Angle << L" radians \n";
+					break;
+				}
+			}
+		}
+
 		std::wcout << L"    Material\n";
 		std::wcout << L"        Colour          : " << Objects[t]->Material->SurfaceColour.ToString() << L"\n";
 		std::wcout << L"        Ambient         : " << Objects[t]->Material->Ambient << L"\n";
@@ -194,6 +188,31 @@ void World::ToString()
 		{
 			std::wcout << L"    Pattern (" << Objects[t]->Material->SurfacePattern->Name << L")\n";
 			std::wcout << L"        Colours         : " << Objects[t]->Material->SurfacePattern->ToString() << L"\n";
+			
+			if (Objects[t]->TransformsCount() != 0)
+			{
+				std::wcout << L"        Transforms\n";
+
+				for (int x = 0; x < Objects[t]->Material->SurfacePattern->TransformsCount(); x++)
+				{
+					TransformConfiguration tc = Objects[t]->Material->SurfacePattern->TransformAt(x);
+
+					std::wcout << L"            Type            : " << tc.TypeAsString() << L"\n";
+
+					switch (tc.Type)
+					{
+					case TransformType::Scale:
+					case TransformType::Translate:
+						std::wcout << L"            XYZ             : " << tc.XYZ.ToString() << L"\n";
+						break;
+					case TransformType::RotateX:
+					case TransformType::RotateY:
+					case TransformType::RotateZ:
+						std::wcout << L"            Angle           : " << tc.Angle << L" radians \n";
+						break;
+					}
+				}
+			}
 		}
 
 		std::wcout << "\n";
@@ -201,7 +220,7 @@ void World::ToString()
 
 	for (int t = 0; t < Lights.size(); t++)
 	{
-		std::wcout << L" Light " << t << L" (" << Lights[t]->ID << L")\n";
+		std::wcout << L" Light " << t << L" (" << Lights[t]->Name << L")\n";
 		std::wcout << L"    Position   : " << Lights[t]->Position.ToString() << L"\n";
 		std::wcout << L"    Intensity  : " << Lights[t]->Intensity.ToString() << L"\n";
 		std::wcout << L"    Detail     : " << Lights[t]->ToString() << L"\n";
@@ -214,7 +233,7 @@ void World::ToString()
 #ifdef _DEBUG
 void World::DefaultWorld(int testid)
 {
-	Light* l = new Light(1.0, 1.0, 1.0, -10, 10, -10);
+	PointLight* l = new PointLight(L"pointlight", 1.0, 1.0, 1.0, -10, 10, -10);
 	//Light l = Light(1.0, 1.0, 1.0, 0, 0.25, 0);
 
 	Lights.push_back(l);
@@ -235,7 +254,7 @@ void World::DefaultWorld(int testid)
 
 	Sphere* s2 = new Sphere(L"");
 
-	s2->SetTransform(Matrix4(0, 0.5, 0.5, 0.5));
+	s2->AddTransform({ TransformType::Scale, Matrix4(0, 0.5, 0.5, 0.5), Quaternion(), 0 });
 
 	PhongMaterial* m2 = new PhongMaterial();
 	s2->Material = m2;
@@ -256,7 +275,7 @@ void World::DefaultWorld(int testid)
 		Objects[0]->Material->Ambient = 1.0;
 
 		TestPattern* p = new TestPattern(L"TestPattern");
-		p->Finalise();
+		p->ProcessTransforms();
 
 		Objects[0]->Material->SetPattern(p);
 
@@ -272,8 +291,7 @@ void World::DefaultWorld(int testid)
 		m3->Transparency = 0.5;
 		m3->RefractiveIndex = 1.5;
 		p->Material = m3;
-
-		p->Transform = Matrix4(1, 0, -1, 0);
+		p->AddTransform({ TransformType::Translate, Matrix4(1, 0, -1, 0), Quaternion(), 0 });
 
 		Objects.push_back(p);
 
@@ -281,7 +299,7 @@ void World::DefaultWorld(int testid)
 		PhongMaterial* m4 = new PhongMaterial();
 		m4->SurfaceColour = Colour(1, 0, 0);
 		m4->Ambient = 0.5;
-		s4->Transform = Matrix4(1, 0, -3.5, -0.5);
+		s4->AddTransform({ TransformType::Translate, Matrix4(1, 0, -3.5, -0.5), Quaternion(), 0 });
 		s4->Material = m4;
 
 		Objects.push_back(s4);

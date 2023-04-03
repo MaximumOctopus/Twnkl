@@ -403,7 +403,7 @@ bool Matrix4::Equals(Matrix4& m)
     {
         for (int x = 0; x < 4; x++)
         {
-            if (abs(Data[y][x] - m.Data[y][x]) > epsilon)
+            if (std::abs(Data[y][x] - m.Data[y][x]) > epsilon)
             {
                 Result = false;
             }

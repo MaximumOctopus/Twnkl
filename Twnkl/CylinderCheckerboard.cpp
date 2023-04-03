@@ -12,6 +12,7 @@
 #include <iostream>
 
 #include "CylinderCheckerboard.h"
+#include "Fast.h"
 #include "PatternCommon.h"
 
 
@@ -41,8 +42,8 @@ Colour CylinderCheckerboard::ColourAt(Object* o, Quaternion& q)
 
 Colour CylinderCheckerboard::UVColourAt(double u, double v)
 {
-	int u2 = static_cast<int>(floor(u * Width));
-	int v2 = static_cast<int>(floor(v * Height));
+	int u2 = static_cast<int>(Fast::Floor(u * Width));
+	int v2 = static_cast<int>(Fast::Floor(v * Height));
 
 	if ((u2 + v2) % 2 == 0)
 	{
@@ -55,5 +56,5 @@ Colour CylinderCheckerboard::UVColourAt(double u, double v)
 
 std::wstring CylinderCheckerboard::ToString()
 {
-	return L"#1 " + Colours[0].ToString() + L" #2 " + Colours[1].ToString();
+	return L"#1 " + Colours[0].ToString() + L" #2 " + Colours[1].ToString() + L", Dimensions " + std::to_wstring(Width) + L" x " + std::to_wstring(Height);
 }

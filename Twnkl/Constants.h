@@ -37,3 +37,8 @@ static int __DefaultRendererSamplesPerPixel = 0;
 
 static double __DefaultPerlinScale = 1.0;
 static double __DefaultPerlinPhase = 10.0;
+
+static double __DefaultFractalFrequency = 1.0;
+static double __DefaultFractalAmplitude = 1.0;
+static double __DefaultFractalLacunarity = 2.0;
+static double __DefaultFractalPersistence = 0.5;

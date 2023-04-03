@@ -42,6 +42,8 @@ class Renderer
 
 public:
 
+	std::wstring RenderTime = L"0";
+
 	Renderer();
 	~Renderer();
 
@@ -55,8 +57,8 @@ public:
 	[[nodiscard]] bool IsShadowed(Quaternion&, Quaternion&);
 	[[nodiscard]] Colour ReflectedColour(Computation&, int);
 	[[nodiscard]] Colour RefractedColour(Computation&, int);
-	double IntensityAt(Light*, Quaternion&);
-	[[nodiscard]] void IntersectsWorld(Ray&);
+	[[nodiscard]] double IntensityAt(Light*, Quaternion&);
+	void IntersectsWorld(Ray&);
 
 	[[nodiscard]] Colour Lighting(Object*, Light*, Quaternion&, Quaternion&, Quaternion&, double);
 };

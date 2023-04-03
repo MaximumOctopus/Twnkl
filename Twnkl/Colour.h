@@ -39,5 +39,14 @@ public:
 
 	void Reset();
 
+	int To255(double);
+
+	int ToIntBGR();					// to Windows format: BGR
+	int ToIntRGB();
+	void FromIntBGR(int);			// from Windows format: BGR
+	void FromIntRGB(int);
+
+	std::string RGBString();
+
 	[[nodiscard]] bool Equals(Colour);
 };

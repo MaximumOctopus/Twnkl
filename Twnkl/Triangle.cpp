@@ -48,7 +48,7 @@ void Triangle::LocalIntersect(Intersections& i, Ray& rt)
 	Quaternion dir_cross_e2 = rt.Direction.Cross(e2);
 	double det = e1.Dot(dir_cross_e2);
 
-	if (abs(det) < epsilon) 
+	if (std::abs(det) < epsilon)
 	{
 		return;
 	}

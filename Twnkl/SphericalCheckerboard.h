@@ -19,7 +19,6 @@ class SphericalCheckerboard : public Pattern
 	double Height = 0;
 
 	Colour UVColourAt(double, double);
-	std::pair<double, double> SphericalMap(Quaternion&);
 
 public:
 

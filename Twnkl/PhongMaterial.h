@@ -39,8 +39,11 @@ public:
 	bool HasPattern = false;
 
 	PhongMaterial();
+	~PhongMaterial();
 
 	PhongMaterial(double, double, double, double, double, double, double, double, double, double);
 
 	void SetPattern(Pattern*);
+
+	void RemovePattern();
 };

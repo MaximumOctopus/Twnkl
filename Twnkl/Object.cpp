@@ -21,14 +21,6 @@ Object::Object(std::wstring n)
 }
 
 
-void Object::SetTransform(Matrix4 m)
-{
-	Transform = m;
-
-	TransformSet = true;
-}
-
-
 void Object::SetMaterial(PhongMaterial p)
 {
 	Material->Ambient = p.Ambient;
@@ -41,9 +33,73 @@ void Object::SetMaterial(PhongMaterial p)
 }
 
 
+void Object::ProcessTransforms()
+{
+	for (int t = 0; t < Transforms.size(); t++)
+	{
+		if (t == 0)
+		{
+			Transform = Transforms[t].Transform;
+		}
+		else
+		{
+			Transform.MultiplyBy(Transforms[t].Transform);
+		}
+	}
+
+	CreateInverseTransform();
+}
+
+
+void Object::AddTransform(TransformConfiguration tc)
+{
+	Transforms.push_back(tc);
+}
+
+
 void Object::CreateInverseTransform()
 {
 	InverseTransform = Transform.Inverse();
+}
+
+
+int Object::TransformsCount()
+{
+	return Transforms.size();
+}
+
+
+TransformConfiguration Object::TransformAt(int index)
+{
+	return Transforms[index];
+}
+
+
+void Object::TransformReplaceAt(int index, TransformConfiguration tc)
+{
+	Transforms[index].Type = tc.Type;
+
+	Transforms[index].Angle = tc.Angle;
+	Transforms[index].XYZ = tc.XYZ;
+
+	switch (Transforms[index].Type)
+	{
+	case TransformType::Scale:
+		Transforms[index].Transform = Matrix4(0, tc.XYZ.x, tc.XYZ.y, tc.XYZ.z);
+		break;
+	case TransformType::Translate:
+		Transforms[index].Transform = Matrix4(1, tc.XYZ.x, tc.XYZ.y, tc.XYZ.z);
+		break;
+	case TransformType::RotateX:
+		Transforms[index].Transform = Matrix4(0, tc.Angle);
+		break;
+	case TransformType::RotateY:
+		Transforms[index].Transform = Matrix4(1, tc.Angle);
+		break;
+	case TransformType::RotateZ:
+		Transforms[index].Transform = Matrix4(2, tc.Angle);
+		break;
+	}
 }
 
 

@@ -31,13 +31,13 @@ bool Cylinder::CheckCap(double t, Ray& r)
     auto x = r.Origin.x + t * r.Direction.x;
     auto z = r.Origin.z + t * r.Direction.z;
 
-    return (pow(x, 2) + pow(z, 2)) <= 1;
+    return (x * x + z * z) <= 1;
 }
 
 
 void Cylinder::IntersectCaps(Intersections& i, Ray& r)
 {
-    if (!Closed || abs(r.Direction.y) < epsilon) 
+    if (!Closed || std::abs(r.Direction.y) < epsilon)
     {
         return;
     }
@@ -60,17 +60,17 @@ void Cylinder::IntersectCaps(Intersections& i, Ray& r)
 
 void Cylinder::LocalIntersect(Intersections& i, Ray& rt)
 {
-    double a = pow(rt.Direction.x, 2) + pow(rt.Direction.z, 2);
+    double a = rt.Direction.x * rt.Direction.x + rt.Direction.z * rt.Direction.z;
 
-    if (abs(a) < epsilon)
+    if (std::abs(a) < epsilon)
     {
         return;
     }
 
     double b = 2 * rt.Origin.x * rt.Direction.x + 2 * rt.Origin.z * rt.Direction.z;
-    double c = pow(rt.Origin.x, 2) + pow(rt.Origin.z, 2) - 1;
+    double c = rt.Origin.x * rt.Origin.x + rt.Origin.z * rt.Origin.z - 1;
 
-    double disc = pow(b, 2) - 4 * a * c;
+    double disc = b * b - 4 * a * c;
 
     if (disc < 0)
     { 
@@ -106,7 +106,7 @@ void Cylinder::LocalIntersect(Intersections& i, Ray& rt)
 // calculates the normal at a space in world space
 Quaternion Cylinder::LocalNormalAt(Quaternion& world_point)
 {
-    auto dist = pow(world_point.x, 2) + pow(world_point.z, 2);
+    auto dist = world_point.x * world_point.x + world_point.z * world_point.z;
 
     if (dist < 1 && world_point.y >= (Maximum - epsilon))
     {

@@ -16,21 +16,12 @@
 
 class CubeChecker : public Pattern
 {
-	int FaceFromPoint(Quaternion);
-
-	std::pair<double, double> CubeUVFront(Quaternion&);
-	std::pair<double, double> CubeUVBack(Quaternion&);
-	std::pair<double, double> CubeUVLeft(Quaternion&);
-	std::pair<double, double> CubeUVRight(Quaternion&);
-	std::pair<double, double> CubeUVUp(Quaternion&);
-	std::pair<double, double> CubeUVDown(Quaternion&);
-
 	Colour UVColourAt(double, double);
 
 public:
 
-	int Width = 0;
-	int Height = 0;
+	double Width = 0;
+	double Height = 0;
 
 	CubeChecker(std::wstring);
 

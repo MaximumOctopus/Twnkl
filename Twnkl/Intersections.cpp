@@ -15,6 +15,11 @@
 #include "Intersections.h"
 
 
+#ifdef _GUI
+bool sortBySize(const Intersect& lhs, const Intersect& rhs) { return lhs.Tvalue < rhs.Tvalue; }
+#endif
+
+
 Intersections::Intersections() noexcept
 {
 
@@ -23,7 +28,12 @@ Intersections::Intersections() noexcept
 
 void Intersections::Sort()
 {
+	#ifdef _CONSOLE
 	std::ranges::sort(List, {}, &Intersect::Tvalue);
+	#endif
+	#ifdef _GUI
+	std::sort(List.begin(), List.end(), sortBySize);
+	#endif
 }
 
 
@@ -65,7 +75,6 @@ bool Intersections::LowestNonNegativeLessDistance(double distance)
 
 Computation Intersections::PrepareComputation(int hit_object_id, Ray& r)
 {
-	//std::wcout << L"PC() List " << ToString() << L"\n";
 
 	Quaternion point = r.Position(List[hit_object_id].Tvalue);
 

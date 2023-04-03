@@ -24,7 +24,7 @@ class Model : public Object
 
 	std::vector<Object*> Objects;
 
-	std::tuple<int, int, int> VectorsFrom(const std::wstring, int);
+	Quaternion VectorsFrom(const std::wstring, int);
 	Quaternion XYZFrom(const std::wstring);
 
 	void SetBounds(Triangle*);
@@ -32,6 +32,7 @@ class Model : public Object
 public:
 
 	Model(std::wstring);
+	~Model();
 
 	void LocalIntersect(Intersections&, Ray&) override;
 

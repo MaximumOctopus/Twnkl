@@ -22,11 +22,9 @@
 
 class World
 {
-	[[nodiscard]] std::string ColourToPPM(Colour);
-
 public:
 
-	Colour* Canvas;
+	Colour* Canvas = nullptr;
 
 	std::vector<Object*> Objects;
 	std::vector<Light*> Lights;

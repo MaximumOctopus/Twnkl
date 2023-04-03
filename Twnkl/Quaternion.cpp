@@ -23,7 +23,7 @@ Quaternion::Quaternion() noexcept
 
 
 // create random between from and to
-Quaternion::Quaternion(double min, double max)
+Quaternion::Quaternion(double min, double max) noexcept
 {
 	x = min + (max - min) * (rand() / (RAND_MAX + 1.0));
 	y = min + (max - min) * (rand() / (RAND_MAX + 1.0));
@@ -33,7 +33,7 @@ Quaternion::Quaternion(double min, double max)
 }
 
 
-Quaternion::Quaternion(double xx, double yy, double zz, double ww)  noexcept
+Quaternion::Quaternion(double xx, double yy, double zz, double ww) noexcept
 {
 	x = xx;
 	y = yy;
@@ -176,10 +176,10 @@ Matrix4 Quaternion::ViewTransform(Quaternion& to, Quaternion& up)
 
 bool Quaternion::Equals(Quaternion& q)
 {
-	double xx = abs(x - q.x);
-	double yy = abs(y - q.y);
-	double zz = abs(z - q.z);
-	double ww = abs(w - q.w);
+	double xx = std::abs(x - q.x);
+	double yy = std::abs(y - q.y);
+	double zz = std::abs(z - q.z);
+	double ww = std::abs(w - q.w);
 
 	if (xx < epsilon && yy < epsilon && zz < epsilon && ww < epsilon)
 	{

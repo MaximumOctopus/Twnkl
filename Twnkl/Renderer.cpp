@@ -115,6 +115,8 @@ void Renderer::ShowRenderTime()
 	std::chrono::duration<double> elapsed_seconds = EndTime - StartTime;
 
 	std::wcout << L"\n  Render time         : " << elapsed_seconds.count() << L" seconds \n";
+
+	RenderTime = std::to_wstring(elapsed_seconds.count());
 }
 
 
@@ -276,7 +278,7 @@ Colour Renderer::Lighting(Object* o, Light* l, Quaternion& pos, Quaternion& eyev
 		return ambient;
 	}
 
-	Colour sum = Colour(0, 0, 0);
+	Colour total = Colour(0, 0, 0);
 
 	for (int v = 0; v < l->deltav; v++)
 	{
@@ -291,9 +293,9 @@ Colour Renderer::Lighting(Object* o, Light* l, Quaternion& pos, Quaternion& eyev
 			if (light_dot_normal > 0)
 			{
 				// compute the diffuse contribution
-				sum.r += effective.r * o->Material->Diffuse * light_dot_normal;
-				sum.g += effective.g * o->Material->Diffuse * light_dot_normal;
-				sum.b += effective.b * o->Material->Diffuse * light_dot_normal;
+				total.r += effective.r * o->Material->Diffuse * light_dot_normal;
+				total.g += effective.g * o->Material->Diffuse * light_dot_normal;
+				total.b += effective.b * o->Material->Diffuse * light_dot_normal;
 
 				// reflect_dot_eye represents the cosine of the angle between the
 				// reflection vectorand the eye vector.A negative number means the
@@ -310,17 +312,17 @@ Colour Renderer::Lighting(Object* o, Light* l, Quaternion& pos, Quaternion& eyev
 					// compute the specular contribution
 					double factor = pow(reflect_dot_eye, o->Material->Shininess);
 
-					sum.r += l->Intensity.r * o->Material->Specular * factor;
-					sum.g += l->Intensity.g * o->Material->Specular * factor;
-					sum.b += l->Intensity.b * o->Material->Specular * factor;
+					total.r += l->Intensity.r * o->Material->Specular * factor;
+					total.g += l->Intensity.g * o->Material->Specular * factor;
+					total.b += l->Intensity.b * o->Material->Specular * factor;
 				}
 			}
 		}
 	}
 
-	return Colour(ambient.r + (sum.r / (double)l->Samples) * shade_intensity,
-		ambient.g + (sum.g / (double)l->Samples) * shade_intensity,
-		ambient.b + (sum.b / (double)l->Samples) * shade_intensity);
+	return Colour(ambient.r + (total.r / (double)l->Samples) * shade_intensity,
+		ambient.g + (total.g / (double)l->Samples) * shade_intensity,
+		ambient.b + (total.b / (double)l->Samples) * shade_intensity);
 }
 
 

@@ -18,6 +18,15 @@ PhongMaterial::PhongMaterial()
 }
 
 
+PhongMaterial::~PhongMaterial()
+{
+	if (SurfacePattern != nullptr && HasPattern)
+	{
+		delete SurfacePattern;
+	}
+}
+
+
 PhongMaterial::PhongMaterial(double r, double g, double b,
 	double am, double di, double re, double ri, double sh, double sp, double tr)
 {
@@ -40,4 +49,12 @@ void PhongMaterial::SetPattern(Pattern* p)
 	SurfacePattern = p;
 
 	HasPattern = true;
+}
+
+
+void PhongMaterial::RemovePattern()
+{
+	delete SurfacePattern;
+
+	HasPattern = false;
 }

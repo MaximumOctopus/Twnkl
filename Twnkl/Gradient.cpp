@@ -9,6 +9,7 @@
 // 
 // 
 
+#include "Fast.h"
 #include "Gradient.h"
 
 
@@ -25,7 +26,7 @@ Colour Gradient::ColourAt(Object* o, Quaternion& q)
 
 	Colour d = Colours[1].Sub(Colours[0]);
 
-	double f = pattern_point.x - floor(pattern_point.x);
+	double f = pattern_point.x - Fast::Floor(pattern_point.x);
 
 	Colour dmf = d.Mult(f);
 

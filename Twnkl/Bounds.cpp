@@ -76,7 +76,7 @@ std::pair<double, double> Bounds::CheckAxis(double origin, double direction, dou
 
     double tmin{ 0 }, tmax{ 0 };
 
-    if (abs(direction) >= epsilon)
+    if (std::abs(direction) >= epsilon)
     {
         tmin = tminNumerator / direction;
         tmax = tmaxNumerator / direction;

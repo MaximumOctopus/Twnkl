@@ -12,6 +12,7 @@
 #include <iostream>
 
 #include "CubeCheckerboard.h"
+#include "PatternCommon.h"
 
 
 CubeChecker::CubeChecker(std::wstring name) : Pattern(name)
@@ -27,82 +28,6 @@ void CubeChecker::SetDimensions(double u, double v)
 }
 
 
-int CubeChecker::FaceFromPoint(Quaternion p)
-{
-	double abs_x = abs(p.x);
-	double abs_y = abs(p.y);
-	double abs_z = abs(p.z);
-	double coord = std::max(abs_x, std::max(abs_y, abs_z));
-
-	if (coord == p.x)			// right
-		return 0;
-	else if (coord == -p.x)		// left
-		return 1;
-	else if (coord == p.y)		// up
-		return 2;
-	else if (coord == -p.y)		// down
-		return 3;
-	else if (coord == p.z)		// front
-		return 4;
-
-	return 5;				// back
-}
-
-
-std::pair<double, double> CubeChecker::CubeUVFront(Quaternion& p)
-{
-	double u = fmod(p.x + 1, 2.0) / 2.0;
-	double v = fmod(p.y + 1, 2.0) / 2.0;
-
-	return { u, v };
-}
-
-
-std::pair<double, double> CubeChecker::CubeUVBack(Quaternion& p)
-{
-	double u = fmod(1 - p.x, 2.0) / 2.0;
-	double v = fmod(p.y + 1, 2.0) / 2.0;
-
-	return { u, v };
-}
-
-
-std::pair<double, double> CubeChecker::CubeUVLeft(Quaternion& p)
-{
-	double u = fmod(p.z + 1.0, 2.0) / 2.0;
-	double v = fmod(p.y + 1.0, 2.0) / 2.0;
-
-	return { u, v };
-}
-
-
-std::pair<double, double> CubeChecker::CubeUVRight(Quaternion& p)
-{
-	double u = fmod(1 - p.z, 2.0) / 2.0;
-	double v = fmod(p.y + 1, 2.0) / 2.0;
-
-	return { u, v };
-}
-
-
-std::pair<double, double> CubeChecker::CubeUVUp(Quaternion& p)
-{
-	double u = fmod(p.x + 1, 2.0) / 2.0;
-	double v = fmod(1 - p.z, 2.0) / 2.0;
-
-	return { u, v };
-}
-
-
-std::pair<double, double> CubeChecker::CubeUVDown(Quaternion& p)
-{
-	double u = fmod(p.x + 1, 2.0) / 2.0;
-	double v = fmod(p.z + 1, 2.0) / 2.0;
-
-	return { u, v };
-}
-
-
 Colour CubeChecker::ColourAt(Object* o, Quaternion& q)
 {
 	Quaternion object_point = o->InverseTransform.MultQ(q);
@@ -110,20 +35,20 @@ Colour CubeChecker::ColourAt(Object* o, Quaternion& q)
 
 	std::pair<double, double> uv = { 0, 0 };
 
-	int face = FaceFromPoint(pattern_point);
+	int face = PatternCommon::FaceFromPoint(pattern_point);
 
 	if (face == 1)
-		uv = CubeUVLeft(pattern_point);
+		uv = PatternCommon::CubeUVLeft(pattern_point);
 	else if (face == 0)
-		uv = CubeUVRight(pattern_point);
+		uv = PatternCommon::CubeUVRight(pattern_point);
 	else if (face == 4)
-		uv = CubeUVFront(pattern_point);
+		uv = PatternCommon::CubeUVFront(pattern_point);
 	else if (face == 5)
-		uv = CubeUVBack(pattern_point);
+		uv = PatternCommon::CubeUVBack(pattern_point);
 	else if (face == 2)
-		uv = CubeUVUp(pattern_point);
+		uv = PatternCommon::CubeUVUp(pattern_point);
 	else
-		uv = CubeUVDown(pattern_point);
+		uv = PatternCommon::CubeUVDown(pattern_point);
 
 	return UVColourAt(/*cube_map.faces[face]*/ uv.first, uv.second);
 }
@@ -131,12 +56,8 @@ Colour CubeChecker::ColourAt(Object* o, Quaternion& q)
 
 Colour CubeChecker::UVColourAt(double u, double v)
 {
-	// flip v over so it matches the image layout, with y at the top
-	//v = 1.0 - abs(v);
-	//u = 1.0 - abs(u);
-
-	int x = abs(static_cast<int>(u * Width));
-	int y = abs(static_cast<int>(v * Height));
+	int x = std::abs(static_cast<int>(u * Width));
+	int y = std::abs(static_cast<int>(v * Height));
 
 	if ((x + y) % 2 == 0)
 	{
@@ -149,6 +70,5 @@ Colour CubeChecker::UVColourAt(double u, double v)
 
 std::wstring CubeChecker::ToString()
 {
-	return L"Dimensions " + std::to_wstring(Width) + L" x " + std::to_wstring(Height);
+	return L"#1 " + Colours[0].ToString() + L" #2 " + Colours[1].ToString() + L", Dimensions " + std::to_wstring(Width) + L" x " + std::to_wstring(Height);
 }
-

@@ -49,3 +49,79 @@ std::pair<double, double> PatternCommon::SphericalMap(Quaternion& p)
 
 	return { u, v };
 }
+
+
+int PatternCommon::FaceFromPoint(Quaternion p)
+{
+	double abs_x = std::abs(p.x);
+	double abs_y = std::abs(p.y);
+	double abs_z = std::abs(p.z);
+	double coord = std::max(abs_x, std::max(abs_y, abs_z));
+
+	if (coord == p.x)			// right
+		return 0;
+	else if (coord == -p.x)		// left
+		return 1;
+	else if (coord == p.y)		// up
+		return 2;
+	else if (coord == -p.y)		// down
+		return 3;
+	else if (coord == p.z)		// front
+		return 4;
+
+	return 5;				// back
+}
+
+
+std::pair<double, double> PatternCommon::CubeUVFront(Quaternion& p)
+{
+	double u = fmod(p.x + 1, 2.0) / 2.0;
+	double v = fmod(p.y + 1, 2.0) / 2.0;
+
+	return { u, v };
+}
+
+
+std::pair<double, double> PatternCommon::CubeUVBack(Quaternion& p)
+{
+	double u = fmod(1 - p.x, 2.0) / 2.0;
+	double v = fmod(p.y + 1, 2.0) / 2.0;
+
+	return { u, v };
+}
+
+
+std::pair<double, double> PatternCommon::CubeUVLeft(Quaternion& p)
+{
+	double u = fmod(p.z + 1.0, 2.0) / 2.0;
+	double v = fmod(p.y + 1.0, 2.0) / 2.0;
+
+	return { u, v };
+}
+
+
+std::pair<double, double> PatternCommon::CubeUVRight(Quaternion& p)
+{
+	double u = fmod(1 - p.z, 2.0) / 2.0;
+	double v = fmod(p.y + 1, 2.0) / 2.0;
+
+	return { u, v };
+}
+
+
+std::pair<double, double> PatternCommon::CubeUVUp(Quaternion& p)
+{
+	double u = fmod(p.x + 1, 2.0) / 2.0;
+	double v = fmod(1 - p.z, 2.0) / 2.0;
+
+	return { u, v };
+}
+
+
+std::pair<double, double> PatternCommon::CubeUVDown(Quaternion& p)
+{
+	double u = fmod(p.x + 1, 2.0) / 2.0;
+	double v = fmod(p.z + 1, 2.0) / 2.0;
+
+	return { u, v };
+}

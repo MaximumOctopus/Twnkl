@@ -21,7 +21,7 @@ class PointLight : public Light
 {
 public:
 
-	PointLight(double, double, double, double, double, double);
+	PointLight(std::wstring, double, double, double, double, double, double);
 
 	Quaternion PointOn(double, double) override;
 

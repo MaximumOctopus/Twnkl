@@ -14,8 +14,10 @@
 #include "AreaLight.h"
 
 
-AreaLight::AreaLight(double r, double g, double b, double x, double y, double z) : Light(r, g, b, x, y, z)
+AreaLight::AreaLight(std::wstring name, double r, double g, double b, double x, double y, double z) : Light(name, r, g, b, x, y, z)
 {
+	Name = name;
+
 	Intensity.r = r;
 	Intensity.g = g;
 	Intensity.b = b;

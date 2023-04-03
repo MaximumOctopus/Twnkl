@@ -21,7 +21,7 @@ Plane::Plane(std::wstring name): Object(name)
 
 void Plane::LocalIntersect(Intersections& i, Ray& rt)
 {
-	if (abs(rt.Direction.y) < epsilon)
+	if (std::abs(rt.Direction.y) < epsilon)
 	{
 		return;
 	}

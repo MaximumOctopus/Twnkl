@@ -24,6 +24,12 @@ Model::Model(std::wstring name) : Object(name)
 }
 
 
+Model::~Model()
+{
+	
+}
+
+
 void Model::LocalIntersect(Intersections& i, Ray& rt)
 {
 	if (bounds.Intersects(rt))
@@ -43,7 +49,7 @@ Quaternion Model::LocalNormalAt(Quaternion& q)
 }
 
 
-std::tuple<int, int, int> Model::VectorsFrom(const std::wstring input, int reference_index)
+Quaternion Model::VectorsFrom(const std::wstring input, int reference_index)
 {
 	int ReferenceType = 0;	// 0 = vector index, 1 = texture index, 2 = vector normal
 	int mode = 0;
@@ -99,7 +105,7 @@ std::tuple<int, int, int> Model::VectorsFrom(const std::wstring input, int refer
 		}
 	}
 
-	return { components[0], components[1], components[2] };
+	return Quaternion(components[0], components[1], components[2], 0);
 }
 
 
@@ -185,7 +191,7 @@ void Model::Load(std::wstring file_name)
 					}
 					case L'f':					// faces
 					{
-						std::tuple<int, int, int> points = VectorsFrom(s.substr(2) + L" ", 0);
+						Quaternion points = VectorsFrom(s.substr(2) + L" ", 0);
 
 						Triangle* tringle = new Triangle(L"");
 
@@ -193,15 +199,15 @@ void Model::Load(std::wstring file_name)
 
 						if (VectorNormals.size() != 0)
 						{
-							std::tuple<int, int, int> normals = VectorsFrom(s.substr(2) + L" ", 2);
+							Quaternion normals = VectorsFrom(s.substr(2) + L" ", 2);
 
 							// for now, assumes the normals for each point are equal...
-							tringle->SetPointsWithNormal(Vectors[std::get<0>(points) - 1], Vectors[std::get<1>(points) - 1], Vectors[std::get<2>(points) - 1], 
-								VectorNormals[std::get<0>(normals) - 1]);
+							tringle->SetPointsWithNormal(Vectors[points.x - 1], Vectors[points.y - 1], Vectors[points.z - 1],
+								VectorNormals[normals.x - 1]);
 						}
 						else
 						{
-							tringle->SetPoints(Vectors[std::get<0>(points) - 1], Vectors[std::get<1>(points) - 1], Vectors[std::get<2>(points) - 1]);
+							tringle->SetPoints(Vectors[points.x - 1], Vectors[points.y - 1], Vectors[points.z - 1]);
 						}
 
 						Objects.push_back(tringle);

@@ -40,17 +40,45 @@ Colour Pattern::ColourAt(Object*, Quaternion&)
 }
 
 
-void Pattern::SetTransform(Matrix4 m)
+void Pattern::ProcessTransforms()
 {
-	Transform = m;
+	for (int t = 0; t < Transforms.size(); t++)
+	{
+		if (t == 0)
+		{
+			Transform = Transforms[t].Transform;
+		}
+		else
+		{
+			Transform.MultiplyBy(Transforms[t].Transform);
+		}
+	}
 
-	TransformSet = true;
+	CreateInverseTransform();
 }
 
 
-void Pattern::Finalise()
+void Pattern::AddTransform(TransformConfiguration tc)
+{
+	Transforms.push_back(tc);
+}
+
+
+void Pattern::CreateInverseTransform()
 {
 	InverseTransform = Transform.Inverse();
+}
+
+
+int Pattern::TransformsCount()
+{
+	return Transforms.size();
+}
+
+
+TransformConfiguration Pattern::TransformAt(int index)
+{
+	return Transforms[index];
 }
 
 

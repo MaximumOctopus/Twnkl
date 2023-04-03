@@ -9,6 +9,9 @@
 // 
 // 
 
+#include <cmath>
+
+#include "Fast.h"
 #include "PatternCommon.h"
 #include "Perlin2.h"
 
@@ -117,18 +120,18 @@ double Perlin2::Turbulance(const Quaternion& p)
 		temp_p.Scale(2);
 	}
 
-	return fabs(accum);
+	return std::fabs(accum);
 }
 
 
 double Perlin2::Noise(const Quaternion& p)
 {
-	auto u = p.x - floor(p.x);
-	auto v = p.y - floor(p.y);
-	auto w = p.z - floor(p.z);
-	auto i = static_cast<int>(floor(p.x));
-	auto j = static_cast<int>(floor(p.y));
-	auto k = static_cast<int>(floor(p.z));
+	auto u = p.x - Fast::Floor(p.x);
+	auto v = p.y - Fast::Floor(p.y);
+	auto w = p.z - Fast::Floor(p.z);
+	auto i = static_cast<int>(Fast::Floor(p.x));
+	auto j = static_cast<int>(Fast::Floor(p.y));
+	auto k = static_cast<int>(Fast::Floor(p.z));
 
 	Quaternion c[2][2][2];
 

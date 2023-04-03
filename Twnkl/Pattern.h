@@ -14,10 +14,13 @@
 #include "Colour.h"
 #include "Object.h"
 #include "Quaternion.h"
+#include "TransformConfiguration.h"
 
 
 class Pattern
 {
+	std::vector<TransformConfiguration> Transforms;
+
 public:
 
 	std::wstring Name = L"";
@@ -29,8 +32,6 @@ public:
 	double Reflectivity[2] = { 0, 0 };
 	bool HasReflectivity = false;
 
-	bool TransformSet = false;
-
 	Pattern(std::wstring);
 
 	void SetColours(Colour, Colour);
@@ -38,8 +39,13 @@ public:
 
 	[[nodiscard]] virtual Colour ColourAt(Object*, Quaternion&);
 
-	void SetTransform(Matrix4);
-	void Finalise();
+	void ProcessTransforms();
+	void AddTransform(TransformConfiguration);
+
+	int TransformsCount();
+	[[nodiscard]] TransformConfiguration TransformAt(int);
+
+	void CreateInverseTransform();
 
 	[[nodiscard]] virtual std::wstring ToString();
 };

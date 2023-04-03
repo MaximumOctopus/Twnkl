@@ -48,7 +48,7 @@ public:
 
 	Quaternion() noexcept;
 
-	Quaternion(double, double);
+	Quaternion(double, double) noexcept;
 
 	Quaternion(double, double, double, double) noexcept;
 

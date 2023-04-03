@@ -14,6 +14,11 @@
 #include <iostream>
 #include <string>
 
+#ifdef _GUI
+#include <windows.h>
+#include <string.h>
+#endif
+
 #include "Constants.h"
 #include "Utility.h"
 
@@ -22,6 +27,33 @@ namespace Utility
 {
 	static const std::wstring ShortDays[7] = { L"Sun", L"Mon", L"Tue", L"Wed", L"Thu", L"Fri", L"Sat" };
 	static const std::wstring Months[12] = { L"Jan", L"Feb", L"Mar", L"Apr", L"May", L"Jun", L"Jul", L"Aug", L"Sep", L"Oct", L"Nov", L"Dec" };
+
+	#ifdef _GUI
+	std::wstring GetFileName()
+	{
+		OPENFILENAME ofn = { 0 };
+		TCHAR szFile[260] = { 0 };
+		// Initialize remaining fields of OPENFILENAME structure
+		ofn.lStructSize = sizeof(ofn);
+		ofn.hwndOwner = 0;
+		ofn.lpstrFile = szFile;
+		ofn.nMaxFile = sizeof(szFile);
+		ofn.lpstrFilter = _T("Twnkl Scene Files\0*.twnkl\0Text\0*.twnkl\0");
+		ofn.nFilterIndex = 1;
+		ofn.lpstrFileTitle = NULL;
+		ofn.nMaxFileTitle = 0;
+		ofn.lpstrInitialDir = NULL;
+		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+		if (GetOpenFileName(&ofn) == TRUE)
+		{
+			return std::wstring(&ofn.lpstrFile[0]);
+
+		}
+
+		return L"";
+	}
+	#endif
 
 	int CurrentYear()
 	{

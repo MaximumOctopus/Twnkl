@@ -37,20 +37,23 @@ Camera::Camera(int h, int v, double f, Matrix4 t)
 
 void Camera::CalculatePixelSize()
 {
-	HalfView = tan(FoV / 2.0);
-
-	double aspect = (double)Width / (double)Height;
-
-	if (aspect >= 1.0)
+	if (Width != 0 && Height != 0)
 	{
-		HalfWidth = HalfView;
-		HalfHeight = HalfView / aspect;
-	}
-	else
-	{
-		HalfWidth = HalfView * aspect;
-		HalfHeight = HalfView;
-	}
+		HalfView = tan(FoV / 2.0);
 
-	PixelSize = (HalfWidth * 2.0) / (double)Width;
+		double aspect = (double)Width / (double)Height;
+
+		if (aspect >= 1.0)
+		{
+			HalfWidth = HalfView;
+			HalfHeight = HalfView / aspect;
+		}
+		else
+		{
+			HalfWidth = HalfView * aspect;
+			HalfHeight = HalfView;
+		}
+
+		PixelSize = (HalfWidth * 2.0) / (double)Width;
+	}
 }

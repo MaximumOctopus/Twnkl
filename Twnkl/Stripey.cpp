@@ -9,6 +9,7 @@
 // 
 // 
 
+#include "Fast.h"
 #include "Stripey.h"
 
 
@@ -23,7 +24,7 @@ Colour Stripey::ColourAt(Object* o, Quaternion& q)
 	Quaternion object_point = o->InverseTransform.MultQ(q);
 	Quaternion pattern_point = InverseTransform.MultQ(object_point);
 	
-	if (static_cast<int>(floor(pattern_point.x)) % 2 == 0)
+	if (static_cast<int>(Fast::Floor(pattern_point.x)) % 2 == 0)
 	{
 		return Colours[0];
 	}

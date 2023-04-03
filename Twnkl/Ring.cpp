@@ -9,6 +9,7 @@
 // 
 // 
 
+#include "Fast.h"
 #include "Ring.h"
 
 
@@ -23,7 +24,7 @@ Colour Ring::ColourAt(Object* o, Quaternion& q)
 	Quaternion object_point = o->InverseTransform.MultQ(q);
 	Quaternion pattern_point = InverseTransform.MultQ(object_point);
 
-	if (static_cast<int>(floor(sqrt(pattern_point.x * pattern_point.x + pattern_point.z * pattern_point.z))) % 2 == 0)
+	if (static_cast<int>(Fast::Floor(sqrt(pattern_point.x * pattern_point.x + pattern_point.z * pattern_point.z))) % 2 == 0)
 	{
 		return Colours[0];
 	}

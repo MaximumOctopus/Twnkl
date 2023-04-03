@@ -31,9 +31,11 @@ public:
 	int deltau = 0;
 	int deltav = 0;
 
+	std::wstring Name = L"";
+
 	int ID = 0;
 
-	Light(double, double, double, double, double, double);
+	Light(std::wstring, double, double, double, double, double, double);
 
 	virtual Quaternion PointOn(double, double);
 
