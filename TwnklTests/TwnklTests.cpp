@@ -153,9 +153,8 @@ namespace TwnklTestsMatrix
 		{
 			Sphere o = Sphere(L"");
 
-			o.SetTransform(Matrix4(1, 0, 1, 0));
-
-			o.CreateInverseTransform();
+			o.AddTransform({ TransformType::Translate, Matrix4(1, 0, 1, 0), Quaternion(), 0 });
+			o.ProcessTransforms();
 
 			Quaternion n = Quaternion(0, 1.70711, -0.70711, 1);
 
@@ -174,9 +173,8 @@ namespace TwnklTestsMatrix
 
 			Matrix4 zrotate(2, 0.6283185307);
 
-			o.SetTransform(m.MultM(zrotate));
-
-			o.CreateInverseTransform();
+			o.AddTransform({ TransformType::RotateZ, m.MultM(zrotate), Quaternion(), 0 });
+			o.ProcessTransforms();
 
 			Quaternion l = Quaternion(0, 0.7071067, -0.7071067, 1.0);
 

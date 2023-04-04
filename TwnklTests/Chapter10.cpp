@@ -14,6 +14,7 @@
 #include "../Twnkl/Sphere.h"
 #include "../Twnkl/Pattern.h"
 #include "../Twnkl/TestPattern.h"
+#include "../Twnkl/TransformConfiguration.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -28,8 +29,8 @@ namespace TwnklTestsChapter10
 		TEST_METHOD(Page134_1)
 		{
 			Sphere* s = new Sphere(L"");
-			s->SetTransform(Matrix4(0, 2, 2, 2));
-			s->CreateInverseTransform();
+			s->AddTransform({ TransformType::Scale, Matrix4(0, 2, 2, 2), Quaternion(), 0 });
+			s->ProcessTransforms();
 
 			PhongMaterial* p = new PhongMaterial();
 			TestPattern* tp = new TestPattern(L"TestPattern");
@@ -43,15 +44,15 @@ namespace TwnklTestsChapter10
 
 			Assert::IsTrue(col.Equals(Colour(1, 1.5, 2)));
 		}
-
+		
 		TEST_METHOD(Page134_2)
 		{
 			Sphere* s = new Sphere(L"");
 
 			PhongMaterial* p = new PhongMaterial();
 			TestPattern* tp = new TestPattern(L"TestPattern");
-			tp->SetTransform(Matrix4(0, 2, 2, 2));
-			tp->Finalise();
+			tp->AddTransform({ TransformType::Scale, Matrix4(0, 2, 2, 2), Quaternion(), 0 });
+			tp->ProcessTransforms();
 			p->SetPattern(tp);
 
 			Quaternion qpos(2, 3, 4, 1);
@@ -62,17 +63,17 @@ namespace TwnklTestsChapter10
 
 			Assert::IsTrue(col.Equals(Colour(1, 1.5, 2)));
 		}
-
+		
 		TEST_METHOD(Page134_3)
 		{
 			Sphere* s = new Sphere(L"");
-			s->SetTransform(Matrix4(0, 2, 2, 2));
-			s->CreateInverseTransform();
+			s->AddTransform({ TransformType::Scale, Matrix4(0, 2, 2, 2), Quaternion(), 0 });
+			s->ProcessTransforms();
 
 			PhongMaterial* p = new PhongMaterial();
 			TestPattern* tp = new TestPattern(L"TestPattern");
-			tp->SetTransform(Matrix4(1, 0.5, 1, 1.5));
-			tp->Finalise();
+			tp->AddTransform({ TransformType::Translate, Matrix4(1, 0.5, 1, 1.5), Quaternion(), 0 });
+			tp->ProcessTransforms();
 			p->SetPattern(tp);
 
 			Quaternion qpos(2.5, 3, 3.5, 1);

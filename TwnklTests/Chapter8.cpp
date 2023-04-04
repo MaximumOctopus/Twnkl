@@ -62,8 +62,8 @@ namespace TwnklTestsChapter8
 			PhongMaterial* m1 = new PhongMaterial();
 			s1->Material = m1;
 
-			s1->SetTransform(Matrix4(1, 0, 0, 1));
-			s1->CreateInverseTransform();
+			s1->AddTransform({ TransformType::Translate, Matrix4(1, 0, 0, 1), Quaternion(), 0 });
+			s1->ProcessTransforms();
 
 			GWorld->Objects.push_back(s1);
 

@@ -29,7 +29,7 @@ namespace TwnklTestsBonus
 
 		TEST_METHOD(SSPoL1)
 		{
-			AreaLight* l = new AreaLight(1, 1, 1, 0, 0, 0);
+			AreaLight* l = new AreaLight(L"arealight", 1, 1, 1, 0, 0, 0);
 			l->uvec = Quaternion(2, 0, 0, 0);
 			l->vvec = Quaternion(0, 0, 1, 0);
 
@@ -42,7 +42,7 @@ namespace TwnklTestsBonus
 
 		TEST_METHOD(SSPoL2)
 		{
-			AreaLight* l = new AreaLight(1, 1, 1, 0, 0, 0);
+			AreaLight* l = new AreaLight(L"arealight", 1, 1, 1, 0, 0, 0);
 			l->uvec = Quaternion(2, 0, 0, 0);
 			l->vvec = Quaternion(0, 0, 1, 0);
 
@@ -55,7 +55,7 @@ namespace TwnklTestsBonus
 
 		TEST_METHOD(SSPoL3)
 		{
-			AreaLight* l = new AreaLight(1, 1, 1, 0, 0, 0);
+			AreaLight* l = new AreaLight(L"arealight", 1, 1, 1, 0, 0, 0);
 			l->uvec = Quaternion(2, 0, 0, 0);
 			l->vvec = Quaternion(0, 0, 1, 0);
 
@@ -68,7 +68,7 @@ namespace TwnklTestsBonus
 
 		TEST_METHOD(SSPoL4)
 		{
-			AreaLight* l = new AreaLight(1, 1, 1, 0, 0, 0);
+			AreaLight* l = new AreaLight(L"arealight", 1, 1, 1, 0, 0, 0);
 			l->uvec = Quaternion(2, 0, 0, 0);
 			l->vvec = Quaternion(0, 0, 1, 0);
 
@@ -81,7 +81,7 @@ namespace TwnklTestsBonus
 
 		TEST_METHOD(SSPoL5)
 		{
-			AreaLight* l = new AreaLight(1, 1, 1, 0, 0, 0);
+			AreaLight* l = new AreaLight(L"arealight", 1, 1, 1, 0, 0, 0);
 			l->uvec = Quaternion(2, 0, 0, 0);
 			l->vvec = Quaternion(0, 0, 1, 0);
 

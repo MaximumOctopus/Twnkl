@@ -18,6 +18,7 @@
 #include "../Twnkl/Intersect.cpp"
 #include "../Twnkl/Intersections.cpp"
 #include "../Twnkl/Light.cpp"
+#include "../Twnkl/PointLight.cpp"
 #include "../Twnkl/PhongMaterial.cpp"
 #include "../Twnkl/Plane.cpp"
 #include "../Twnkl/Renderer.cpp"
@@ -524,7 +525,6 @@ namespace TwnklTestsChapter11
 			Assert::IsTrue(c.N1 == 1.5 && c.N2 == 1.0);
 		}
 
-
 		TEST_METHOD(Page154)
 		{
 			GWorld = new World(640, 320, 3.14159265358979311600 / 3.0);
@@ -536,8 +536,8 @@ namespace TwnklTestsChapter11
 			m1->RefractiveIndex = 1.5;
 			s1->Material = m1;
 
-			s1->SetTransform(Matrix4(1, 0, 0, 1));
-			s1->CreateInverseTransform();
+			s1->AddTransform({ TransformType::Translate, Matrix4(1, 0, 0, 1), Quaternion(), 0 });
+			s1->ProcessTransforms();
 
 			GWorld->Objects.push_back(s1);
 
