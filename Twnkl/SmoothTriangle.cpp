@@ -15,6 +15,7 @@
 SmoothTriangle::SmoothTriangle(std::wstring name) : Object(name)
 {
 	Name = name;
+	Primitive = PrimitiveType::SmoothTriangle;
 }
 
 
@@ -37,7 +38,7 @@ void SmoothTriangle::LocalIntersect(Intersections& i, Ray& rt)
 	auto dir_cross_e2 = rt.Direction.Cross(e2);
 	auto det = e1.Dot(dir_cross_e2);
 
-	if (abs(det) < epsilon)
+	if (std::abs(det) < epsilon)
 	{
 		return;
 	}
@@ -105,4 +106,12 @@ void SmoothTriangle::PostSetup(int i)
 std::wstring SmoothTriangle::ToString()
 {
 	return L"SmoothTriangle.";
+}
+
+
+void SmoothTriangle::ToFile(std::ofstream& ofile)
+{
+	ofile << Formatting::to_utf8(__SceneChunkObjectSmoothTriangle + L"\n");
+	ofile << Formatting::to_utf8(L"name=" + Name + L"\n");
+	ofile << Formatting::to_utf8(L"}\n");
 }

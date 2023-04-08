@@ -1,4 +1,16 @@
+//
+// Twnkl 1.0
+//
+// (c) Paul Alan Freshney 2023
+//
+// paul@freshney.org
+// 
+// https://github.com/MaximumOctopus/Twnkl
+// 
+// 
 
+#include <algorithm>
+#include <cmath>
 
 #include "PatternCommon.h"
 
@@ -6,12 +18,12 @@
 std::pair<double, double> PatternCommon::CylindricalMap(Quaternion& p)
 {
 	// compute the azimuthal angle, same as sphericalmap()
-	double theta = atan2(p.x, p.z);
+	double theta = std::atan2(p.x, p.z);
 	double raw_u = theta / (2.0 * 3.1415926535);
 	double u = 1.0 - (raw_u + 0.5);
 
 	// let v go from 0 to 1 between whole units of y
-	double v = fmod(p.y, 1.0);
+	double v = std::fmod(p.y, 1.0);
 
 	return { u, v };
 }
@@ -23,7 +35,7 @@ std::pair<double, double> PatternCommon::SphericalMap(Quaternion& p)
 	// -pi < theta <= pi
 	// angle increases clockwise as viewed from above,
 	// which is opposite of what we want, but we'll fix it later.
-	double theta = atan2(p.x, p.z);
+	double theta = std::atan2(p.x, p.z);
 
 	// vec is the vector pointing from the sphere's origin (the world origin)
 	// to the point, which will also happen to be exactly equal to the sphere's radius.
@@ -32,7 +44,7 @@ std::pair<double, double> PatternCommon::SphericalMap(Quaternion& p)
 
 	// compute the polar angle
 	// 0 <= phi <= pi
-	double phi = acos(p.y / radius);
+	double phi = std::acos(p.y / radius);
 
 	// -0.5 < raw_u <= 0.5
 	double raw_u = theta / (2.0 * 3.1415926535);
@@ -75,8 +87,8 @@ int PatternCommon::FaceFromPoint(Quaternion p)
 
 std::pair<double, double> PatternCommon::CubeUVFront(Quaternion& p)
 {
-	double u = fmod(p.x + 1, 2.0) / 2.0;
-	double v = fmod(p.y + 1, 2.0) / 2.0;
+	double u = std::fmod(p.x + 1, 2.0) / 2.0;
+	double v = std::fmod(p.y + 1, 2.0) / 2.0;
 
 	return { u, v };
 }
@@ -84,8 +96,8 @@ std::pair<double, double> PatternCommon::CubeUVFront(Quaternion& p)
 
 std::pair<double, double> PatternCommon::CubeUVBack(Quaternion& p)
 {
-	double u = fmod(1 - p.x, 2.0) / 2.0;
-	double v = fmod(p.y + 1, 2.0) / 2.0;
+	double u = std::fmod(1 - p.x, 2.0) / 2.0;
+	double v = std::fmod(p.y + 1, 2.0) / 2.0;
 
 	return { u, v };
 }
@@ -93,8 +105,8 @@ std::pair<double, double> PatternCommon::CubeUVBack(Quaternion& p)
 
 std::pair<double, double> PatternCommon::CubeUVLeft(Quaternion& p)
 {
-	double u = fmod(p.z + 1.0, 2.0) / 2.0;
-	double v = fmod(p.y + 1.0, 2.0) / 2.0;
+	double u = std::fmod(p.z + 1.0, 2.0) / 2.0;
+	double v = std::fmod(p.y + 1.0, 2.0) / 2.0;
 
 	return { u, v };
 }
@@ -102,8 +114,8 @@ std::pair<double, double> PatternCommon::CubeUVLeft(Quaternion& p)
 
 std::pair<double, double> PatternCommon::CubeUVRight(Quaternion& p)
 {
-	double u = fmod(1 - p.z, 2.0) / 2.0;
-	double v = fmod(p.y + 1, 2.0) / 2.0;
+	double u = std::fmod(1 - p.z, 2.0) / 2.0;
+	double v = std::fmod(p.y + 1, 2.0) / 2.0;
 
 	return { u, v };
 }
@@ -111,8 +123,8 @@ std::pair<double, double> PatternCommon::CubeUVRight(Quaternion& p)
 
 std::pair<double, double> PatternCommon::CubeUVUp(Quaternion& p)
 {
-	double u = fmod(p.x + 1, 2.0) / 2.0;
-	double v = fmod(1 - p.z, 2.0) / 2.0;
+	double u = std::fmod(p.x + 1, 2.0) / 2.0;
+	double v = std::fmod(1 - p.z, 2.0) / 2.0;
 
 	return { u, v };
 }
@@ -120,8 +132,8 @@ std::pair<double, double> PatternCommon::CubeUVUp(Quaternion& p)
 
 std::pair<double, double> PatternCommon::CubeUVDown(Quaternion& p)
 {
-	double u = fmod(p.x + 1, 2.0) / 2.0;
-	double v = fmod(p.z + 1, 2.0) / 2.0;
+	double u = std::fmod(p.x + 1, 2.0) / 2.0;
+	double v = std::fmod(p.z + 1, 2.0) / 2.0;
 
 	return { u, v };
 }

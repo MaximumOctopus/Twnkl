@@ -9,6 +9,8 @@
 // 
 // 
 
+#include <cmath>
+
 #include "Computation.h"
 
 
@@ -47,10 +49,10 @@ double Computation::Schlick()
 		}
 
 		// when n1 > n2, use cos(theta_t) instead
-		cenv = sqrt(1.0 - sin2_t);
+		cenv = std::sqrt(1.0 - sin2_t);
 	}
 
 	double rzero = ((N1 - N2) / (N1 + N2)) * ((N1 - N2) / (N1 + N2));
 
-	return rzero + (1.0 - rzero) * pow(1.0 - cenv, 5);
+	return rzero + (1.0 - rzero) * std::pow(1.0 - cenv, 5);
 }

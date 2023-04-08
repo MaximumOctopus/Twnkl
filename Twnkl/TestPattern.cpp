@@ -31,3 +31,8 @@ std::wstring TestPattern::ToString()
 {
 	return L"#1 " + Colours[0].ToString() + L" #2 " + Colours[1].ToString();
 }
+
+
+void TestPattern::ToFile(std::ofstream& ofile)
+{
+}

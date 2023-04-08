@@ -19,6 +19,7 @@
 Perlin3::Perlin3(std::wstring name) : Pattern(name)
 {
 	Name = name;
+	Design = PatternDesign::Perlin3;
 
 	ranvec = new Quaternion[point_count];
 
@@ -165,11 +166,28 @@ Colour Perlin3::ColourAt(Object* o, Quaternion& q)
 		pattern_point.Scale(Scale);
 	}
 
-	return Colours[0].Mult(0.5 * (1.0 + sin(Scale * q.z + Phase * Turbulance(pattern_point)))); // scale * pattern_point
+	return Colours[0].Mult(0.5 * (1.0 + std::sin(Scale * q.z + Phase * Turbulance(pattern_point)))); // scale * pattern_point
 }
 
 
 std::wstring Perlin3::ToString()
 {
 	return L"Colour " + Colours[0].ToString() + L", Scale " + std::to_wstring(Scale) + L", Phase " + std::to_wstring(Phase);
+}
+
+
+void Perlin3::ToFile(std::ofstream& ofile)
+{
+	ofile << Formatting::to_utf8(__SceneChunkPerlin3 + L"\n");
+	ofile << Formatting::to_utf8(L"colour=" + Colours[0].ToCommaString() + L"\n");
+	ofile << Formatting::to_utf8(L"u=" + std::to_wstring(Width) + L"\n");
+	ofile << Formatting::to_utf8(L"v=" + std::to_wstring(Height) + L"\n");
+	ofile << Formatting::to_utf8(L"phase=" + std::to_wstring(Phase) + L"\n");
+	ofile << Formatting::to_utf8(L"scale=" + std::to_wstring(Scale) + L"\n");
+	ofile << Formatting::to_utf8(L"}\n");
+
+	for (int t = 0; t < Transforms.size(); t++)
+	{
+		Transforms[t].ToFile(ofile);
+	}
 }

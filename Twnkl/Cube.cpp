@@ -15,6 +15,7 @@
 Cube::Cube(std::wstring name) : Object(name)
 {
 	Name = name;
+	Primitive = PrimitiveType::Cube;
 }
 
 
@@ -32,8 +33,8 @@ std::pair<double, double> Cube::CheckAxis(double origin, double direction)
 	}
 	else
 	{
-		tmin = tminNumerator * INFINITY;
-		tmax = tmaxNumerator * INFINITY;
+		tmin = tminNumerator * 9999999;	// C++ builder gives invalid floating point operations if using INFINITY \_(^-^)_/¯
+		tmax = tmaxNumerator * 9999999; //
 	}
 
 	if (tmin > tmax)
@@ -93,4 +94,19 @@ void Cube::PostSetup(int i)
 std::wstring Cube::ToString()
 {
 	return L"Cube.";
+}
+
+
+void Cube::ToFile(std::ofstream& ofile)
+{
+	ofile << Formatting::to_utf8(__SceneChunkObjectCube + L"\n");
+	ofile << Formatting::to_utf8(L"name=" + Name + L"\n");
+	ofile << Formatting::to_utf8(L"}\n");
+
+	for (int t = 0; t < Transforms.size(); t++)
+	{
+		Transforms[t].ToFile(ofile);
+	}
+
+	Material->ToFile(ofile);
 }

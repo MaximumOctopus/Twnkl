@@ -12,12 +12,39 @@
 #include <fstream>
 #include <iostream>
 
-#ifdef _DEBUG
+#include "Cone.h"
+#include "Cube.h"
+#include "Cylinder.h"
+#include "Model.h"
 #include "Plane.h"
-#include "PointLight.h"
 #include "Sphere.h"
+
+#ifdef _DEBUG
+#include "PointLight.h"
+#ifndef _GUI
 #include "TestPattern.h"
 #endif
+#endif
+
+#include "Checkerboard.h"
+#include "CubeCheckerboard.h"
+#include "CubeTexture.h"
+#include "CylinderCheckerboard.h"
+#include "CylinderTexture.h"
+#include "Fractal.h"
+#include "Gradient.h"
+#include "Gradient2.h"
+#include "Perlin.h"
+#include "Perlin2.h"
+#include "Perlin3.h"
+#include "PlanarTexture.h"
+#include "Ring.h"
+#include "Simplex.h"
+#include "SphericalCheckerboard.h"
+#include "SphericalTexture.h"
+#include "Stripey.h"
+
+#include "TextureLoader.h"
 
 #include "World.h"
 
@@ -35,6 +62,20 @@ World::~World()
 {
 	delete Cam;
 	delete Canvas;
+}
+
+
+void World::Clear()
+{
+	for (int t = 0; t < Objects.size(); t++)
+	{
+		delete Objects[t];
+	}
+
+	for (int t = 0; t < Lights.size(); t++)
+	{
+		delete Lights[t];
+	}
 }
 
 
@@ -122,6 +163,30 @@ bool World::SaveCanvasToFile(const std::wstring file_name)
 
 	return false;
 }
+
+
+void World::SaveScene(std::wstring file_name)
+{
+	std::ofstream file(file_name);
+
+	if (file)
+	{
+		Cam->ToFile(file);
+
+		for (int t = 0; t < Lights.size(); t++)
+		{
+			Lights[t]->ToFile(file);
+		}
+
+		for (int t = 0; t < Objects.size(); t++)
+		{
+			Objects[t]->ToFile(file);
+		}
+
+		file.close();
+	}
+}
+
 
 
 // =================================================================================
@@ -230,7 +295,257 @@ void World::ToString()
 }
 
 
+void World::AddNewObject(int primitive, AvailablePatterns pattern, PatternProperties properties, std::wstring name)
+{
+	switch (primitive)
+	{
+	case 0:             // cone
+	{
+		Cone* s = new Cone(name);
+		s->SetParameters(0, 1, true);
+		Objects.push_back(s);
+		break;
+	}
+	case 1:             // cube
+	{
+		Cube* s = new Cube(name);
+		Objects.push_back(s);
+		break;
+	}
+	case 2:             // cylinder
+	{
+		Cylinder* s = new Cylinder(name);
+		s->SetParameters(0, 1, true);
+		Objects.push_back(s);
+		break;
+	}
+	case 3:             // model
+	{
+		Model* s = new Model(name);
+		//s->Load(file_name);
+		Objects.push_back(s);
+		break;
+	}
+	case 4:             // plane
+	{
+		Plane* s = new Plane(name);
+		Objects.push_back(s);
+		break;
+	}
+	case 5:             // sphere
+	{
+		Sphere* s = new Sphere(name);
+		Objects.push_back(s);
+		break;
+	}
+	}
+
+	PhongMaterial* p = new PhongMaterial();
+	Objects.back()->Material = p;
+
+	if (pattern != AvailablePatterns::None)
+	{
+		SetLastObjectPattern(pattern, properties);
+	}
+}
+
+
+void World::SetLastObjectPattern(AvailablePatterns pattern, PatternProperties properties)
+{
+	bool greyscale = false;
+
+	if (properties.process == ImageProcess::Greyscale)
+	{
+		greyscale = true;
+	}
+
+	switch (pattern)
+	{
+	case AvailablePatterns::Checker:
+	{
+		Checkerboard* p = new Checkerboard(L"Checkboard");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		GWorld->Objects.back()->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::Gradient:
+	{
+		Gradient* p = new Gradient(L"Gradient");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		GWorld->Objects.back()->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::Gradient2:
+	{
+		Gradient2* p = new Gradient2(L"Gradient2");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		GWorld->Objects.back()->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::Ring:
+	{
+		Ring* p = new Ring(L"Ring");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		GWorld->Objects.back()->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::Stripey:
+	{
+		Stripey* p = new Stripey(L"Stripey");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		GWorld->Objects.back()->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::Perlin:
+	{
+		Perlin* p = new Perlin(L"Perlin");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		p->SetDimensions(properties.u, properties.v, properties.scale);
+		GWorld->Objects.back()->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::Perlin2:
+	{
+		Perlin2* p = new Perlin2(L"Perlin2");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		p->SetDimensions(properties.u, properties.v, properties.scale);
+		GWorld->Objects.back()->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::Perlin3:
+	{
+		Perlin3* p = new Perlin3(L"Perlin3");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		p->SetDimensions(properties.u, properties.v, properties.scale, properties.phase);
+		GWorld->Objects.back()->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::Fractal:
+	{
+		Fractal* p = new Fractal(L"Fractal");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		p->SetFALP(properties.frequency, properties.amplitude, properties.lacunarity, properties.persistence);
+		GWorld->Objects.back()->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::Simplex:
+	{
+		Simplex* p = new Simplex(L"Simplex");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		p->Simple = properties.simple;
+		GWorld->Objects.back()->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::SphericalChecker:
+	{
+		SphericalCheckerboard* p = new SphericalCheckerboard(L"SphericalChecker");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		p->SetDimensions(properties.u, properties.v);
+		GWorld->Objects.back()->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::CylinderChecker:
+	{
+		CylinderCheckerboard* p = new CylinderCheckerboard(L"CylinderChecker");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		p->SetDimensions(properties.u, properties.v);
+		GWorld->Objects.back()->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::CubeChecker:
+	{
+		CubeChecker* p = new CubeChecker(L"CubeChecker");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		p->SetDimensions(properties.u, properties.v);
+		GWorld->Objects.back()->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::SphericalTexture:
+	{
+		SphericalTexture* p = new SphericalTexture(L"SphericalTexture");
+
+		TextureLoader tl;
+
+		if (tl.Go(&p->Texture, properties.FileName, greyscale))
+		{
+			p->Width = tl.TextureWidth;
+			p->Height = tl.TextureHeight;
+
+			GWorld->Objects.back()->Material->SetPattern(p);
+		}
+		else
+		{
+			std::wcout << L"error loading texture \"" << properties.FileName << L"\"\n";
+		}
+
+		break;
+	}
+	case AvailablePatterns::PlanarTexture:
+	{
+		PlanarTexture* p = new PlanarTexture(L"PlanarTexture");
+
+		TextureLoader tl;
+
+		if (tl.Go(&p->Texture, properties.FileName, greyscale))
+		{
+			p->Width = tl.TextureWidth;
+			p->Height = tl.TextureHeight;
+
+			GWorld->Objects.back()->Material->SetPattern(p);
+		}
+		else
+		{
+			std::wcout << L"error loading texture \"" << properties.FileName << L"\"\n";
+		}
+
+		break;
+	}
+	case AvailablePatterns::CubicTexture:
+	{
+		CubeTexture* p = new CubeTexture(L"CubicTexture");
+
+		TextureLoader tl;
+
+		if (tl.Go(&p->Texture, properties.FileName, greyscale))
+		{
+			p->Width = tl.TextureWidth;
+			p->Height = tl.TextureHeight;
+
+			GWorld->Objects.back()->Material->SetPattern(p);
+		}
+		else
+		{
+			std::wcout << L"error loading texture \"" << properties.FileName << L"\"\n";
+		}
+
+		break;
+	}
+	case AvailablePatterns::CylinderTexture:
+	{
+		CylinderTexture* p = new CylinderTexture(L"CylinderTexture");
+
+		TextureLoader tl;
+
+		if (tl.Go(&p->Texture, properties.FileName, greyscale))
+		{
+			p->Width = tl.TextureWidth;
+			p->Height = tl.TextureHeight;
+
+			GWorld->Objects.back()->Material->SetPattern(p);
+		}
+		else
+		{
+			std::wcout << L"error loading texture \"" << properties.FileName << L"\"\n";
+		}
+
+		break;
+	}
+	}
+}
+
+
 #ifdef _DEBUG
+#ifndef _GUI
 void World::DefaultWorld(int testid)
 {
 	PointLight* l = new PointLight(L"pointlight", 1.0, 1.0, 1.0, -10, 10, -10);
@@ -341,4 +656,5 @@ void World::DefaultWorld(int testid)
 
 	Finalise();
 }
+#endif
 #endif

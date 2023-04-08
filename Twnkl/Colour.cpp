@@ -170,3 +170,11 @@ std::wstring Colour::ToString()
 
 	return s;
 }
+
+
+std::wstring Colour::ToCommaString()
+{
+	std::wstring s = std::to_wstring(r) + L", " + std::to_wstring(g) + L", " + std::to_wstring(b);
+
+	return s;
+}

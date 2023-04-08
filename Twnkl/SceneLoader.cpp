@@ -18,6 +18,8 @@
 #include "AreaLight.h"
 #include "PointLight.h"
 
+
+
 #include "Cone.h"
 #include "Cube.h"
 #include "Cylinder.h"
@@ -26,23 +28,7 @@
 #include "Sphere.h"
 #include "World.h"
 
-#include "Checkerboard.h"
-#include "CubeCheckerboard.h"
-#include "CubeTexture.h"
-#include "CylinderCheckerboard.h"
-#include "CylinderTexture.h"
-#include "Fractal.h"
-#include "Gradient.h"
-#include "Gradient2.h"
-#include "Perlin.h"
-#include "Perlin2.h"
-#include "Perlin3.h"
-#include "PlanarTexture.h"
-#include "Ring.h"
-#include "Simplex.h"
-#include "SphericalCheckerboard.h"
-#include "SphericalTexture.h"
-#include "Stripey.h"
+
 #ifdef _CONSOLE
 #include "TestPattern.h"
 #endif
@@ -198,7 +184,7 @@ Quaternion SceneLoader::XYZFrom(const std::wstring input, int w)
 
 
 // returns the correct pattern for the object type
-SceneLoader::Pattern SceneLoader::PatternFromObject(Chunk object, Chunk pattern)
+AvailablePatterns SceneLoader::PatternFromObject(Chunk object, Chunk pattern)
 {
 	switch (pattern)
 	{
@@ -207,247 +193,53 @@ SceneLoader::Pattern SceneLoader::PatternFromObject(Chunk object, Chunk pattern)
 		{
 		case Chunk::ObjectCone:
 		case Chunk::ObjectCylinder:
-			return Pattern::CylinderChecker;
+			return AvailablePatterns::CylinderChecker;
 		case Chunk::ObjectCube:
-			return Pattern::CubeChecker;
+			return AvailablePatterns::CubeChecker;
 		case Chunk::ObjectPlane:
-			return Pattern::Checker;
+			return AvailablePatterns::Checker;
 		case Chunk::ObjectSphere:
-			return Pattern::SphericalChecker;
+			return AvailablePatterns::SphericalChecker;
 		}
 		break;
 	case Chunk::PatternGradient:
-		return Pattern::Gradient;
+		return AvailablePatterns::Gradient;
 	case Chunk::PatternGradient2:
-		return Pattern::Gradient2;
+		return AvailablePatterns::Gradient2;
 	case Chunk::PatternRing:
-		return Pattern::Ring;
+		return AvailablePatterns::Ring;
 	case Chunk::PatternStripey:
-		return Pattern::Stripey;
+		return AvailablePatterns::Stripey;
 	case Chunk::PatternPerlin:
-		return Pattern::Perlin;
+		return AvailablePatterns::Perlin;
 	case Chunk::PatternPerlin2:
-		return Pattern::Perlin2;
+		return AvailablePatterns::Perlin2;
 	case Chunk::PatternPerlin3:
-		return Pattern::Perlin3;
+		return AvailablePatterns::Perlin3;
 	case Chunk::PatternFractal:
-		return Pattern::Fractal;
+		return AvailablePatterns::Fractal;
 	case Chunk::PatternSimplex:
-		return Pattern::Simplex;
+		return AvailablePatterns::Simplex;
 	case Chunk::PatternTexture:
 		switch (object)
 		{
 		case Chunk::ObjectCone:
 		case Chunk::ObjectCylinder:
-			return Pattern::CylinderTexture;
+			return AvailablePatterns::CylinderTexture;
 		case Chunk::ObjectCube:
-			return Pattern::CubicTexture;
+			return AvailablePatterns::CubicTexture;
 		case Chunk::ObjectPlane:
-			return Pattern::PlanarTexture;
+			return AvailablePatterns::PlanarTexture;
 		case Chunk::ObjectSphere:
-			return Pattern::SphericalTexture;
+			return AvailablePatterns::SphericalTexture;
 		}
 		break;
 	}
 	
-	return Pattern::None;
+	return AvailablePatterns::None;
 }
 
-
-void SceneLoader::ObjectSetPattern(Pattern pattern, Colour a, Colour b, std::wstring file_name, PatternProperties properties)
-{
-	bool greyscale = false;
-
-	if (properties.process == ImageProcess::Greyscale)
-	{
-		greyscale = true;
-	}
-
-	switch (pattern)
-	{
-	case Pattern::Checker:
-	{
-		Checkerboard* p = new Checkerboard(L"Checkboard");
-		p->SetColours(a, b);
-		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
-	}
-	case Pattern::Gradient:
-	{
-		Gradient* p = new Gradient(L"Gradient");
-		p->SetColours(a, b);
-		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
-	}
-	case Pattern::Gradient2:
-	{
-		Gradient2* p = new Gradient2(L"Gradient2");
-		p->SetColours(a, b);
-		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
-	}
-	case Pattern::Ring:
-	{
-		Ring* p = new Ring(L"Ring");
-		p->SetColours(a, b);
-		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
-	}
-	case Pattern::Stripey:
-	{
-		Stripey* p = new Stripey(L"Stripey");
-		p->SetColours(a, b);
-		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
-	}
-	case Pattern::Perlin:
-	{
-		Perlin* p = new Perlin(L"Perlin");
-		p->SetColours(a, b);
-		p->SetDimensions(properties.u, properties.v, properties.scale);
-		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
-	}
-	case Pattern::Perlin2:
-	{
-		Perlin2* p = new Perlin2(L"Perlin2");
-		p->SetColours(a, b);
-		p->SetDimensions(properties.u, properties.v, properties.scale);
-		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
-	}
-	case Pattern::Perlin3:
-	{
-		Perlin3* p = new Perlin3(L"Perlin3");
-		p->SetColours(a, b);
-		p->SetDimensions(properties.u, properties.v, properties.scale, properties.phase);
-		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
-	}
-	case Pattern::Fractal:
-	{
-		Fractal* p = new Fractal(L"Fractal");
-		p->SetColours(a, b);
-		p->SetFALP(properties.frequency, properties.amplitude, properties.lacunarity, properties.persistence);
-		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
-	}
-	case Pattern::Simplex:
-	{
-		Simplex* p = new Simplex(L"Simplex");
-		p->SetColours(a, b);
-		p->Simple = properties.simple;
-		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
-	}
-	case Pattern::SphericalChecker:
-	{
-		SphericalCheckerboard* p = new SphericalCheckerboard(L"SphericalChecker");
-		p->SetColours(a, b);
-		p->SetDimensions(properties.u, properties.v);
-		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
-	}
-	case Pattern::CylinderChecker:
-	{
-		CylinderCheckerboard* p = new CylinderCheckerboard(L"CylinderChecker");
-		p->SetColours(a, b);
-		p->SetDimensions(properties.u, properties.v);
-		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
-	}
-	case Pattern::CubeChecker:
-	{
-		CubeChecker* p = new CubeChecker(L"CubeChecker");
-		p->SetColours(a, b);
-		p->SetDimensions(properties.u, properties.v);
-		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
-	}
-	case Pattern::SphericalTexture:
-	{
-		SphericalTexture* p = new SphericalTexture(L"SphericalTexture");
-
-		TextureLoader tl;
-
-		if (tl.Go(&p->Texture, file_name, greyscale))
-		{
-			p->Width = tl.TextureWidth;
-			p->Height = tl.TextureHeight;
-
-			GWorld->Objects.back()->Material->SetPattern(p);
-		}
-		else
-		{
-			std::wcout << L"error loading texture \"" << file_name << L"\"\n";
-		}
-
-		break;
-	}
-	case Pattern::PlanarTexture:
-	{
-		PlanarTexture* p = new PlanarTexture(L"PlanarTexture");
-
-		TextureLoader tl;
-
-		if (tl.Go(&p->Texture, file_name, greyscale))
-		{
-			p->Width = tl.TextureWidth;
-			p->Height = tl.TextureHeight;
-
-			GWorld->Objects.back()->Material->SetPattern(p);
-		}
-		else
-		{
-			std::wcout << L"error loading texture \"" << file_name << L"\"\n";
-		}
-
-		break;
-	}
-	case Pattern::CubicTexture:
-	{
-		CubeTexture* p = new CubeTexture(L"CubicTexture");
-
-		TextureLoader tl;
-
-		if (tl.Go(&p->Texture, file_name, greyscale))
-		{
-			p->Width = tl.TextureWidth;
-			p->Height = tl.TextureHeight;
-
-			GWorld->Objects.back()->Material->SetPattern(p);
-		}
-		else
-		{
-			std::wcout << L"error loading texture \"" << file_name << L"\"\n";
-		}
-
-		break;
-	}
-	case Pattern::CylinderTexture:
-	{
-		CylinderTexture* p = new CylinderTexture(L"CylinderTexture");
-
-		TextureLoader tl;
-
-		if (tl.Go(&p->Texture, file_name, greyscale))
-		{
-			p->Width = tl.TextureWidth;
-			p->Height = tl.TextureHeight;
-
-			GWorld->Objects.back()->Material->SetPattern(p);
-		}
-		else
-		{
-			std::wcout << L"error loading texture \"" << file_name << L"\"\n";
-		}
-
-		break;
-	}
-	}
-}
-
-
+	
 SceneLoader::FileProperty SceneLoader::GetInputProperty(std::wstring input)
 {
 	for (int t = 0; t < kPropertyListCount; t++)
@@ -669,7 +461,11 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail, GUI
 						case Chunk::PatternTexture:
 						case Chunk::PatternFractal:
 						case Chunk::PatternSimplex:
-							ObjectSetPattern(PatternFromObject(last_object, mode), Colours[0], Colours[1], FileName, pattern_properties);
+							pattern_properties.Colour1 = Colours[0];
+							pattern_properties.Colour2 = Colours[1];
+							pattern_properties.FileName = FileName;
+
+							GWorld->SetLastObjectPattern(PatternFromObject(last_object, mode), pattern_properties);
 							break;
 						case Chunk::Transform:
 						{
@@ -1018,6 +814,8 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail, GUI
 			GWorld->Cam->Width = newsize.first;
 			GWorld->Cam->Height = newsize.second;
 		}
+
+		GWorld->Cam->SetViewport(CameraFrom, CameraTo, CameraUp);
 
 		Quaternion campos = CameraFrom;
 		GWorld->Cam->Transform = campos.ViewTransform(CameraTo, CameraUp);

@@ -15,6 +15,7 @@
 
 #include "Colour.h"
 #include "Constants.h"
+#include "Object.h"
 #include "Quaternion.h"
 #include "TransformConfiguration.h"
 
@@ -29,13 +30,6 @@ struct GUIProperties
 
 class SceneLoader
 {
-	enum class Pattern { None = 0,
-		Checker = 1, Gradient = 2, Gradient2 = 3, Ring = 4, Stripey = 5, 
-		Perlin = 6, Perlin2 = 7, Perlin3 = 8,
-		Fractal = 9,Simplex = 10,
-		SphericalChecker = 11, CylinderChecker = 12, SphericalTexture = 13, PlanarTexture = 14, CubicTexture = 15, CylinderTexture = 16, CubeChecker = 17
-	};
-
 	enum class Chunk {
 		None = 0, ObjectSphere = 1, ObjectPlane = 2, ObjectCone = 3, ObjectCube = 4, ObjectCylinder = 5, ObjectModel = 6, ObjectModelSmooth = 7,
 		PatternChecker = 8, PatternGradient = 9, PatternGradient2 = 10, PatternRing = 11, PatternStripey = 12, PatternPerlin = 13, PatternPerlin2 = 14, PatternPerlin3 = 15, PatternTexture = 16,
@@ -58,10 +52,9 @@ class SceneLoader
 		Chunk::Material, 
 		Chunk::PatternChecker, Chunk::PatternGradient, Chunk::PatternGradient2, Chunk::PatternRing, Chunk::PatternStripey, Chunk::PatternPerlin, Chunk::PatternPerlin2, Chunk::PatternPerlin3, Chunk::PatternTexture,
 		Chunk::PatternFractal, Chunk::PatternSimplex,
-		Chunk::Transform, Chunk::PointLight, Chunk::AreaLight, Chunk::Camera };
-
-	enum class ImageProcess { None = 0, Greyscale = 1 };
-
+		Chunk::Transform, Chunk::PointLight, Chunk::AreaLight, Chunk::Camera
+	};
+		
 	enum class FileProperty {
 		None = 0, NotFound = 1, DataBegin = 2, DataEnd = 3, Colour = 4, Position = 5, Name = 6,
 		Ambience = 10, Diffuse = 11, Reflectivity = 12, RefractiveIndex = 13, Shininess = 14, Specular = 15, Transparency = 16,
@@ -78,12 +71,12 @@ class SceneLoader
 	static const int kPropertyListCount = 60;
 
 	const std::wstring FilePropertyList[kPropertyListCount] = {
-		L"{camera", L"{pointlight", L"{arealight",
-		L"{objectsphere", L"{objectplane", L"{objectcone", L"{objectcube", L"{objectcylinder", L"{objectmodel", L"{objectmodelsmooth",
-		L"{material", L"{transform", 
-		L"{patternchecker", L"{patterngradient", L"{patterngradient2", L"{patternring", L"{patternstripey", L"{patternperlin", L"{patternperlin2", L"{patternperlin3", 
-		L"{patterntexture",
-		L"{patternfractal", L"{patternsimplex",
+		__SceneChunkCamera, __SceneChunkPointLight, __SceneChunkAreaLight,
+		__SceneChunkObjectSphere, __SceneChunkObjectPlane, __SceneChunkObjectCone, __SceneChunkObjectCube, __SceneChunkObjectCylinder, __SceneChunkObjectModel, __SceneChunkObjectModelSmooth,
+		__SceneChunkMaterial, __SceneChunkTransform,
+		__SceneChunkChecker, __SceneChunkGradient, __SceneChunkGradient2, __SceneChunkRing, __SceneChunkStripey, __SceneChunkPerlin, __SceneChunkPerlin2, __SceneChunkPerlin3,
+		__SceneChunkTexture,
+		__SceneChunkFractal, __SceneChunkSimplex,
 		L"}",
 		L"colour", L"color", L"position", L"name",
 		L"ambient", L"diffuse", L"reflectivity", L"refractiveindex", L"shininess", L"specular", L"transparency",
@@ -138,43 +131,14 @@ class SceneLoader
 			transparent = __DefaultMaterialTransparency;
 		}
 	};
-
-	struct PatternProperties
-	{
-		double u = 0;
-		double v = 0;
-		ImageProcess process = ImageProcess::None;
-		double scale = __DefaultPerlinScale;
-		double phase = __DefaultPerlinPhase;
-		double frequency = __DefaultFractalFrequency;
-		double amplitude = __DefaultFractalAmplitude;
-		double lacunarity = __DefaultFractalLacunarity;
-		double persistence = __DefaultFractalPersistence;
-		double simple = false;
-
-		void Clear()
-		{
-			u = 0;
-			v = 0;
-			process = ImageProcess::None;
-			scale = __DefaultPerlinScale;
-			phase = __DefaultPerlinPhase;
-			frequency = __DefaultFractalFrequency;
-			amplitude = __DefaultFractalAmplitude;
-			lacunarity = __DefaultFractalLacunarity;
-			persistence = __DefaultFractalPersistence;
-			simple = false;
-		}
-	};
-
+	
 	[[nodiscard]] TransformType TransformTypeFrom(const std::wstring);
 	[[nodiscard]] Colour ColourFrom(const std::wstring);
 	[[nodiscard]] Chunk GetDataBlockChunkFrom(const std::wstring);
 	[[nodiscard]] Quaternion XYZFrom(const std::wstring, int);
 	void AddObject(Chunk, std::wstring, std::wstring, int, int, bool);
 	
-	SceneLoader::Pattern PatternFromObject(Chunk, Chunk);
-	void ObjectSetPattern(Pattern, Colour, Colour, std::wstring, PatternProperties);
+	AvailablePatterns PatternFromObject(Chunk, Chunk);
 	[[nodiscard]] FileProperty GetInputProperty(std::wstring);
 
 	bool ValidateParameter(bool, std::wstring, int);

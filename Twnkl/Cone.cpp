@@ -9,12 +9,15 @@
 // 
 // 
 
+#include <cmath>
+
 #include "Cone.h"
 
 
 Cone::Cone(std::wstring name) : Object(name)
 {
     Name = name;
+    Primitive = PrimitiveType::Cone;
 }
 
 
@@ -86,8 +89,8 @@ void Cone::LocalIntersect(Intersections& i, Ray& rt)
         return;
     }
 
-    double t0 = (-b - sqrt(disc)) / (2 * a);
-    double t1 = (-b + sqrt(disc)) / (2 * a);
+    double t0 = (-b - std::sqrt(disc)) / (2 * a);
+    double t1 = (-b + std::sqrt(disc)) / (2 * a);
 
     if (t0 > t1)
     {
@@ -126,7 +129,7 @@ Quaternion Cone::LocalNormalAt(Quaternion& world_point)
         return { 0, -1, 0, 0 };
     }
      
-    double y = sqrt(dist);
+    double y = std::sqrt(dist);
 
     if (world_point.y > 0) 
     {
@@ -146,4 +149,25 @@ void Cone::PostSetup(int i)
 std::wstring Cone::ToString()
 {
     return L"Cone. Min " + std::to_wstring(Minimum) + L", Max " + std::to_wstring(Maximum);
+}
+
+
+void Cone::ToFile(std::ofstream& ofile)
+{
+    ofile << Formatting::to_utf8(__SceneChunkObjectCone + L"\n");
+    ofile << Formatting::to_utf8(L"name=" + Name + L"\n");
+    ofile << Formatting::to_utf8(L"minimum=" + std::to_wstring(Minimum) + L"\n");
+    ofile << Formatting::to_utf8(L"maximum=" + std::to_wstring(Maximum) + L"\n");
+    if (Closed)
+    {
+        ofile << Formatting::to_utf8(L"closed=yes\n");
+    }
+    ofile << Formatting::to_utf8(L"}\n");
+
+    for (int t = 0; t < Transforms.size(); t++)
+    {
+        Transforms[t].ToFile(ofile);
+    }
+
+    Material->ToFile(ofile);
 }

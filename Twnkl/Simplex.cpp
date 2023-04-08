@@ -16,6 +16,7 @@
 Simplex::Simplex(std::wstring name) : Pattern(name)
 {
     Name = name;
+    Design = PatternDesign::Simplex;
 
     noize = new Noise();
 }
@@ -55,4 +56,22 @@ Colour Simplex::ColourAt(Object* o, Quaternion& q)
 std::wstring Simplex::ToString()
 {
     return L"#1 " + Colours[0].ToString() + L" #2 " + Colours[1].ToString();
+}
+
+
+void Simplex::ToFile(std::ofstream& ofile)
+{
+    ofile << Formatting::to_utf8(__SceneChunkSimplex + L"\n");
+    ofile << Formatting::to_utf8(L"colour=" + Colours[0].ToCommaString() + L"\n");
+    ofile << Formatting::to_utf8(L"colour=" + Colours[1].ToCommaString() + L"\n");
+    if (Simple)
+    {
+        ofile << Formatting::to_utf8(L"simple=yes\n");
+    }
+    ofile << Formatting::to_utf8(L"}\n");
+
+    for (int t = 0; t < Transforms.size(); t++)
+    {
+        Transforms[t].ToFile(ofile);
+    }
 }

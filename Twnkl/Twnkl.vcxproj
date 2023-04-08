@@ -162,6 +162,7 @@
     <ClCompile Include="SceneLoader.cpp" />
     <ClCompile Include="Fractal.cpp" />
     <ClCompile Include="Simplex.cpp" />
+    <ClCompile Include="Trinion.cpp" />
     <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="PlanarTexture.cpp" />
     <ClCompile Include="SphericalCheckerboard.cpp" />
@@ -223,6 +224,7 @@
     <ClInclude Include="SceneLoader.h" />
     <ClInclude Include="Fractal.h" />
     <ClInclude Include="Simplex.h" />
+    <ClInclude Include="Trinion.h" />
     <ClInclude Include="TextureLoader.h" />
     <ClInclude Include="Pattern.h" />
     <ClInclude Include="PhongMaterial.h" />

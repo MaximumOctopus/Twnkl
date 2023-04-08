@@ -57,6 +57,20 @@ void Object::AddTransform(TransformConfiguration tc)
 }
 
 
+void Object::RemoveTransformAt(int index)
+{
+	Transforms.erase(Transforms.begin() + index);
+
+	// if there are no transforms then the transform "merge" won't happen,
+	// and the Transform will not change to reflect the lack of transforms in the stack.
+	// so we reset the Transform to the identity matrix. 
+	if (Transforms.size() == 0)
+	{
+		Transform = Matrix4();
+	}
+}
+
+
 void Object::CreateInverseTransform()
 {
 	InverseTransform = Transform.Inverse();
@@ -165,7 +179,39 @@ void Object::PostSetup(int i)
 }
 
 
+std::wstring Object::FriendlyName()
+{
+	switch (Primitive)
+	{
+	case PrimitiveType::None:
+		return L"None!";
+	case PrimitiveType::Cone:
+		return L"Cone";
+	case PrimitiveType::Cube:
+		return L"Cube";
+	case PrimitiveType::Cylinder:
+		return L"Cylinder";
+	case PrimitiveType::Model:
+		return L"Model";
+	case PrimitiveType::Plane:
+		return L"Plane";
+	case PrimitiveType::SmoothTriangle:
+		return L"Triangle (Smooth)";
+	case PrimitiveType::Sphere:
+		return L"Sphere";
+	case PrimitiveType::Triangle:
+		return L"Triangle";
+	}
+}
+
+
 std::wstring Object::ToString()
 {
 	return L"Object.";
+}
+
+
+void Object::ToFile(std::ofstream& ofile)
+{
+
 }

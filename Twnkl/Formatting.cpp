@@ -11,6 +11,9 @@
 
 #include <algorithm>
 #include <string>
+
+#define NOMINMAX
+
 #include <windows.h>
 
 #include "Formatting.h"

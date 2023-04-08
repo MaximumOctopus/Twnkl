@@ -20,6 +20,8 @@ class CubeTexture : public Pattern
 
 public:
 
+	std::wstring FileName = L"";
+
 	Colour* Texture = nullptr;
 
 	int Width = 0;
@@ -30,4 +32,6 @@ public:
 	[[nodiscard]] Colour ColourAt(Object*, Quaternion&) override;
 
 	[[nodiscard]] std::wstring ToString() override;
+
+	void ToFile(std::ofstream&) override;
 };

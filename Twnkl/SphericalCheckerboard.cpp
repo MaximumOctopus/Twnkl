@@ -19,6 +19,7 @@
 SphericalCheckerboard::SphericalCheckerboard(std::wstring name) : Pattern(name)
 {
 	Name = name;
+	Design = PatternDesign::SphericalCheckerboard;
 }
 
 
@@ -57,4 +58,20 @@ Colour SphericalCheckerboard::UVColourAt(double u, double v)
 std::wstring SphericalCheckerboard::ToString()
 {
 	return L"#1 " + Colours[0].ToString() + L" #2 " + Colours[1].ToString() + L", Dimensions " + std::to_wstring(Width) + L" x " + std::to_wstring(Height);
+}
+
+
+void SphericalCheckerboard::ToFile(std::ofstream& ofile)
+{
+	ofile << Formatting::to_utf8(__SceneChunkChecker + L"\n");
+	ofile << Formatting::to_utf8(L"colour=" + Colours[0].ToCommaString() + L"\n");
+	ofile << Formatting::to_utf8(L"colour=" + Colours[1].ToCommaString() + L"\n");
+	ofile << Formatting::to_utf8(L"u=" + std::to_wstring(Width) + L"\n");
+	ofile << Formatting::to_utf8(L"v=" + std::to_wstring(Height) + L"\n");
+	ofile << Formatting::to_utf8(L"}\n");
+
+	for (int t = 0; t < Transforms.size(); t++)
+	{
+		Transforms[t].ToFile(ofile);
+	}
 }

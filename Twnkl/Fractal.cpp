@@ -16,6 +16,7 @@
 Fractal::Fractal(std::wstring name) : Pattern(name)
 {
 	Name = name;
+    Design = PatternDesign::Fractal;
 
     noize = new Noise();
 }
@@ -51,4 +52,22 @@ Colour Fractal::ColourAt(Object* o, Quaternion& q)
 std::wstring Fractal::ToString()
 {
 	return L"#1 " + Colours[0].ToString() + L" #2 " + Colours[1].ToString();
+}
+
+
+void Fractal::ToFile(std::ofstream& ofile)
+{
+	ofile << Formatting::to_utf8(__SceneChunkFractal + L"\n");
+	ofile << Formatting::to_utf8(L"colour=" + Colours[0].ToCommaString() + L"\n");
+	ofile << Formatting::to_utf8(L"colour=" + Colours[1].ToCommaString() + L"\n");
+	ofile << Formatting::to_utf8(L"frequency=" + std::to_wstring(noize->Frequency) + L"\n");
+	ofile << Formatting::to_utf8(L"amplitude=" + std::to_wstring(noize->Amplitude) + L"\n");
+	ofile << Formatting::to_utf8(L"lacunarity=" + std::to_wstring(noize->Lacunarity) + L"\n");
+	ofile << Formatting::to_utf8(L"persistence=" + std::to_wstring(noize->Persistence) + L"\n");
+	ofile << Formatting::to_utf8(L"}\n");
+
+	for (int t = 0; t < Transforms.size(); t++)
+	{
+		Transforms[t].ToFile(ofile);
+	}
 }

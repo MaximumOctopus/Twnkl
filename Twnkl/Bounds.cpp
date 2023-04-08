@@ -9,6 +9,8 @@
 // 
 // 
 
+#include <algorithm>
+
 #include "Constants.h"
 #include "Bounds.h"
 
@@ -83,8 +85,9 @@ std::pair<double, double> Bounds::CheckAxis(double origin, double direction, dou
     }
     else
     {
-        tmin = tminNumerator * INFINITY;
-        tmax = tmaxNumerator * INFINITY;
+        tmin = tminNumerator * 9999999;	// C++ builder gives invalid floating point operations if using INFINITY \_(^-^)_/¯
+        tmax = tmaxNumerator * 9999999; //
+
     }
 
     if (tmin > tmax)

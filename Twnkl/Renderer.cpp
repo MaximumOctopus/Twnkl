@@ -222,7 +222,7 @@ Colour Renderer::RefractedColour(Computation& c, int recursion)
 		return Colour(0, 0, 0);
 	}
 
-	double cos_t = sqrt(1.0 - sin2_t);
+	double cos_t = std::sqrt(1.0 - sin2_t);
 
 	Quaternion direction = Quaternion((c.NormalVector.x * (n_ratio * cos_i - cos_t)) - (c.EyeVector.x * n_ratio),
 		(c.NormalVector.y * (n_ratio * cos_i - cos_t)) - (c.EyeVector.y * n_ratio),
@@ -310,7 +310,7 @@ Colour Renderer::Lighting(Object* o, Light* l, Quaternion& pos, Quaternion& eyev
 				if (reflect_dot_eye > 0)
 				{
 					// compute the specular contribution
-					double factor = pow(reflect_dot_eye, o->Material->Shininess);
+					double factor = std::pow(reflect_dot_eye, o->Material->Shininess);
 
 					total.r += l->Intensity.r * o->Material->Specular * factor;
 					total.g += l->Intensity.g * o->Material->Specular * factor;

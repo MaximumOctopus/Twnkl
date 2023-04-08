@@ -17,11 +17,24 @@
 #include "TransformConfiguration.h"
 
 
+enum class PatternDesign {
+	None = 0, Checkerboard = 1, Gradient = 2, Gradient2 = 3, Ring = 4, Stripey = 5,
+	Fractal = 6, Simplex = 7, Perlin1 = 8, Perlin2 = 9, Perlin3 = 10,
+	CubeCheckerboard = 20, CubeTexture = 21, CylinderCheckerboard = 22, CylinderTexture = 23, PlanarTexture = 24,
+	SphericalCheckerboard = 25, SphericalTexture = 26
+};
+
+
 class Pattern
 {
+
+protected:
+
 	std::vector<TransformConfiguration> Transforms;
 
 public:
+
+	PatternDesign Design = PatternDesign::None;
 
 	std::wstring Name = L"";
 
@@ -41,11 +54,17 @@ public:
 
 	void ProcessTransforms();
 	void AddTransform(TransformConfiguration);
+	void RemoveTransformAt(int);
 
 	int TransformsCount();
 	[[nodiscard]] TransformConfiguration TransformAt(int);
+	void TransformReplaceAt(int, TransformConfiguration);
 
 	void CreateInverseTransform();
 
+	std::wstring FriendlyName();
+
 	[[nodiscard]] virtual std::wstring ToString();
+
+	virtual void ToFile(std::ofstream&);
 };

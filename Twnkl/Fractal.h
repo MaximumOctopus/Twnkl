@@ -17,9 +17,10 @@
 
 class Fractal : public Pattern
 {
-	Noise* noize;
 
 public:
+
+	Noise* noize;
 
     Fractal(std::wstring);
 	~Fractal();
@@ -29,4 +30,6 @@ public:
 	[[nodiscard]] Colour ColourAt(Object*, Quaternion&) override;
 
 	[[nodiscard]] virtual std::wstring ToString() override;
+
+	void ToFile(std::ofstream&) override;
 };

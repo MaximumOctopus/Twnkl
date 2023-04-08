@@ -16,7 +16,12 @@
 
 class Camera
 {
+
 public:
+
+	Quaternion From;
+	Quaternion To;
+	Quaternion Up;
 
 	int Width = 0;
 	int Height = 0;
@@ -36,5 +41,10 @@ public:
 	// create camera using custom transform
 	Camera(int, int, double, Matrix4);
 
+	// not used by the code, but needed for output
+	void SetViewport(Quaternion, Quaternion, Quaternion);
+
 	void CalculatePixelSize();
+
+	void ToFile(std::ofstream&);
 };

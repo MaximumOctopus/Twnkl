@@ -42,3 +42,13 @@ std::wstring PointLight::ToString()
 {
 	return L"Point.";
 }
+
+
+void PointLight::ToFile(std::ofstream& ofile)
+{
+	ofile << Formatting::to_utf8(__SceneChunkPointLight + L"\n");
+	ofile << Formatting::to_utf8(L"name=" + Name + L"\n");
+	ofile << Formatting::to_utf8(L"colour=" + Intensity.ToCommaString() + L"\n");
+	ofile << Formatting::to_utf8(L"position=" + std::to_wstring(Position.x) + L", " + std::to_wstring(Position.y) + L", " + std::to_wstring(Position.z) + L"\n");
+	ofile << Formatting::to_utf8(L"}\n");
+}

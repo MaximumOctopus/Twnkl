@@ -15,6 +15,7 @@
 #include <string>
 
 #ifdef _GUI
+#define NOMINMAX
 #include <windows.h>
 #include <string.h>
 #endif
@@ -29,7 +30,7 @@ namespace Utility
 	static const std::wstring Months[12] = { L"Jan", L"Feb", L"Mar", L"Apr", L"May", L"Jun", L"Jul", L"Aug", L"Sep", L"Oct", L"Nov", L"Dec" };
 
 	#ifdef _GUI
-	std::wstring GetFileName()
+	std::wstring GetOpenFileName()
 	{
 		OPENFILENAME ofn = { 0 };
 		TCHAR szFile[260] = { 0 };
@@ -48,7 +49,30 @@ namespace Utility
 		if (GetOpenFileName(&ofn) == TRUE)
 		{
 			return std::wstring(&ofn.lpstrFile[0]);
+		}
 
+		return L"";
+	}
+
+	std::wstring GetSaveFileName()
+	{
+		OPENFILENAME ofn = { 0 };
+		TCHAR szFile[260] = { 0 };
+		// Initialize remaining fields of OPENFILENAME structure
+		ofn.lStructSize = sizeof(ofn);
+		ofn.hwndOwner = 0;
+		ofn.lpstrFile = szFile;
+		ofn.nMaxFile = sizeof(szFile);
+		ofn.lpstrFilter = _T("Twnkl Scene Files\0*.twnkl\0Text\0*.twnkl\0");
+		ofn.nFilterIndex = 1;
+		ofn.lpstrFileTitle = NULL;
+		ofn.nMaxFileTitle = 0;
+		ofn.lpstrInitialDir = NULL;
+		ofn.Flags = 0;
+
+		if (GetSaveFileName(&ofn) == TRUE)
+		{
+			return std::wstring(&ofn.lpstrFile[0]);
 		}
 
 		return L"";
@@ -59,7 +83,11 @@ namespace Utility
 	{
 		struct tm newtime;
 		time_t now = time(0);
+		#ifdef _CONSOLE
 		localtime_s(&newtime, &now);
+		#else
+		localtime_s(&now, &newtime);	// C++ builder wants the parameters the other way around?!
+		#endif
 
 		return newtime.tm_year + 1900;
 	}
@@ -92,7 +120,11 @@ namespace Utility
 
 			struct tm newtime;
 			time_t now = time(0);
+			#ifdef _CONSOLE
 			localtime_s(&newtime, &now);
+			#else
+			localtime_s(&now, &newtime);	// C++ builder wants the parameters the other way around?!
+			#endif
 
 			int mm = newtime.tm_mon + 1;
 			int dd = newtime.tm_mday;

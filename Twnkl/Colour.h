@@ -35,8 +35,6 @@ public:
 
 	Colour(double, double, double) noexcept;
 
-	[[nodiscard]] std::wstring ToString();
-
 	void Reset();
 
 	int To255(double);
@@ -47,6 +45,9 @@ public:
 	void FromIntRGB(int);
 
 	std::string RGBString();
+
+	[[nodiscard]] std::wstring ToCommaString();
+	[[nodiscard]] std::wstring ToString();
 
 	[[nodiscard]] bool Equals(Colour);
 };

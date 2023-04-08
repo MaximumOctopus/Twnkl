@@ -11,7 +11,11 @@
 
 #pragma once
 
+#include <fstream>
+
 #include "Colour.h"
+#include "Constants.h"
+#include "Formatting.h"
 #include "Quaternion.h"
 
 
@@ -40,4 +44,6 @@ public:
 	virtual Quaternion PointOn(double, double);
 
 	virtual std::wstring ToString();
+
+	virtual void ToFile(std::ofstream& ofile);
 };

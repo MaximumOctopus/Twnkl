@@ -279,6 +279,9 @@
     <ClCompile Include="Noise.cpp">
       <Filter>Source Files\Patterns\Noise</Filter>
     </ClCompile>
+    <ClCompile Include="Trinion.cpp">
+      <Filter>Source Files\Matrix</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h">
@@ -453,6 +456,9 @@
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
     <ClInclude Include="TransformConfiguration.h">
+      <Filter>Header Files\Matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="Trinion.h">
       <Filter>Header Files\Matrix</Filter>
     </ClInclude>
   </ItemGroup>

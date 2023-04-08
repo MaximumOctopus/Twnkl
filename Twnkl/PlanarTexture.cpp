@@ -17,6 +17,7 @@
 PlanarTexture::PlanarTexture(std::wstring name) : Pattern(name)
 {
 	Name = name;
+	Design = PatternDesign::PlanarTexture;
 }
 
 
@@ -48,16 +49,16 @@ std::pair<double, double> PlanarTexture::PlanarMap(Quaternion& p)
 {
 	if (p.x < 0)
 	{
-		p.x = 1.0 - std::abs(fmod(p.x, 1));
+		p.x = 1.0 - std::abs(std::fmod(p.x, 1));
 	}
 
 	if (p.z < 0)
 	{
-		p.z = 1.0 - std::abs(fmod(p.z, 1));
+		p.z = 1.0 - std::abs(std::fmod(p.z, 1));
 	}
 
-	double u = fmod(p.x, 1);
-	double v = fmod(p.z, 1);
+	double u = std::fmod(p.x, 1);
+	double v = std::fmod(p.z, 1);
 
 	return { u, v };
 }
@@ -68,3 +69,15 @@ std::wstring PlanarTexture::ToString()
 	return L"Dimensions " + std::to_wstring(Width) + L" x " + std::to_wstring(Height);
 }
 
+
+void PlanarTexture::ToFile(std::ofstream& ofile)
+{
+	ofile << Formatting::to_utf8(__SceneChunkTexture + L"\n");
+	ofile << Formatting::to_utf8(L"filename=" + FileName + L"\n");
+	ofile << Formatting::to_utf8(L"}\n");
+
+	for (int t = 0; t < Transforms.size(); t++)
+	{
+		Transforms[t].ToFile(ofile);
+	}
+}

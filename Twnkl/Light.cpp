@@ -37,3 +37,8 @@ std::wstring Light::ToString()
 {
 	return L"";
 }
+
+
+void Light::ToFile(std::ofstream& ofile)
+{
+}

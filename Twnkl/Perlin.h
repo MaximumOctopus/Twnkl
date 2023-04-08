@@ -19,10 +19,6 @@
 
 class Perlin : public Pattern
 {
-	double Width = 0;
-	double Height = 0;
-	double Scale = 1.0;
-
 	static const int point_count = 256;
 	double* ranfloat;
 	Quaternion* ranvec;
@@ -38,6 +34,10 @@ class Perlin : public Pattern
 
 public:
 
+	double Width = 0;
+	double Height = 0;
+	double Scale = 1.0;
+
 	Perlin(std::wstring);
 	~Perlin();
 
@@ -46,4 +46,6 @@ public:
 	[[nodiscard]] Colour ColourAt(Object*, Quaternion&) override;
 
 	[[nodiscard]] virtual std::wstring ToString() override;
+
+	void ToFile(std::ofstream&) override;
 };
