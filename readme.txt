@@ -8,7 +8,7 @@
   Source code, example scenes and textures
     https://github.com/MaximumOctopus/Twnkl
 
-  March 30th 2023
+  April 8th 2023
 ==========================================================================================================================
 ==========================================================================================================================
 
@@ -38,7 +38,19 @@ Also implements a supersampling algorithm based on the code from the website
     "Ray Tracing in One Weekend"
 
     https://raytracing.github.io/books/RayTracingInOneWeekend.html
+
+\Twnkl\
+Console application
+
+C++ 20 with Visual Studio 2022.
+
+\Twnkl_GUI\
+C++ 17 with C++ Builder 10.4
 	
+An early alpha, proof of concept, WIP, GUI front-end for Twnkl.
+
+There are currently a few differences between the core source files of the GUI version and the console version, but these will be gone asap. My plan is to keep all source files compatible with either a console or gui build.
+
 ==========================================================================================================================
 ==========================================================================================================================
 
@@ -54,6 +66,10 @@ All of my software is free and open source; please consider donating to a local 
 ==========================================================================================================================
 
 Release History
+
+0.7 / April 8th 2023
+
+Mainly updating the source code so that the GUI and console versions can share the same core.
 
 0.6 / March 30th 2023
 
