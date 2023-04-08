@@ -21,7 +21,11 @@ namespace DateUtility
 	{
 		struct tm newtime;
 		time_t now = time(0);
+		#ifdef _CONSOLE
 		localtime_s(&newtime, &now);
+		#else
+		localtime_s(&now, &newtime);	// C++ builder wants the parameters the other way around?!
+		#endif
 
 		std::wstring year = std::to_wstring(newtime.tm_year + 1900);
 		std::wstring month = std::to_wstring(newtime.tm_mon + 1);
