@@ -103,6 +103,10 @@ void __fastcall TfrmMain::bNewClick(TObject *Sender)
     GWorld->DefaultScene();
 
 	PopulateTreeView();
+
+	cameras->GetLastChild()->Selected = true;
+
+	tvObjectsClick(NULL);
 }
 
 
@@ -126,6 +130,10 @@ void __fastcall TfrmMain::bOpenSceneClick(TObject *Sender)
 				bRender->Enabled = true;
 
 				PopulateTreeView();
+
+				cameras->GetLastChild()->Selected = true;
+
+				tvObjectsClick(NULL);
 			}
 			else
 			{
@@ -283,6 +291,9 @@ void TfrmMain::PopulateTreeView()
 void TfrmMain::BuildCameraPanel(int id)
 {
 	eCFoV->Text = GWorld->Cam->FoV;
+
+	eCWidth->Text = GWorld->Cam->Width;
+    eCHeight->Text = GWorld->Cam->Height;
 
 	eCFromX->Text = GWorld->Cam->From.x;
 	eCFromY->Text = GWorld->Cam->From.y;
@@ -1237,9 +1248,28 @@ void __fastcall TfrmMain::eCUpXExit(TObject *Sender)
 
 void __fastcall TfrmMain::eCFoVExit(TObject *Sender)
 {
-	GWorld->Cam->FoV = eCFoV->Text.ToDouble();
+	if (tvObjects->Selected != NULL)
+	{
+		if (tvObjects->Selected->Data != NULL)
+		{
+			int type = PTreeObject(tvObjects->Selected->Data)->Type;
+
+			if (type == 0)
+			{
+				GWorld->Cam->FoV = eCFoV->Text.ToDouble();
+
+				GWorld->Cam->CalculatePixelSize();
+			}
+		}
+    }
 }
 
+
+void __fastcall TfrmMain::eCWidthExit(TObject *Sender)
+{
+	GWorld->Cam->Width = eCWidth->Text.ToDouble();
+	GWorld->Cam->Height = eCHeight->Text.ToDouble();
+}
 
 void __fastcall TfrmMain::ePFrequencyExit(TObject *Sender)
 {

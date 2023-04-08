@@ -157,6 +157,10 @@ __published:	// IDE-managed Components
 	TEdit *eLPositionZ;
 	TLabel *Label24;
 	TLabel *Label25;
+	TLabel *Label26;
+	TEdit *eCWidth;
+	TLabel *Label27;
+	TEdit *eCHeight;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall bOpenSceneClick(TObject *Sender);
@@ -195,6 +199,7 @@ __published:	// IDE-managed Components
 	void __fastcall sbDeleteObjectClick(TObject *Sender);
 	void __fastcall bNewClick(TObject *Sender);
 	void __fastcall eLPositionXExit(TObject *Sender);
+	void __fastcall eCWidthExit(TObject *Sender);
 
 private:	// User declarations
 	TTreeNode* cameras = nullptr;

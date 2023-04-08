@@ -116,7 +116,7 @@ object frmMain: TfrmMain
       Top = 192
       Width = 268
       Height = 418
-      ActivePage = tsLight
+      ActivePage = tsCamera
       Anchors = [akLeft, akTop, akBottom]
       TabOrder = 1
       object tsCamera: TTabSheet
@@ -131,45 +131,59 @@ object frmMain: TfrmMain
         end
         object Label33: TLabel
           Left = 39
-          Top = 86
+          Top = 150
           Width = 24
           Height = 13
           Caption = 'From'
         end
         object Label34: TLabel
           Left = 39
-          Top = 113
+          Top = 177
           Width = 12
           Height = 13
           Caption = 'To'
         end
         object Label35: TLabel
           Left = 39
-          Top = 140
+          Top = 204
           Width = 13
           Height = 13
           Caption = 'Up'
         end
         object Label36: TLabel
           Left = 113
-          Top = 64
+          Top = 128
           Width = 6
           Height = 13
           Caption = 'X'
         end
         object Label37: TLabel
           Left = 172
-          Top = 64
+          Top = 128
           Width = 6
           Height = 13
           Caption = 'Y'
         end
         object Label38: TLabel
           Left = 225
-          Top = 64
+          Top = 128
           Width = 6
           Height = 13
           Caption = 'Z'
+        end
+        object Label26: TLabel
+          Left = 39
+          Top = 51
+          Width = 28
+          Height = 13
+          Caption = 'Width'
+        end
+        object Label27: TLabel
+          Left = 39
+          Top = 78
+          Width = 31
+          Height = 13
+          Caption = 'Height'
         end
         object eCFoV: TEdit
           Left = 101
@@ -177,12 +191,12 @@ object frmMain: TfrmMain
           Width = 56
           Height = 21
           TabOrder = 0
-          Text = '.'
+          Text = '1.152'
           OnExit = eCFoVExit
         end
         object eCFromX: TEdit
           Left = 101
-          Top = 83
+          Top = 147
           Width = 49
           Height = 21
           TabOrder = 1
@@ -191,7 +205,7 @@ object frmMain: TfrmMain
         end
         object eCFromY: TEdit
           Left = 156
-          Top = 83
+          Top = 147
           Width = 47
           Height = 21
           TabOrder = 2
@@ -200,7 +214,7 @@ object frmMain: TfrmMain
         end
         object eCFromZ: TEdit
           Left = 209
-          Top = 83
+          Top = 147
           Width = 47
           Height = 21
           TabOrder = 3
@@ -209,7 +223,7 @@ object frmMain: TfrmMain
         end
         object eCToX: TEdit
           Left = 101
-          Top = 110
+          Top = 174
           Width = 49
           Height = 21
           TabOrder = 4
@@ -218,7 +232,7 @@ object frmMain: TfrmMain
         end
         object eCToY: TEdit
           Left = 156
-          Top = 110
+          Top = 174
           Width = 47
           Height = 21
           TabOrder = 5
@@ -227,7 +241,7 @@ object frmMain: TfrmMain
         end
         object eCToZ: TEdit
           Left = 209
-          Top = 110
+          Top = 174
           Width = 48
           Height = 21
           TabOrder = 6
@@ -236,7 +250,7 @@ object frmMain: TfrmMain
         end
         object eCUpX: TEdit
           Left = 101
-          Top = 137
+          Top = 201
           Width = 49
           Height = 21
           TabOrder = 7
@@ -245,7 +259,7 @@ object frmMain: TfrmMain
         end
         object eCUpY: TEdit
           Left = 156
-          Top = 137
+          Top = 201
           Width = 47
           Height = 21
           TabOrder = 8
@@ -254,12 +268,30 @@ object frmMain: TfrmMain
         end
         object eCUpZ: TEdit
           Left = 209
-          Top = 137
+          Top = 201
           Width = 48
           Height = 21
           TabOrder = 9
           Text = '.'
           OnExit = ePTAngleExit
+        end
+        object eCWidth: TEdit
+          Left = 101
+          Top = 48
+          Width = 56
+          Height = 21
+          TabOrder = 10
+          Text = '1'
+          OnExit = eCWidthExit
+        end
+        object eCHeight: TEdit
+          Left = 101
+          Top = 75
+          Width = 56
+          Height = 21
+          TabOrder = 11
+          Text = '1'
+          OnExit = eCWidthExit
         end
       end
       object tsLight: TTabSheet
