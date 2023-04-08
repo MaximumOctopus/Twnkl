@@ -19,6 +19,9 @@
 
 class AreaLight : public Light
 {
+	Quaternion OriginalUVector;
+	Quaternion OriginalVVector;
+
 public:
 
 	AreaLight(std::wstring, double, double, double, double, double, double);
@@ -28,4 +31,6 @@ public:
 	void SetDimensions(Quaternion, Quaternion, int);
 
 	std::wstring ToString() override;
+
+	void ToFile(std::ofstream& ofile) override;
 };

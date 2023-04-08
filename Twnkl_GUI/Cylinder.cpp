@@ -9,12 +9,15 @@
 // 
 // 
 
+#include <cmath>
+
 #include "Cylinder.h"
 
 
 Cylinder::Cylinder(std::wstring name) : Object(name)
 {
     Name = name;
+    Primitive = PrimitiveType::Cylinder;
 }
 
 
@@ -77,7 +80,7 @@ void Cylinder::LocalIntersect(Intersections& i, Ray& rt)
         return;
     }
 
-	double t0 = (-b - std::sqrt(disc)) / (2 * a);
+    double t0 = (-b - std::sqrt(disc)) / (2 * a);
     double t1 = (-b + std::sqrt(disc)) / (2 * a);
     
     if (t0 > t1) 
@@ -132,4 +135,25 @@ void Cylinder::PostSetup(int i)
 std::wstring Cylinder::ToString()
 {
     return L"Cylinder. Min " + std::to_wstring(Minimum) + L", Max " + std::to_wstring(Maximum);
+}
+
+
+void Cylinder::ToFile(std::ofstream& ofile)
+{
+    ofile << Formatting::to_utf8(__SceneChunkObjectCylinder + L"\n");
+    ofile << Formatting::to_utf8(L"name=" + Name + L"\n");
+    ofile << Formatting::to_utf8(L"name=" + Name + L"\n");
+    ofile << Formatting::to_utf8(L"minimum=" + std::to_wstring(Minimum) + L"\n");
+    ofile << Formatting::to_utf8(L"maximum=" + std::to_wstring(Maximum) + L"\n");
+    if (Closed)
+    {
+        ofile << Formatting::to_utf8(L"closed=yes\n");
+    }
+
+    for (int t = 0; t < Transforms.size(); t++)
+    {
+        Transforms[t].ToFile(ofile);
+    }
+
+    Material->ToFile(ofile);
 }

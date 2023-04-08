@@ -9,8 +9,6 @@
 // 
 // 
 
-#include <iostream>
-
 #include "AreaLight.h"
 
 
@@ -45,6 +43,9 @@ Quaternion AreaLight::PointOn(double u, double v)
 
 void AreaLight::SetDimensions(Quaternion u, Quaternion v, int sample_count)
 {
+	OriginalUVector = u;
+	OriginalVVector = v;
+
 	uvec = u.Mult(1.0 / (double)sample_count);
 	vvec = v.Mult(1.0 / (double)sample_count);
 	
@@ -58,4 +59,17 @@ void AreaLight::SetDimensions(Quaternion u, Quaternion v, int sample_count)
 std::wstring AreaLight::ToString()
 {
 	return L"Area. Samples: " + std::to_wstring(Samples) + L" u: " + uvec.ToString() + L" v : " + vvec.ToString();
+}
+
+
+void AreaLight::ToFile(std::ofstream& ofile)
+{
+	ofile << Formatting::to_utf8(__SceneChunkAreaLight + L"\n");
+	ofile << Formatting::to_utf8(L"name=" + Name + L"\n");
+	ofile << Formatting::to_utf8(L"colour=" + Intensity.ToCommaString() + L"\n");
+	ofile << Formatting::to_utf8(L"position=" + std::to_wstring(Position.x) + L", " + std::to_wstring(Position.y) + L", " + std::to_wstring(Position.z) + L"\n");
+	ofile << Formatting::to_utf8(L"colour=" + Name + L"\n");
+	ofile << Formatting::to_utf8(L"uvector=" + std::to_wstring(OriginalUVector.x) + L", " + std::to_wstring(OriginalUVector.y) + L", " + std::to_wstring(OriginalUVector.z) + L"\n");
+	ofile << Formatting::to_utf8(L"vvector=" + std::to_wstring(OriginalVVector.x) + L", " + std::to_wstring(OriginalVVector.y) + L", " + std::to_wstring(OriginalVVector.z) + L"\n");
+	ofile << Formatting::to_utf8(L"}\n");
 }

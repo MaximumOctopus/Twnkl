@@ -36,4 +36,6 @@ public:
 	void PostSetup(int) override;
 
 	[[nodiscard]] std::wstring ToString() override;
+
+	void ToFile(std::ofstream& ofile) override;
 };

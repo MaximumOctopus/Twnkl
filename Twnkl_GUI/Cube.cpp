@@ -9,24 +9,24 @@
 // 
 // 
 
-#include <algorithm>
-
 #include "Cube.h"
 
 
 Cube::Cube(std::wstring name) : Object(name)
 {
 	Name = name;
+	Primitive = PrimitiveType::Cube;
 }
 
 
 std::pair<double, double> Cube::CheckAxis(double origin, double direction) 
 {
-	auto tminNumerator = (-1 - origin);
-	auto tmaxNumerator = (1 - origin);
+	double tminNumerator = (-1 - origin);
+	double tmaxNumerator = (1 - origin);
 
-	double tmin{ 0 }, tmax{ 0 };
-	
+	double tmin(0);
+	double tmax(0);
+
 	if (std::abs(direction) >= epsilon)
 	{
 		tmin = tminNumerator / direction;
@@ -34,15 +34,15 @@ std::pair<double, double> Cube::CheckAxis(double origin, double direction)
 	}
 	else
 	{
-		tmin = tminNumerator * INFINITY;
-		tmax = tmaxNumerator * INFINITY;
+		tmin = tminNumerator * 9999999;
+		tmax = tmaxNumerator * 9999999;
 	}
 
 	if (tmin > tmax)
 	{
-		std::swap(tmin, tmax); 
+		std::swap(tmin, tmax);
 	}
-	
+
 	return { tmin, tmax };
 }
 
@@ -95,4 +95,19 @@ void Cube::PostSetup(int i)
 std::wstring Cube::ToString()
 {
 	return L"Cube.";
+}
+
+
+void Cube::ToFile(std::ofstream& ofile)
+{
+	ofile << Formatting::to_utf8(__SceneChunkObjectCube + L"\n");
+	ofile << Formatting::to_utf8(L"name=" + Name + L"\n");
+	ofile << Formatting::to_utf8(L"}\n");
+
+	for (int t = 0; t < Transforms.size(); t++)
+	{
+		Transforms[t].ToFile(ofile);
+	}
+
+	Material->ToFile(ofile);
 }

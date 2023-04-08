@@ -9,6 +9,8 @@
 // 
 // 
 
+#include <cmath>
+
 #include "Computation.h"
 
 

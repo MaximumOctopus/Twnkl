@@ -7,7 +7,7 @@
 // 
 // https://github.com/MaximumOctopus/Twnkl
 // 
-//
+// 
 
 #include <algorithm>
 
@@ -48,11 +48,11 @@ void Bounds::Transform(Matrix4 m)
     double minz = points[0].z;
     double maxx = points[0].x;
     double maxy = points[0].y;
-	double maxz = points[0].z;
+    double maxz = points[0].z;
 
     for (int t = 0; t < 8; t++)
-	{
-		minx = std::min(minx, points[t].x);
+    {
+        minx = std::min(minx, points[t].x);
         miny = std::min(miny, points[t].y);
         minz = std::min(minz, points[t].z);
 
