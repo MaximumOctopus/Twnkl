@@ -133,7 +133,7 @@ Quaternion Quaternion::Cross(Quaternion& b)
 
 double Quaternion::Magnitude()
 {
-	return sqrt(x * x + y * y + z * z + w * w);
+	return std::sqrt(x * x + y * y + z * z + w * w);
 }
 
 

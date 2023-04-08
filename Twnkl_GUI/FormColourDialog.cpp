@@ -1,4 +1,13 @@
-
+//
+// TwnklX 1.0
+//
+// (c) Paul Alan Freshney 2023
+//
+// paul@freshney.org
+//
+// https://github.com/MaximumOctopus/Twnkl
+//
+//
 
 #include <vcl.h>
 #pragma hdrstop
@@ -7,6 +16,7 @@
 
 #pragma package(smart_init)
 #pragma resource "*.dfm"
+
 TfrmColourDialog *frmColourDialog;
 
 
@@ -18,7 +28,24 @@ __fastcall TfrmColourDialog::TfrmColourDialog(TComponent* Owner)
 
 void __fastcall TfrmColourDialog::tbRedChange(TObject *Sender)
 {
-	SelectedColour = (tbBlue->Position << 16) + (tbGreen->Position << 8) + tbRed->Position;
+	if (!Changing)
+	{
+		SelectedColour = (tbBlue->Position << 16) + (tbGreen->Position << 8) + tbRed->Position;
 
-    sShapeColour->Brush->Color = TColor(SelectedColour);
+		sShapeColour->Brush->Color = TColor(SelectedColour);
+    }
+}
+
+
+void __fastcall TfrmColourDialog::FormShow(TObject *Sender)
+{
+	Changing = true;
+
+	sShapeColour->Brush->Color = TColor(SelectedColour);
+
+	tbBlue->Position = (SelectedColour & 0x00FF0000) >> 16;
+	tbGreen->Position = (SelectedColour & 0x0000FF00) >> 8;
+	tbRed->Position = (SelectedColour & 0x000000FF);
+
+	Changing = false;
 }

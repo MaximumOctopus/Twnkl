@@ -19,6 +19,7 @@
 Perlin2::Perlin2(std::wstring name) : Pattern(name)
 {
 	Name = name;
+	Design = PatternDesign::Perlin2;
 
 	ranvec = new Quaternion[point_count];
 
@@ -171,4 +172,20 @@ Colour Perlin2::ColourAt(Object* o, Quaternion& q)
 std::wstring Perlin2::ToString()
 {
 	return L"Colour " + Colours[0].ToString() + L", Scale " + std::to_wstring(Scale);
+}
+
+
+void Perlin2::ToFile(std::ofstream& ofile)
+{
+	ofile << Formatting::to_utf8(__SceneChunkPerlin2 + L"\n");
+	ofile << Formatting::to_utf8(L"colour=" + Colours[0].ToCommaString() + L"\n");
+	ofile << Formatting::to_utf8(L"u=" + std::to_wstring(Width) + L"\n");
+	ofile << Formatting::to_utf8(L"v=" + std::to_wstring(Height) + L"\n");
+	ofile << Formatting::to_utf8(L"scale=" + std::to_wstring(Scale) + L"\n");
+	ofile << Formatting::to_utf8(L"}\n");
+
+	for (int t = 0; t < Transforms.size(); t++)
+	{
+		Transforms[t].ToFile(ofile);
+	}
 }

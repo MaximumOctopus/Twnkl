@@ -16,8 +16,11 @@
 
 class Pattern;
 
+#include <fstream>
+
 #include "Constants.h"
 #include "Colour.h"
+#include "Formatting.h"
 #include "Pattern.h"
 
 
@@ -46,4 +49,6 @@ public:
 	void SetPattern(Pattern*);
 
 	void RemovePattern();
+
+	void ToFile(std::ofstream& ofile);
 };

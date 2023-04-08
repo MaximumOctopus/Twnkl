@@ -58,3 +58,23 @@ void PhongMaterial::RemovePattern()
 
 	HasPattern = false;
 }
+
+
+void PhongMaterial::ToFile(std::ofstream& ofile)
+{
+	ofile << Formatting::to_utf8(__SceneChunkMaterial + L"\n");
+	ofile << Formatting::to_utf8(L"colour=" + SurfaceColour.ToCommaString() + L"\n");
+	ofile << Formatting::to_utf8(L"ambient=" + std::to_wstring(Ambient) + L"\n");
+	ofile << Formatting::to_utf8(L"diffuse=" + std::to_wstring(Diffuse) + L"\n");
+	ofile << Formatting::to_utf8(L"reflectivity=" + std::to_wstring(Reflectivity) + L"\n");
+	ofile << Formatting::to_utf8(L"refractiveindex=" + std::to_wstring(RefractiveIndex) + L"\n");
+	ofile << Formatting::to_utf8(L"shininess=" + std::to_wstring(Shininess) + L"\n");
+	ofile << Formatting::to_utf8(L"specular=" + std::to_wstring(Specular) + L"\n");
+	ofile << Formatting::to_utf8(L"transparency=" + std::to_wstring(Transparency) + L"\n");
+	ofile << Formatting::to_utf8(L"}\n");
+
+	if (HasPattern)
+	{
+		SurfacePattern->ToFile(ofile);
+	}
+}

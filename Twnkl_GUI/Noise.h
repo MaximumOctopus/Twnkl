@@ -34,17 +34,17 @@ class Noise
 		138, 236, 205, 93, 222, 114, 67, 29, 24, 72, 243, 141, 128, 195, 78, 66, 215, 61, 156, 180
 	};
 
-	double Frequency = 1.0;
-	double Amplitude = 1.0;
-	double Lacunarity = 2.0;
-	double Persistence = 0.5;
-
 	static double Grad(int32_t, double, double, double);
 
 	static inline int32_t FastFloor(double);
 	static inline uint8_t Hash(int32_t);
 
 public:
+
+	double Frequency = 1.0;
+	double Amplitude = 1.0;
+	double Lacunarity = 2.0;
+	double Persistence = 0.5;
 
 	Noise();
 

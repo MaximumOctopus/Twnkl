@@ -78,25 +78,34 @@ double Noise::Simplex(double x, double y, double z)
     // Determine which simplex we are in.
     int i1, j1, k1; // Offsets for second corner of simplex in (i,j,k) coords
     int i2, j2, k2; // Offsets for third corner of simplex in (i,j,k) coords
-    if (x0 >= y0) {
-        if (y0 >= z0) {
+    
+    if (x0 >= y0)
+    {
+        if (y0 >= z0) 
+        {
             i1 = 1; j1 = 0; k1 = 0; i2 = 1; j2 = 1; k2 = 0; // X Y Z order
         }
-        else if (x0 >= z0) {
+        else if (x0 >= z0) 
+        {
             i1 = 1; j1 = 0; k1 = 0; i2 = 1; j2 = 0; k2 = 1; // X Z Y order
         }
-        else {
+        else 
+        {
             i1 = 0; j1 = 0; k1 = 1; i2 = 1; j2 = 0; k2 = 1; // Z X Y order
         }
     }
-    else { // x0<y0
-        if (y0 < z0) {
+    else
+    { // x0<y0
+        if (y0 < z0) 
+        {
             i1 = 0; j1 = 0; k1 = 1; i2 = 0; j2 = 1; k2 = 1; // Z Y X order
         }
-        else if (x0 < z0) {
+        else if (x0 < z0) 
+        {
             i1 = 0; j1 = 1; k1 = 0; i2 = 0; j2 = 1; k2 = 1; // Y Z X order
         }
-        else {
+        else 
+        {
             i1 = 0; j1 = 1; k1 = 0; i2 = 1; j2 = 1; k2 = 0; // Y X Z order
         }
     }
@@ -123,34 +132,42 @@ double Noise::Simplex(double x, double y, double z)
 
     // Calculate the contribution from the four corners
     double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
-    if (t0 < 0) {
+    if (t0 < 0) 
+    {
         n0 = 0.0;
     }
-    else {
+    else 
+    {
         t0 *= t0;
         n0 = t0 * t0 * Grad(gi0, x0, y0, z0);
     }
     double t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1;
-    if (t1 < 0) {
+    if (t1 < 0) 
+    {
         n1 = 0.0;
     }
-    else {
+    else 
+    {
         t1 *= t1;
         n1 = t1 * t1 * Grad(gi1, x1, y1, z1);
     }
     double t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2;
-    if (t2 < 0) {
+    if (t2 < 0) 
+    {
         n2 = 0.0;
     }
-    else {
+    else 
+    {
         t2 *= t2;
         n2 = t2 * t2 * Grad(gi2, x2, y2, z2);
     }
     double t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3;
-    if (t3 < 0) {
+    if (t3 < 0) 
+    {
         n3 = 0.0;
     }
-    else {
+    else 
+    {
         t3 *= t3;
         n3 = t3 * t3 * Grad(gi3, x3, y3, z3);
     }

@@ -21,6 +21,7 @@
 Model::Model(std::wstring name) : Object(name)
 {
 	Name = name;
+	Primitive = PrimitiveType::Model;
 }
 
 
@@ -49,7 +50,7 @@ Quaternion Model::LocalNormalAt(Quaternion& q)
 }
 
 
-Quaternion Model::VectorsFrom(const std::wstring input, int reference_index)
+Trinion Model::VectorsFrom(const std::wstring input, int reference_index)
 {
 	int ReferenceType = 0;	// 0 = vector index, 1 = texture index, 2 = vector normal
 	int mode = 0;
@@ -105,7 +106,7 @@ Quaternion Model::VectorsFrom(const std::wstring input, int reference_index)
 		}
 	}
 
-	return Quaternion(components[0], components[1], components[2], 0);
+	return Trinion(components[0], components[1], components[2]);
 }
 
 
@@ -160,6 +161,8 @@ void Model::Load(std::wstring file_name)
 
 	if (file)
 	{
+		FileName = file_name;
+
 		std::wstring s(L"");
 
 		std::vector<Quaternion> Vectors;
@@ -191,7 +194,7 @@ void Model::Load(std::wstring file_name)
 					}
 					case L'f':					// faces
 					{
-						Quaternion points = VectorsFrom(s.substr(2) + L" ", 0);
+						Trinion points = VectorsFrom(s.substr(2) + L" ", 0);
 
 						Triangle* tringle = new Triangle(L"");
 
@@ -199,7 +202,7 @@ void Model::Load(std::wstring file_name)
 
 						if (VectorNormals.size() != 0)
 						{
-							Quaternion normals = VectorsFrom(s.substr(2) + L" ", 2);
+							Trinion normals = VectorsFrom(s.substr(2) + L" ", 2);
 
 							// for now, assumes the normals for each point are equal...
 							tringle->SetPointsWithNormal(Vectors[points.x - 1], Vectors[points.y - 1], Vectors[points.z - 1],
@@ -279,4 +282,20 @@ void Model::SetBounds(Triangle* tringle)
 std::wstring Model::ToString()
 {
 	return L"Model: " + std::to_wstring(Objects.size()) + L" triangles.";
+}
+
+
+void Model::ToFile(std::ofstream& ofile)
+{
+	ofile << Formatting::to_utf8(__SceneChunkObjectModel + L"\n");
+	ofile << Formatting::to_utf8(L"name=" + Name + L"\n");
+	ofile << Formatting::to_utf8(L"filename=" + FileName + L"\n");
+	ofile << Formatting::to_utf8(L"}\n");
+
+	for (int t = 0; t < Transforms.size(); t++)
+	{
+		Transforms[t].ToFile(ofile);
+	}
+
+	Material->ToFile(ofile);
 }

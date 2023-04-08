@@ -1,4 +1,13 @@
-//---------------------------------------------------------------------------
+//
+// TwnklX 1.0
+//
+// (c) Paul Alan Freshney 2023
+//
+// paul@freshney.org
+//
+// https://github.com/MaximumOctopus/Twnkl
+//
+//
 
 #ifndef mainH
 #define mainH
@@ -10,15 +19,13 @@
 #include <Vcl.Dialogs.hpp>
 #include <Vcl.ComCtrls.hpp>
 
-//---------------------------------------------------------------------------
+#include "Object.h"
 
-
-//---------------------------------------------------------------------------
-class TForm1 : public TForm
+class TfrmMain : public TForm
 {
 __published:	// IDE-managed Components
 	TPanel *Panel1;
-	TBitBtn *bOpenSource;
+	TBitBtn *bOpenScene;
 	TBitBtn *bRender;
 	TPanel *Panel2;
 	TPanel *Panel3;
@@ -37,7 +44,6 @@ __published:	// IDE-managed Components
 	TLabel *Label6;
 	TLabel *Label5;
 	TTrackBar *tbShininess;
-	TTrackBar *tbIoR;
 	TLabel *Label4;
 	TLabel *Label3;
 	TTrackBar *tbReflectivity;
@@ -47,13 +53,13 @@ __published:	// IDE-managed Components
 	TTrackBar *tbAmbient;
 	TShape *sMaterialColour;
 	TLabel *Label8;
-	TLabel *Label9;
+	TLabel *lPatternColour1;
 	TShape *sPatternColour1;
-	TLabel *Label10;
+	TLabel *lPatternColour2;
 	TShape *sPatternColour2;
-	TTabSheet *TabSheet3;
+	TTabSheet *tsTransforms;
 	TStatusBar *sbMain;
-	TTabSheet *Transforms;
+	TTabSheet *tsMaterialTransforms;
 	TLabel *lSurfaceColourWarning;
 	TTabSheet *tsCamera;
 	TTabSheet *tsLight;
@@ -69,6 +75,88 @@ __published:	// IDE-managed Components
 	TEdit *eOTZ;
 	TLabel *Label14;
 	TLabel *Label13;
+	TListBox *lbPatternTransforms;
+	TPanel *pPTAngle;
+	TLabel *Label16;
+	TLabel *Label17;
+	TEdit *ePTAngle;
+	TPanel *pPTXYZ;
+	TLabel *Label18;
+	TLabel *Label19;
+	TLabel *Label20;
+	TEdit *ePTX;
+	TEdit *ePTY;
+	TEdit *ePTZ;
+	TLabel *Label21;
+	TShape *sLightIntensity;
+	TComboBox *cbPatternChangeTo;
+	TLabel *Label22;
+	TTrackBar *tbIoR;
+	TSpeedButton *sbAddObject;
+	TSpeedButton *sbDeleteObject;
+	TSpeedButton *sbAddMaterialTransform;
+	TSpeedButton *sbDeleteMaterialTransform;
+	TSpeedButton *sbAddTransform;
+	TSpeedButton *sbDeleteTransform;
+	TBitBtn *bSaveScene;
+	TLabel *Label23;
+	TLabel *lPatternDesign;
+	TSpeedButton *sbPatternChange;
+	TLabel *lPScale;
+	TEdit *ePScale;
+	TLabel *lPPhase;
+	TEdit *ePPhase;
+	TEdit *ePFrequency;
+	TEdit *ePAmplitude;
+	TLabel *lPAmplitude;
+	TLabel *lPFrequency;
+	TEdit *ePLacunarity;
+	TEdit *ePPersistence;
+	TLabel *lPPersistence;
+	TLabel *lPLacunarity;
+	TEdit *ePWidth;
+	TEdit *ePHeight;
+	TLabel *lPHeight;
+	TLabel *lPWidth;
+	TBitBtn *bNew;
+	TLabel *Label32;
+	TEdit *eCFoV;
+	TLabel *Label33;
+	TEdit *eCFromX;
+	TEdit *eCFromY;
+	TEdit *eCFromZ;
+	TLabel *Label34;
+	TEdit *eCToX;
+	TEdit *eCToY;
+	TEdit *eCToZ;
+	TLabel *Label35;
+	TEdit *eCUpX;
+	TEdit *eCUpY;
+	TEdit *eCUpZ;
+	TLabel *Label36;
+	TLabel *Label37;
+	TLabel *Label38;
+	TTabSheet *tsObject;
+	TLabel *lOMinimum;
+	TEdit *eOMinimum;
+	TEdit *eOMaximum;
+	TLabel *lOMaximum;
+	TCheckBox *cbOClosed;
+	TCheckBox *cbPSimple;
+	TLabel *lTexture;
+	TLabel *lTexturePath;
+	TBitBtn *bOpenTexture;
+	TSpeedButton *SpeedButton1;
+	TLabel *Label9;
+	TLabel *lOPrimitive;
+	TLabel *lOObjectFileName;
+	TLabel *eOObjectFileName;
+	TLabel *Label10;
+	TEdit *eLPositionX;
+	TEdit *eLPositionY;
+	TEdit *eLPositionZ;
+	TLabel *Label24;
+	TLabel *Label25;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall bOpenSceneClick(TObject *Sender);
@@ -83,16 +171,59 @@ __published:	// IDE-managed Components
 	void __fastcall lbObjectTransformsClick(TObject *Sender);
 	void __fastcall eOTAngleExit(TObject *Sender);
 	void __fastcall eOTXExit(TObject *Sender);
+	void __fastcall lbPatternTransformsClick(TObject *Sender);
+	void __fastcall ePTAngleExit(TObject *Sender);
+	void __fastcall sLightIntensityMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
+          int X, int Y);
+	void __fastcall ePTXExit(TObject *Sender);
+	void __fastcall sbAddMaterialTransformClick(TObject *Sender);
+	void __fastcall sbDeleteMaterialTransformClick(TObject *Sender);
+	void __fastcall bSaveSceneClick(TObject *Sender);
+	void __fastcall sbPatternChangeClick(TObject *Sender);
+	void __fastcall sbAddObjectClick(TObject *Sender);
+	void __fastcall sbAddTransformClick(TObject *Sender);
+	void __fastcall eCFromXExit(TObject *Sender);
+	void __fastcall eCToXExit(TObject *Sender);
+	void __fastcall eCUpXExit(TObject *Sender);
+	void __fastcall eCFoVExit(TObject *Sender);
+	void __fastcall ePFrequencyExit(TObject *Sender);
+	void __fastcall ePScaleExit(TObject *Sender);
+	void __fastcall ePPhaseExit(TObject *Sender);
+	void __fastcall ePWidthExit(TObject *Sender);
+	void __fastcall cbPSimpleClick(TObject *Sender);
+	void __fastcall sbDeleteTransformClick(TObject *Sender);
+	void __fastcall sbDeleteObjectClick(TObject *Sender);
+	void __fastcall bNewClick(TObject *Sender);
+	void __fastcall eLPositionXExit(TObject *Sender);
+
 private:	// User declarations
+	TTreeNode* cameras = nullptr;
+	TTreeNode* lights = nullptr;
+	TTreeNode* objects = nullptr;
+
 	void ConfigureTabLayoutFor(int);
 	void PopulateTreeView();
+
+	void AddNewObject(int, int, PatternProperties, std::wstring);
+
+	void BuildCameraPanel(int);
+
+    void BuildLightPanel(int);
+
+    void BuildObjectPanelFromObject(int);
 	void BuildMaterialPanelFromObject(int);
+	void BuildPatternTab(int);
+    void BuildPatternTabControls(PatternDesign);
+	void BuildPatternTransformTab(int);
+
 	void BuildTransformTab(int, int);
-    void UpdateTransformTab(int, int, int);
+
+	void UpdateTransformTab(int, int, int);
+	void UpdatePatternTransformTab(int, int, int);
 public:		// User declarations
-	__fastcall TForm1(TComponent* Owner);
+	__fastcall TfrmMain(TComponent* Owner);
 };
-//---------------------------------------------------------------------------
-extern PACKAGE TForm1 *Form1;
-//---------------------------------------------------------------------------
+
+extern PACKAGE TfrmMain *frmMain;
+
 #endif

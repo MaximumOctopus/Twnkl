@@ -17,6 +17,7 @@
 Triangle::Triangle(std::wstring name) : Object(name)
 {
 	Name = name;
+	Primitive = PrimitiveType::Triangle;
 }
 
 
@@ -106,4 +107,12 @@ void Triangle::Finalise()
 std::wstring Triangle::ToString()
 {
 	return L"Triangle.";
+}
+
+
+void Triangle::ToFile(std::ofstream& ofile)
+{
+	ofile << Formatting::to_utf8(__SceneChunkObjectTriangle + L"\n");
+	ofile << Formatting::to_utf8(L"name=" + Name + L"\n");
+	ofile << Formatting::to_utf8(L"}\n");
 }

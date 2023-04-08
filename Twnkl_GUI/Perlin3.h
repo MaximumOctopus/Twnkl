@@ -19,12 +19,6 @@
 
 class Perlin3 : public Pattern
 {
-	double Width = 0;
-	double Height = 0;
-	double Scale = __DefaultPerlinScale;
-	double Phase = __DefaultPerlinPhase;
-	int Depth = 7;
-
 	static const int point_count = 256;
 	Quaternion* ranvec;
 	int* perm_x;
@@ -40,6 +34,12 @@ class Perlin3 : public Pattern
 
 public:
 
+	double Width = 0;
+	double Height = 0;
+	double Scale = __DefaultPerlinScale;
+	double Phase = __DefaultPerlinPhase;
+	int Depth = 7;
+
 	Perlin3(std::wstring);
 	~Perlin3();
 
@@ -48,4 +48,6 @@ public:
 	[[nodiscard]] Colour ColourAt(Object*, Quaternion&) override;
 
 	[[nodiscard]] virtual std::wstring ToString() override;
+
+	void ToFile(std::ofstream&) override;
 };

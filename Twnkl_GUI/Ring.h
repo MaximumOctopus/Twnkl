@@ -24,4 +24,6 @@ public:
 	[[nodiscard]] Colour ColourAt(Object*, Quaternion&) override;
 
 	[[nodiscard]] virtual std::wstring ToString() override;
+
+	void ToFile(std::ofstream&) override;
 };

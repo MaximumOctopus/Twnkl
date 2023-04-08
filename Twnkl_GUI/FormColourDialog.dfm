@@ -2,8 +2,8 @@ object frmColourDialog: TfrmColourDialog
   Left = 0
   Top = 0
   BorderStyle = bsDialog
-  Caption = 'frmColourDialog'
-  ClientHeight = 223
+  Caption = 'Colour Select'
+  ClientHeight = 198
   ClientWidth = 521
   Color = clBtnFace
   DoubleBuffered = True
@@ -13,6 +13,7 @@ object frmColourDialog: TfrmColourDialog
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object sShapeColour: TShape
@@ -23,54 +24,54 @@ object frmColourDialog: TfrmColourDialog
   end
   object Bevel1: TBevel
     Left = 8
-    Top = 176
+    Top = 152
     Width = 505
     Height = 9
     Shape = bsTopLine
   end
   object Label1: TLabel
     Left = 170
-    Top = 40
-    Width = 31
+    Top = 24
+    Width = 7
     Height = 13
-    Caption = 'Label1'
+    Caption = 'R'
   end
   object Label2: TLabel
     Left = 170
-    Top = 79
-    Width = 31
+    Top = 63
+    Width = 7
     Height = 13
-    Caption = 'Label1'
+    Caption = 'G'
   end
   object Label3: TLabel
     Left = 170
-    Top = 118
-    Width = 31
+    Top = 102
+    Width = 6
     Height = 13
-    Caption = 'Label1'
+    Caption = 'B'
   end
   object tbRed: TTrackBar
-    Left = 207
-    Top = 40
-    Width = 306
+    Left = 192
+    Top = 24
+    Width = 321
     Height = 33
     Max = 255
     TabOrder = 0
     OnChange = tbRedChange
   end
   object tbGreen: TTrackBar
-    Left = 207
-    Top = 79
-    Width = 306
+    Left = 192
+    Top = 63
+    Width = 321
     Height = 33
     Max = 255
     TabOrder = 1
     OnChange = tbRedChange
   end
   object tbBlue: TTrackBar
-    Left = 207
-    Top = 118
-    Width = 306
+    Left = 192
+    Top = 102
+    Width = 321
     Height = 33
     Max = 255
     TabOrder = 2
@@ -78,7 +79,7 @@ object frmColourDialog: TfrmColourDialog
   end
   object BitBtn1: TBitBtn
     Left = 357
-    Top = 191
+    Top = 167
     Width = 75
     Height = 25
     Caption = 'OK'
@@ -87,9 +88,10 @@ object frmColourDialog: TfrmColourDialog
   end
   object BitBtn2: TBitBtn
     Left = 438
-    Top = 191
+    Top = 167
     Width = 75
     Height = 25
+    Cancel = True
     Caption = 'Cancel'
     ModalResult = 2
     TabOrder = 4

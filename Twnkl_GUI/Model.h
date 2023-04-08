@@ -15,16 +15,19 @@
 
 #include "Bounds.h"
 #include "Object.h"
+#include "Trinion.h"
 #include "Triangle.h"
 
 
 class Model : public Object
 {
+	std::wstring FileName = L"";
+
 	Bounds bounds;
 
 	std::vector<Object*> Objects;
 
-	Quaternion VectorsFrom(const std::wstring, int);
+	Trinion VectorsFrom(const std::wstring, int);
 	Quaternion XYZFrom(const std::wstring);
 
 	void SetBounds(Triangle*);
@@ -43,4 +46,6 @@ public:
 	void Load(std::wstring);
 
 	[[nodiscard]] std::wstring ToString() override;
+
+	void ToFile(std::ofstream& ofile) override;
 };

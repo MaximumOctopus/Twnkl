@@ -26,4 +26,6 @@ public:
 	Quaternion PointOn(double, double) override;
 
 	std::wstring ToString() override;
+
+	void ToFile(std::ofstream& ofile) override;
 };

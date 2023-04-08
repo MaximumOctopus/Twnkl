@@ -18,7 +18,8 @@
 namespace Utility
 {
 	#ifdef _GUI
-	[[nodiscard]] std::wstring GetFileName();
+	[[nodiscard]] std::wstring GetOpenFileName();
+	[[nodiscard]] std::wstring GetSaveFileName();
 	#endif
 
 	[[nodiscard]] int CurrentYear();

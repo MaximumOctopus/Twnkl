@@ -15,6 +15,7 @@
 SmoothTriangle::SmoothTriangle(std::wstring name) : Object(name)
 {
 	Name = name;
+	Primitive = PrimitiveType::SmoothTriangle;
 }
 
 
@@ -105,4 +106,12 @@ void SmoothTriangle::PostSetup(int i)
 std::wstring SmoothTriangle::ToString()
 {
 	return L"SmoothTriangle.";
+}
+
+
+void SmoothTriangle::ToFile(std::ofstream& ofile)
+{
+	ofile << Formatting::to_utf8(__SceneChunkObjectSmoothTriangle + L"\n");
+	ofile << Formatting::to_utf8(L"name=" + Name + L"\n");
+	ofile << Formatting::to_utf8(L"}\n");
 }

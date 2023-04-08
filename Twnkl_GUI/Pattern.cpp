@@ -64,6 +64,20 @@ void Pattern::AddTransform(TransformConfiguration tc)
 }
 
 
+void Pattern::RemoveTransformAt(int index)
+{
+	Transforms.erase(Transforms.begin() + index);
+
+	// if there are no transforms then the transform "merg" won't happen,
+	// and the Transform will not change to reflect the lack of transforms in the stack.
+	// so we reset the Transform to the identity matrix. 
+	if (Transforms.size() == 0)
+	{
+		Transform = Matrix4();
+	}
+}
+
+
 void Pattern::CreateInverseTransform()
 {
 	InverseTransform = Transform.Inverse();
@@ -82,7 +96,84 @@ TransformConfiguration Pattern::TransformAt(int index)
 }
 
 
+void Pattern::TransformReplaceAt(int index, TransformConfiguration tc)
+{
+	Transforms[index].Type = tc.Type;
+
+	Transforms[index].Angle = tc.Angle;
+	Transforms[index].XYZ = tc.XYZ;
+
+	switch (Transforms[index].Type)
+	{
+	case TransformType::Scale:
+		Transforms[index].Transform = Matrix4(0, tc.XYZ.x, tc.XYZ.y, tc.XYZ.z);
+		break;
+	case TransformType::Translate:
+		Transforms[index].Transform = Matrix4(1, tc.XYZ.x, tc.XYZ.y, tc.XYZ.z);
+		break;
+	case TransformType::RotateX:
+		Transforms[index].Transform = Matrix4(0, tc.Angle);
+		break;
+	case TransformType::RotateY:
+		Transforms[index].Transform = Matrix4(1, tc.Angle);
+		break;
+	case TransformType::RotateZ:
+		Transforms[index].Transform = Matrix4(2, tc.Angle);
+		break;
+	}
+}
+
+
+std::wstring Pattern::FriendlyName()
+{
+	switch (Design)
+	{
+	case PatternDesign::None:
+		return L"None!";
+	case PatternDesign::Checkerboard:
+		return L"Checkerboard";
+	case PatternDesign::Gradient:
+		return L"Gradient";
+	case PatternDesign::Gradient2:
+		return L"Gradient II";
+	case PatternDesign::Ring:
+		return L"Ring";
+	case PatternDesign::Stripey:
+		return L"Stripey";
+	case PatternDesign::Fractal:
+		return L"Fractal";
+	case PatternDesign::Simplex:
+		return L"Simplex";
+	case PatternDesign::Perlin1:
+		return L"Perlin";
+	case PatternDesign::Perlin2:
+		return L"Perlin II";
+	case PatternDesign::Perlin3:
+		return L"Perlin III";
+	case PatternDesign::CubeCheckerboard:
+		return L"Checkerboard (Cube)";
+	case PatternDesign::CubeTexture:
+		return L"Texture (Cube)";
+	case PatternDesign::CylinderCheckerboard:
+		return L"Checkerboard (Cylinder)";
+	case PatternDesign::CylinderTexture:
+		return L"Texture (Cylinder)";
+	case PatternDesign::PlanarTexture:
+		return L"Texture (Planar)";
+	case PatternDesign::SphericalCheckerboard:
+		return L"Checkerboard (Sphere)";
+	case PatternDesign::SphericalTexture:
+		return L"Texture (Spherical)";
+	}
+}
+
+
 std::wstring Pattern::ToString()
 {
 	return L"base class!";
+}
+
+
+void Pattern::ToFile(std::ofstream& ofile)
+{
 }

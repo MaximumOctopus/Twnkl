@@ -16,6 +16,7 @@
 Plane::Plane(std::wstring name): Object(name)
 {
 	Name = name;
+	Primitive = PrimitiveType::Plane;
 }
 
 
@@ -47,4 +48,19 @@ void Plane::PostSetup(int i)
 std::wstring Plane::ToString()
 {
 	return L"Plane.";
+}
+
+
+void Plane::ToFile(std::ofstream& ofile)
+{
+	ofile << Formatting::to_utf8(__SceneChunkObjectPlane + L"\n");
+	ofile << Formatting::to_utf8(L"name=" + Name + L"\n");
+	ofile << Formatting::to_utf8(L"}\n");
+
+	for (int t = 0; t < Transforms.size(); t++)
+	{
+		Transforms[t].ToFile(ofile);
+	}
+
+	Material->ToFile(ofile);
 }

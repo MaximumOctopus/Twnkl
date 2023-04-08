@@ -17,6 +17,7 @@
 PlanarTexture::PlanarTexture(std::wstring name) : Pattern(name)
 {
 	Name = name;
+	Design = PatternDesign::PlanarTexture;
 }
 
 
@@ -68,3 +69,15 @@ std::wstring PlanarTexture::ToString()
 	return L"Dimensions " + std::to_wstring(Width) + L" x " + std::to_wstring(Height);
 }
 
+
+void PlanarTexture::ToFile(std::ofstream& ofile)
+{
+	ofile << Formatting::to_utf8(__SceneChunkTexture + L"\n");
+	ofile << Formatting::to_utf8(L"filename=" + FileName + L"\n");
+	ofile << Formatting::to_utf8(L"}\n");
+
+	for (int t = 0; t < Transforms.size(); t++)
+	{
+		Transforms[t].ToFile(ofile);
+	}
+}

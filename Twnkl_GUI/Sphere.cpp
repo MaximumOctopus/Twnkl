@@ -17,6 +17,7 @@
 Sphere::Sphere(std::wstring name) : Object(name)
 {
 	Name = name;
+	Primitive = PrimitiveType::Sphere;
 }
 
 
@@ -69,4 +70,19 @@ void Sphere::PostSetup(int i)
 std::wstring Sphere::ToString()
 {
 	return L"Sphere.";
+}
+
+
+void Sphere::ToFile(std::ofstream& ofile)
+{
+	ofile << Formatting::to_utf8(__SceneChunkObjectSphere + L"\n");
+	ofile << Formatting::to_utf8(L"name=" + Name + L"\n");
+	ofile << Formatting::to_utf8(L"}\n");
+
+	for (int t = 0; t < Transforms.size(); t++)
+	{
+		Transforms[t].ToFile(ofile);
+	}
+
+	Material->ToFile(ofile);
 }

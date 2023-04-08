@@ -6,7 +6,7 @@
         <AppType>Application</AppType>
         <MainSource>TwnklX.cpp</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <Platform Condition="'$(Platform)'==''">Win64</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
     </PropertyGroup>
@@ -185,12 +185,10 @@
             <BuildOrder>60</BuildOrder>
         </None>
         <CppCompile Include="Colour.cpp">
-            <VirtualFolder>{AE7156E0-A1AF-4E6D-A0C7-BE99CBCD5078}</VirtualFolder>
-            <BuildOrder>6</BuildOrder>
+            <BuildOrder>111</BuildOrder>
         </CppCompile>
         <None Include="Colour.h">
-            <VirtualFolder>{AE7156E0-A1AF-4E6D-A0C7-BE99CBCD5078}</VirtualFolder>
-            <BuildOrder>61</BuildOrder>
+            <BuildOrder>111</BuildOrder>
         </None>
         <CppCompile Include="Computation.cpp">
             <VirtualFolder>{E62D9962-E05D-4ED1-9294-1D31B2070ABF}</VirtualFolder>
@@ -267,6 +265,20 @@
             <VirtualFolder>{ADB19E0A-6020-4C15-B9B8-19C549C0A997}</VirtualFolder>
             <BuildOrder>73</BuildOrder>
         </None>
+        <CppCompile Include="FormAddObject.cpp">
+            <VirtualFolder>{E301A193-E65A-4468-80E7-3F75CD64921B}</VirtualFolder>
+            <Form>frmAddObject</Form>
+            <FormType>dfm</FormType>
+            <DependentOn>FormAddObject.h</DependentOn>
+            <BuildOrder>108</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="FormAddTransform.cpp">
+            <VirtualFolder>{E301A193-E65A-4468-80E7-3F75CD64921B}</VirtualFolder>
+            <Form>frmAddTransform</Form>
+            <FormType>dfm</FormType>
+            <DependentOn>FormAddTransform.h</DependentOn>
+            <BuildOrder>111</BuildOrder>
+        </CppCompile>
         <CppCompile Include="Formatting.cpp">
             <VirtualFolder>{ADB19E0A-6020-4C15-B9B8-19C549C0A997}</VirtualFolder>
             <BuildOrder>18</BuildOrder>
@@ -276,6 +288,7 @@
             <BuildOrder>75</BuildOrder>
         </None>
         <CppCompile Include="FormColourDialog.cpp">
+            <VirtualFolder>{E301A193-E65A-4468-80E7-3F75CD64921B}</VirtualFolder>
             <Form>frmColourDialog</Form>
             <FormType>dfm</FormType>
             <DependentOn>FormColourDialog.h</DependentOn>
@@ -286,8 +299,8 @@
             <BuildOrder>19</BuildOrder>
         </CppCompile>
         <None Include="Fractal.h">
-            <VirtualFolder>{77CA93F6-BB70-4706-B8B0-A95422F53350}</VirtualFolder>
-            <BuildOrder>76</BuildOrder>
+            <VirtualFolder>{3B0DC2B8-50C4-4699-9E35-07C14B04049B}</VirtualFolder>
+            <BuildOrder>111</BuildOrder>
         </None>
         <CppCompile Include="Gradient.cpp">
             <VirtualFolder>{77CA93F6-BB70-4706-B8B0-A95422F53350}</VirtualFolder>
@@ -338,7 +351,7 @@
             <BuildOrder>83</BuildOrder>
         </None>
         <CppCompile Include="main.cpp">
-            <Form>Form1</Form>
+            <Form>frmMain</Form>
             <FormType>dfm</FormType>
             <DependentOn>main.h</DependentOn>
             <BuildOrder>84</BuildOrder>
@@ -562,6 +575,14 @@
             <VirtualFolder>{FE919E22-9E2A-432F-8F14-D2EE1FA578C4}</VirtualFolder>
             <BuildOrder>114</BuildOrder>
         </None>
+        <CppCompile Include="Trinion.cpp">
+            <VirtualFolder>{AE7156E0-A1AF-4E6D-A0C7-BE99CBCD5078}</VirtualFolder>
+            <BuildOrder>109</BuildOrder>
+        </CppCompile>
+        <None Include="Trinion.h">
+            <VirtualFolder>{AE7156E0-A1AF-4E6D-A0C7-BE99CBCD5078}</VirtualFolder>
+            <BuildOrder>110</BuildOrder>
+        </None>
         <CppCompile Include="TwnklX.cpp">
             <BuildOrder>0</BuildOrder>
         </CppCompile>
@@ -587,6 +608,8 @@
         </None>
         <FormResources Include="main.dfm"/>
         <FormResources Include="FormColourDialog.dfm"/>
+        <FormResources Include="FormAddObject.dfm"/>
+        <FormResources Include="FormAddTransform.dfm"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -612,6 +635,7 @@
                 </ProjectProperties>
                 <VFOLDERS>
                     <VFOLDER ID="{A54DCC9F-401E-412C-9EF5-865893EBA8A4}" name="Configuration"/>
+                    <VFOLDER ID="{E301A193-E65A-4468-80E7-3F75CD64921B}" name="Forms"/>
                     <VFOLDER ID="{E62D9962-E05D-4ED1-9294-1D31B2070ABF}" name="Intersect"/>
                     <VFOLDER ID="{49312A2B-C6D4-4A09-8D00-0F3DB567EB92}" name="Lights"/>
                     <VFOLDER ID="{AE7156E0-A1AF-4E6D-A0C7-BE99CBCD5078}" name="Matrix"/>
@@ -642,11 +666,6 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile Condition="'$(DynamicRTL)'=='true'" LocalName="$(BDS)\Redist\osx64\libcgstl.dylib" Class="DependencyModule">
-                    <Platform Name="OSX64">
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'!='true'" LocalName="$(BDS)\bin\cc32270.dll" Class="DependencyModule">
                     <Platform Name="Win32">
                         <Overwrite>true</Overwrite>
@@ -654,6 +673,11 @@
                 </DeployFile>
                 <DeployFile Condition="'$(DynamicRTL)'=='true'" LocalName="$(BDS)\Redist\osx32\libcgcrtl.dylib" Class="DependencyModule">
                     <Platform Name="OSX32">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile Condition="'$(DynamicRTL)'=='true'" LocalName="$(BDS)\Redist\osx64\libcgstl.dylib" Class="DependencyModule">
+                    <Platform Name="OSX64">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

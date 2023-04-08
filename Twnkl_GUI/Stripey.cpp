@@ -16,6 +16,7 @@
 Stripey::Stripey(std::wstring name) : Pattern(name)
 {
 	Name = name;
+	Design = PatternDesign::Stripey;
 }
 
 
@@ -38,4 +39,18 @@ Colour Stripey::ColourAt(Object* o, Quaternion& q)
 std::wstring Stripey::ToString()
 {
 	return L"#1 " + Colours[0].ToString() + L" #2 " + Colours[1].ToString();
+}
+
+
+void Stripey::ToFile(std::ofstream& ofile)
+{
+	ofile << Formatting::to_utf8(__SceneChunkStripey + L"\n");
+	ofile << Formatting::to_utf8(L"colour=" + Colours[0].ToCommaString() + L"\n");
+	ofile << Formatting::to_utf8(L"colour=" + Colours[1].ToCommaString() + L"\n");
+	ofile << Formatting::to_utf8(L"}\n");
+
+	for (int t = 0; t < Transforms.size(); t++)
+	{
+		Transforms[t].ToFile(ofile);
+	}
 }
