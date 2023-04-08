@@ -11,18 +11,50 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 
+#include "../Twnkl/Formatting.cpp"
+
+#include "../Twnkl/Cone.cpp"
+#include "../Twnkl/Cube.cpp"
+#include "../Twnkl/Cylinder.cpp"
+#include "../Twnkl/Model.cpp"
+#include "../Twnkl/Plane.cpp"
+#include "../Twnkl/Sphere.cpp"
+
+#include "../Twnkl/Bounds.cpp"
+#include "../Twnkl/Trinion.cpp"
+
 #include "../Twnkl/Camera.cpp"
 #include "../Twnkl/Computation.cpp"
 #include "../Twnkl/Colour.cpp"
-#include "../Twnkl/Checkerboard.cpp"
 #include "../Twnkl/Intersect.cpp"
 #include "../Twnkl/Intersections.cpp"
 #include "../Twnkl/Light.cpp"
 #include "../Twnkl/PointLight.cpp"
 #include "../Twnkl/PhongMaterial.cpp"
-#include "../Twnkl/Plane.cpp"
 #include "../Twnkl/Renderer.cpp"
 #include "../Twnkl/World.cpp"
+
+#include "../Twnkl/Checkerboard.cpp"
+#include "../Twnkl/CubeCheckerboard.cpp"
+#include "../Twnkl/CubeTexture.cpp"
+#include "../Twnkl/CylinderCheckerboard.cpp"
+#include "../Twnkl/CylinderTexture.cpp"
+#include "../Twnkl/Fractal.cpp"
+#include "../Twnkl/Gradient.cpp"
+#include "../Twnkl/Gradient2.cpp"
+#include "../Twnkl/Noise.cpp"
+#include "../Twnkl/PatternCommon.cpp"
+#include "../Twnkl/Perlin.cpp"
+#include "../Twnkl/Perlin2.cpp"
+#include "../Twnkl/Perlin3.cpp"
+#include "../Twnkl/PlanarTexture.cpp"
+#include "../Twnkl/Ring.cpp"
+#include "../Twnkl/Simplex.cpp"
+#include "../Twnkl/SphericalCheckerboard.cpp"
+#include "../Twnkl/SphericalTexture.cpp"
+#include "../Twnkl/Stripey.cpp"
+
+#include "../Twnkl/TextureLoader.cpp"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 

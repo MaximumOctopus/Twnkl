@@ -17,7 +17,6 @@
 #include "../Twnkl/Object.cpp"
 #include "../Twnkl/Quaternion.cpp"
 #include "../Twnkl/Ray.cpp"
-#include "../Twnkl/Sphere.cpp"
 #include "../Twnkl/Sphere.h"
 #include "../Twnkl/Pattern.cpp"
 #include "../Twnkl/TestPattern.cpp"
