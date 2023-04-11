@@ -11,7 +11,7 @@ up=0.0, 1.0, 0.0
 {arealight
 name=AreaLight
 colour=1.0, 1.0, 1.0
-position=4.9, 1.9, -1
+position=-4.9, 1.9, -1
 }
 {objectplane
 name=Floor
@@ -45,5 +45,5 @@ shininess=50
 reflectivity=0.1
 }
 {patterntexture
-filename=textures\thermalcat_s256.ppm
+filename=textures\max.ppm
 }

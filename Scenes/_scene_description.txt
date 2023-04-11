@@ -1,6 +1,7 @@
 // ============================================
-// Twnkl scene spec.
-// April 3rd 2023
+// Twnkl scene specification
+//
+// April 8th 2023
 // ============================================
 
 
@@ -160,7 +161,7 @@ colour=r, g, b
 
 // for sphere, works best when texture width (u) is 2x height (v) (eg 256x128)
 {patternperlin
-colour=r,g,best
+colour=r,g,b
 u=
 v=
 scale=								// default is 1.0
@@ -168,7 +169,7 @@ scale=								// default is 1.0
 
 // for sphere, works best when texture width (u) is 2x height (v) (eg 256x128)
 {patternperlin2
-colour=r,g,best
+colour=r,g,b
 u=
 v=
 scale=								// default is 1.0
@@ -176,7 +177,7 @@ scale=								// default is 1.0
 
 // for sphere, works best when texture width (u) is 2x height (v) (eg 256x128)
 {patternperlin3
-colour=r,g,best
+colour=r,g,b
 u=
 v=
 phase=								// default is 10, higher values equal harsher transitions
@@ -203,8 +204,8 @@ colour=r, g, b
 {patternchecker
 colour=r, g, b
 colour=r, g, b
-width=
-height=
+u=
+v=
 }
 
 // for sphere, plane, cylinder, cone, cube
