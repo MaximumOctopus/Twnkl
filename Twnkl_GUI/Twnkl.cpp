@@ -44,10 +44,6 @@ int wmain(int argc, wchar_t* argv[])
 	{
 		if (!GWorld->Finalise())
 		{
-			GWorld->SaveScene(L"test_save.twnkl");
-
-			return 0;
-
 			if (GConfiguration->Meta.Debug)
 			{
 				GWorld->ToString();

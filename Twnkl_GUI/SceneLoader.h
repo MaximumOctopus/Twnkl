@@ -151,6 +151,10 @@ public:
 
 	SceneLoader(const std::wstring, int);
 
+	#ifdef _GUI
+	AvailablePatterns PatternFromObject2(PrimitiveType, int);
+	#endif
+
 	std::pair<int, int> ResizeForDisplay(double, double, double, double);
 
 	[[nodiscard]] bool LoadScene(const std::wstring, int, GUIProperties);

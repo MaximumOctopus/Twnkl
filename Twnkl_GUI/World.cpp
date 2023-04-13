@@ -26,10 +26,6 @@
 #endif
 #endif
 
-#ifdef _GUI
-#include "PointLight.h"
-#endif
-
 #include "Checkerboard.h"
 #include "CubeCheckerboard.h"
 #include "CubeTexture.h"
@@ -76,14 +72,10 @@ void World::Clear()
 		delete Objects[t];
 	}
 
-	Objects.clear();
-
 	for (int t = 0; t < Lights.size(); t++)
 	{
 		delete Lights[t];
 	}
-
-	Lights.clear();
 }
 
 
@@ -550,16 +542,201 @@ void World::SetLastObjectPattern(AvailablePatterns pattern, PatternProperties pr
 	}
 	}
 }
-		  /*
-{camera
-width=400
-height=200
-focallength=1.152
-from=-2.6, 1.5, -3.9
-to=-0.6, 1, -0.8
-up=0.0, 1.0, 0.0
+
+
+void World::SetObjectPattern(int id, AvailablePatterns pattern, PatternProperties properties)
+{
+	bool greyscale = false;
+
+	if (properties.process == ImageProcess::Greyscale)
+	{
+		greyscale = true;
+	}
+
+	switch (pattern)
+	{
+	case AvailablePatterns::Checker:
+	{
+		Checkerboard* p = new Checkerboard(L"Checkboard");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		GWorld->Objects[id]->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::Gradient:
+	{
+		Gradient* p = new Gradient(L"Gradient");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		GWorld->Objects[id]->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::Gradient2:
+	{
+		Gradient2* p = new Gradient2(L"Gradient2");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		GWorld->Objects[id]->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::Ring:
+	{
+		Ring* p = new Ring(L"Ring");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		GWorld->Objects[id]->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::Stripey:
+	{
+		Stripey* p = new Stripey(L"Stripey");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		GWorld->Objects[id]->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::Perlin:
+	{
+		Perlin* p = new Perlin(L"Perlin");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		p->SetDimensions(properties.u, properties.v, properties.scale);
+		Objects[id]->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::Perlin2:
+	{
+		Perlin2* p = new Perlin2(L"Perlin2");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		p->SetDimensions(properties.u, properties.v, properties.scale);
+		GWorld->Objects[id]->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::Perlin3:
+	{
+		Perlin3* p = new Perlin3(L"Perlin3");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		p->SetDimensions(properties.u, properties.v, properties.scale, properties.phase);
+		GWorld->Objects[id]->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::Fractal:
+	{
+		Fractal* p = new Fractal(L"Fractal");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		p->SetFALP(properties.frequency, properties.amplitude, properties.lacunarity, properties.persistence);
+		GWorld->Objects[id]->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::Simplex:
+	{
+		Simplex* p = new Simplex(L"Simplex");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		p->Simple = properties.simple;
+		GWorld->Objects[id]->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::SphericalChecker:
+	{
+		SphericalCheckerboard* p = new SphericalCheckerboard(L"SphericalChecker");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		p->SetDimensions(properties.u, properties.v);
+		GWorld->Objects[id]->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::CylinderChecker:
+	{
+		CylinderCheckerboard* p = new CylinderCheckerboard(L"CylinderChecker");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		p->SetDimensions(properties.u, properties.v);
+		GWorld->Objects[id]->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::CubeChecker:
+	{
+		CubeChecker* p = new CubeChecker(L"CubeChecker");
+		p->SetColours(properties.Colour1, properties.Colour2);
+		p->SetDimensions(properties.u, properties.v);
+		GWorld->Objects[id]->Material->SetPattern(p);
+		break;
+	}
+	case AvailablePatterns::SphericalTexture:
+	{
+		SphericalTexture* p = new SphericalTexture(L"SphericalTexture");
+
+		TextureLoader tl;
+
+		if (tl.Go(&p->Texture, properties.FileName, greyscale))
+		{
+			p->Width = tl.TextureWidth;
+			p->Height = tl.TextureHeight;
+
+			Objects[id]->Material->SetPattern(p);
+		}
+		else
+		{
+			std::wcout << L"error loading texture \"" << properties.FileName << L"\"\n";
+		}
+
+		break;
+	}
+	case AvailablePatterns::PlanarTexture:
+	{
+		PlanarTexture* p = new PlanarTexture(L"PlanarTexture");
+
+		TextureLoader tl;
+
+		if (tl.Go(&p->Texture, properties.FileName, greyscale))
+		{
+			p->Width = tl.TextureWidth;
+			p->Height = tl.TextureHeight;
+
+			Objects[id]->Material->SetPattern(p);
+		}
+		else
+		{
+			std::wcout << L"error loading texture \"" << properties.FileName << L"\"\n";
+		}
+
+		break;
+	}
+	case AvailablePatterns::CubicTexture:
+	{
+		CubeTexture* p = new CubeTexture(L"CubicTexture");
+
+		TextureLoader tl;
+
+		if (tl.Go(&p->Texture, properties.FileName, greyscale))
+		{
+			p->Width = tl.TextureWidth;
+			p->Height = tl.TextureHeight;
+
+			GWorld->Objects.back()->Material->SetPattern(p);
+		}
+		else
+		{
+			std::wcout << L"error loading texture \"" << properties.FileName << L"\"\n";
+		}
+
+		break;
+	}
+	case AvailablePatterns::CylinderTexture:
+	{
+		CylinderTexture* p = new CylinderTexture(L"CylinderTexture");
+
+		TextureLoader tl;
+
+		if (tl.Go(&p->Texture, properties.FileName, greyscale))
+		{
+			p->Width = tl.TextureWidth;
+			p->Height = tl.TextureHeight;
+
+			GWorld->Objects.back()->Material->SetPattern(p);
+		}
+		else
+		{
+			std::wcout << L"error loading texture \"" << properties.FileName << L"\"\n";
+		}
+
+		break;
+	}
+	}
 }
-            */
+
 
 #ifdef _GUI
 void World::DefaultScene()
@@ -580,6 +757,7 @@ void World::DefaultScene()
 	p->AddTransform({ TransformType::RotateY, Matrix4(1, 0.31415), Quaternion(), 0.31415 });
 	Objects.push_back(p);
 
+	// blender has a default cube, twnkl has a default sphere with a cool pattern ;)
 	Sphere* s = new Sphere(L"ball");
 	PhongMaterial* sm = new PhongMaterial();
 	s->Material = sm;
@@ -589,7 +767,7 @@ void World::DefaultScene()
 	sc->SetColours(Colour(0.8, 0.4, 0.0), Colour(0.2, 0.1, 0.0));
 	sc->SetDimensions(16, 8);
 
-    s->Material->SetPattern(sc);
+	s->Material->SetPattern(sc);
 
 	Objects.push_back(s);
 
@@ -603,11 +781,12 @@ void World::DefaultScene()
 	Cam->Height = 250;
 
 	Cam->SetViewport(campos, to, up);
-    GWorld->Cam->CalculatePixelSize();
+	GWorld->Cam->CalculatePixelSize();
 
-    Finalise();
+	Finalise();
 }
 #endif
+
 
 #ifdef _DEBUG
 #ifndef _GUI
@@ -713,7 +892,7 @@ void World::DefaultWorld(int testid)
 	}
 
 	Quaternion campos = Quaternion(0, 1.5, -5.0, 1.0);
-
+	
 	Quaternion to(0, 1.0, 0, 1.0);
 	Quaternion up(0, 1.0, 0.0, 0.0);
 

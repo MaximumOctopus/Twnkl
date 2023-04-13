@@ -34,7 +34,7 @@ public:
 	World(int, int, double);
 	~World();
 
-    void Clear();
+	void Clear();
 
 	// call when all objects/lights/camera have been initialised and added
 	// caches copies of inverse transforms for objects and camera
@@ -44,13 +44,14 @@ public:
 
 	void AddNewObject(int, AvailablePatterns, PatternProperties, std::wstring);
 	void SetLastObjectPattern(AvailablePatterns, PatternProperties);
+	void SetObjectPattern(int, AvailablePatterns, PatternProperties);
 
 	void ToString();
 
 	void SaveScene(std::wstring);
 
 	#ifdef _GUI
-	void DefaultScene();
+	void World::DefaultScene();
 	#endif
 
 	#ifdef _DEBUG

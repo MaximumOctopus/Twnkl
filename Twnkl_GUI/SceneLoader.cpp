@@ -239,6 +239,64 @@ AvailablePatterns SceneLoader::PatternFromObject(Chunk object, Chunk pattern)
 	return AvailablePatterns::None;
 }
 
+
+#ifdef _GUI
+AvailablePatterns SceneLoader::PatternFromObject2(PrimitiveType object, int pattern)
+{
+	switch (pattern)
+	{
+	case 1:
+		switch (object)
+		{
+		case PrimitiveType::Cone:
+		case PrimitiveType::Cylinder:
+			return AvailablePatterns::CylinderChecker;
+		case PrimitiveType::Cube:
+			return AvailablePatterns::CubeChecker;
+		case PrimitiveType::Plane:
+			return AvailablePatterns::Checker;
+		case PrimitiveType::Sphere:
+			return AvailablePatterns::SphericalChecker;
+		}
+		break;
+	case 3:
+		return AvailablePatterns::Gradient;
+	case 4:
+		return AvailablePatterns::Gradient2;
+	case 8:
+		return AvailablePatterns::Ring;
+	case 10:
+		return AvailablePatterns::Stripey;
+	case 5:
+		return AvailablePatterns::Perlin;
+	case 6:
+		return AvailablePatterns::Perlin2;
+	case 7:
+		return AvailablePatterns::Perlin3;
+	case 2:
+		return AvailablePatterns::Fractal;
+	case 9:
+		return AvailablePatterns::Simplex;
+	case 11:
+		switch (object)
+		{
+		case PrimitiveType::Cone:
+		case PrimitiveType::Cylinder:
+			return AvailablePatterns::CylinderTexture;
+		case PrimitiveType::Cube:
+			return AvailablePatterns::CubicTexture;
+		case PrimitiveType::Plane:
+			return AvailablePatterns::PlanarTexture;
+		case PrimitiveType::Sphere:
+			return AvailablePatterns::SphericalTexture;
+		}
+		break;
+	}
+
+	return AvailablePatterns::None;
+}
+#endif
+
 	
 SceneLoader::FileProperty SceneLoader::GetInputProperty(std::wstring input)
 {

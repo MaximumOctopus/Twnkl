@@ -54,7 +54,7 @@ namespace Utility
 		return L"";
 	}
 
-	std::wstring GetSaveFileName()
+	std::wstring GetSaveFileName(int mode)
 	{
 		OPENFILENAME ofn = { 0 };
 		TCHAR szFile[260] = { 0 };
@@ -63,7 +63,15 @@ namespace Utility
 		ofn.hwndOwner = 0;
 		ofn.lpstrFile = szFile;
 		ofn.nMaxFile = sizeof(szFile);
-		ofn.lpstrFilter = _T("Twnkl Scene Files\0*.twnkl\0Text\0*.twnkl\0");
+		switch (mode)
+		{
+		case 0:
+			ofn.lpstrFilter = _T("Twnkl Scene Files\0*.twnkl\0Text\0*.twnkl\0");
+			break;
+		case 1:
+			ofn.lpstrFilter = _T("PNG Image Files\0*.png\0PNG\0*.png\0");
+			break;
+		}
 		ofn.nFilterIndex = 1;
 		ofn.lpstrFileTitle = NULL;
 		ofn.nMaxFileTitle = 0;
