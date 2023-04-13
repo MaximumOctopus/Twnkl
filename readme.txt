@@ -8,7 +8,7 @@
   Source code, example scenes and textures
     https://github.com/MaximumOctopus/Twnkl
 
-  April 8th 2023
+  April 13th 2023
 ==========================================================================================================================
 ==========================================================================================================================
 
@@ -49,7 +49,7 @@ C++ 17 with C++ Builder 10.4
 	
 An early alpha, proof of concept, WIP, GUI front-end for Twnkl.
 
-There are currently a few differences between the core source files of the GUI version and the console version, but these will be gone asap. My plan is to keep all source files compatible with either a console or gui build.
+
 
 ==========================================================================================================================
 ==========================================================================================================================
@@ -66,6 +66,12 @@ All of my software is free and open source; please consider donating to a local 
 ==========================================================================================================================
 
 Release History
+
+0.7 GUI / April 13th 2023
+
+Lots of editable fields now work. Rendered image can be exported to PNG.
+
+No significant changes to console version, code not uploaded.
 
 0.7 / April 8th 2023
 
