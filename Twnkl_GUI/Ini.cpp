@@ -136,7 +136,7 @@ std::wstring Ini::ReadString(std::wstring section, std::wstring key, const std::
 						std::wstring line(normalised_line);
 						std::transform(line.begin(), line.end(), line.begin(), ::tolower);
 
-						if (line.find(key) == 0)
+						if (line.starts_with(key))
 						{
 							if (normalised_line.length() > key.length())
 							{

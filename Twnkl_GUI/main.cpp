@@ -13,6 +13,7 @@
 #pragma resource "*.dfm"
 
 #include <vcl.h>
+#include <Vcl.Imaging.pngimage.hpp>
 
 #include "main.h"
 
@@ -116,12 +117,18 @@ void __fastcall TfrmMain::bOpenSceneClick(TObject *Sender)
 
 	if (!file_name.empty())
 	{
+    	GWorld->Clear();
+
+		//cameras->DeleteChildren();
+		lights->DeleteChildren();
+		objects->DeleteChildren();
+
 		sbMain->SimpleText = file_name.c_str();
 
 		GUIProperties gui;
 		gui.ResizeToDisplay = cbResizeToDisplay->Checked;
-		gui.DisplayWidth = PaintBox1->Width;
-		gui.DisplayHeight = PaintBox1->Height;
+		gui.DisplayWidth = pRender->Width;
+		gui.DisplayHeight = pRender->Height;
 
 		if (GSceneLoader->LoadScene(file_name, 0, gui))
 		{
@@ -150,28 +157,57 @@ void __fastcall TfrmMain::bRenderClick(TObject *Sender)
 	{
 		Renderer rx;
 
-	   	rx.Render(0);
+        int ss = eCSuperSamples->Text.ToInt();
+
+	   	rx.Render(ss);
 
 		std::wstring c = L"Rendered in " + rx.RenderTime + L" seconds.";
 
 		sbMain->SimpleText = c.c_str();
 
-		for (int x = 0; x < GWorld->Cam->Width; x++)
+		TBitmap* bit = new TBitmap();
+		bit->PixelFormat = pf24bit;
+		bit->Width = GWorld->Cam->Width;
+		bit->Height = GWorld->Cam->Height;
+
+		TRGBTriple *ptr;
+
+		for (int y = 0; y < bit->Height; y++)
 		{
-			for (int y = 0; y < GWorld->Cam->Height; y++)
+			ptr = reinterpret_cast<TRGBTriple *>(bit->ScanLine[y]);
+
+			for (int x = 0; x < bit->Width; x++)
 			{
-				PaintBox1->Canvas->Pixels[x][y] = TColor(GWorld->Canvas[y * GWorld->Cam->Width + x].ToIntBGR());
+				ptr[x] = GWorld->Canvas[y * GWorld->Cam->Width + x].ToRGBTriple();
 			}
 		}
+
+		iRender->Picture->Assign(bit);
+
+        delete bit;
     }
 }
 
 
-void __fastcall TfrmMain::BitBtn1Click(TObject *Sender)
+void __fastcall TfrmMain::bSaveImageClick(TObject *Sender)
 {
-//
-}
+	std::wstring file_name = Utility::GetSaveFileName(1);
 
+	if (!file_name.empty())
+	{
+		if (file_name.find(L".png") == std::wstring::npos)
+		{
+			file_name += L".png";
+		}
+
+		TPngImage* png  = new TPngImage();
+		png->Assign(iRender->Picture->Bitmap);
+
+		png->SaveToFile(file_name.c_str());
+
+		delete png;
+	}
+}
 
 void __fastcall TfrmMain::tvObjectsClick(TObject *Sender)
 {
@@ -274,7 +310,7 @@ void TfrmMain::PopulateTreeView()
 		TTreeObjectPtr->Type = 1;
 		TTreeObjectPtr->ID = t;
 
-		tvObjects->Items->AddChildObject(lights, "L", TTreeObjectPtr);
+		tvObjects->Items->AddChildObject(lights, GWorld->Lights[t]->Name.c_str(), TTreeObjectPtr);
 	}
 
 	for (int t = 0; t < GWorld->Objects.size(); t++)
@@ -438,6 +474,10 @@ void TfrmMain::BuildPatternTab(int id)
 
 	BuildPatternTabControls(GWorld->Objects[id]->Material->SurfacePattern->Design);
 
+	eNewTexture->Text = "";
+	lTexturePath->Caption = "";
+	lTexturePath->Hint = "";
+
 	switch (GWorld->Objects[id]->Material->SurfacePattern->Design)
 	{
 	case PatternDesign::Checkerboard:
@@ -497,6 +537,7 @@ void TfrmMain::BuildPatternTab(int id)
 	{
 		CubeTexture* p = dynamic_cast<CubeTexture*>(GWorld->Objects[id]->Material->SurfacePattern);
 		lTexturePath->Caption = p->FileName.c_str();
+		lTexturePath->Hint = p->FileName.c_str();
 		break;
 	}
 	case PatternDesign::CylinderCheckerboard:
@@ -510,12 +551,14 @@ void TfrmMain::BuildPatternTab(int id)
 	{
 		CylinderTexture* p = dynamic_cast<CylinderTexture*>(GWorld->Objects[id]->Material->SurfacePattern);
 		lTexturePath->Caption = p->FileName.c_str();
+		lTexturePath->Hint = p->FileName.c_str();
 		break;
 	}
 	case PatternDesign::PlanarTexture:
 	{
 		PlanarTexture* p = dynamic_cast<PlanarTexture*>(GWorld->Objects[id]->Material->SurfacePattern);
 		lTexturePath->Caption = p->FileName.c_str();
+		lTexturePath->Hint = p->FileName.c_str();
 		break;
 	}
 	case PatternDesign::SphericalCheckerboard:
@@ -529,6 +572,7 @@ void TfrmMain::BuildPatternTab(int id)
 	{
 		SphericalTexture* p = dynamic_cast<SphericalTexture*>(GWorld->Objects[id]->Material->SurfacePattern);
 		lTexturePath->Caption = p->FileName.c_str();
+		lTexturePath->Hint = p->FileName.c_str();
 		break;
 	}
     }
@@ -1017,7 +1061,7 @@ void __fastcall TfrmMain::sbDeleteMaterialTransformClick(TObject *Sender)
 
 void __fastcall TfrmMain::bSaveSceneClick(TObject *Sender)
 {
-	std::wstring file_name = Utility::GetSaveFileName();
+	std::wstring file_name = Utility::GetSaveFileName(0);
 
 	if (!file_name.empty())
 	{
@@ -1028,7 +1072,34 @@ void __fastcall TfrmMain::bSaveSceneClick(TObject *Sender)
 
 void __fastcall TfrmMain::sbPatternChangeClick(TObject *Sender)
 {
- //
+	if (tvObjects->Selected != NULL)
+	{
+		if (tvObjects->Selected->Data != NULL)
+		{
+			int id = PTreeObject(tvObjects->Selected->Data)->ID;
+			int type = PTreeObject(tvObjects->Selected->Data)->Type;
+
+			if (type == 2)
+			{
+				PatternProperties pp;
+                pp.FileName = eNewTexture->Text.c_str();
+
+				pp.Colour1 = GWorld->Objects[id]->Material->SurfacePattern->Colours[0];
+				pp.Colour2 = GWorld->Objects[id]->Material->SurfacePattern->Colours[1];
+
+				AvailablePatterns ap = GSceneLoader->PatternFromObject2(GWorld->Objects[id]->Primitive, cbPatternChangeTo->ItemIndex);
+
+				if (ap != AvailablePatterns::None)
+				{
+					delete GWorld->Objects[id]->Material->SurfacePattern;
+
+					GWorld->SetObjectPattern(id, ap, pp);
+
+					BuildMaterialPanelFromObject(id);
+				}
+			}
+		}
+	}
 }
 
 
@@ -1269,7 +1340,9 @@ void __fastcall TfrmMain::eCWidthExit(TObject *Sender)
 {
 	GWorld->Cam->Width = eCWidth->Text.ToDouble();
 	GWorld->Cam->Height = eCHeight->Text.ToDouble();
+    GWorld->Cam->CalculatePixelSize();
 }
+
 
 void __fastcall TfrmMain::ePFrequencyExit(TObject *Sender)
 {
@@ -1443,4 +1516,19 @@ void __fastcall TfrmMain::cbPSimpleClick(TObject *Sender)
 			}
 		}
 	}
+}
+
+
+void __fastcall TfrmMain::cbPatternChangeToChange(TObject *Sender)
+{
+	if (cbPatternChangeTo->ItemIndex == 11)
+	{
+		eNewTexture->Visible = true;
+		bSelectNewTexture->Visible = true;
+	}
+	else
+	{
+		eNewTexture->Visible = false;
+		bSelectNewTexture->Visible = false;
+    }
 }

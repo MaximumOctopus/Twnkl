@@ -15,7 +15,7 @@
 #include "Bounds.h"
 
 
-bool Bounds::ContainsPoint(Quaternion q)
+bool BoundingBox::ContainsPoint(Quaternion q)
 {
     return (q.x >= Minimum.x && q.x <= Maximum.x &&
         q.y >= Minimum.y && q.y <= Maximum.y &&
@@ -23,7 +23,7 @@ bool Bounds::ContainsPoint(Quaternion q)
 }
 
 
-void Bounds::Transform(Matrix4 m)
+void BoundingBox::Transform(Matrix4 m)
 {
     Quaternion points[8];
 
@@ -71,7 +71,7 @@ void Bounds::Transform(Matrix4 m)
 }
 
 
-std::pair<double, double> Bounds::CheckAxis(double origin, double direction, double minx, double maxx)
+std::pair<double, double> BoundingBox::CheckAxis(double origin, double direction, double minx, double maxx)
 {
     auto tminNumerator = (minx - origin);
     auto tmaxNumerator = (maxx - origin);
@@ -85,8 +85,9 @@ std::pair<double, double> Bounds::CheckAxis(double origin, double direction, dou
     }
     else
     {
-        tmin = tminNumerator * INFINITY;
-        tmax = tmaxNumerator * INFINITY;
+        tmin = tminNumerator * 9999999;	// C++ builder gives invalid floating point operations if using INFINITY \_(^-^)_/¯
+        tmax = tmaxNumerator * 9999999; //
+
     }
 
     if (tmin > tmax)
@@ -98,7 +99,7 @@ std::pair<double, double> Bounds::CheckAxis(double origin, double direction, dou
 }
 
 
-bool Bounds::Intersects(Ray& rt)
+bool BoundingBox::Intersects(Ray& rt)
 {
     auto [xtmin, xtmax] = CheckAxis(rt.Origin.x, rt.Direction.x, Minimum.x, Maximum.x);
     auto [ytmin, ytmax] = CheckAxis(rt.Origin.y, rt.Direction.y, Minimum.y, Maximum.y);

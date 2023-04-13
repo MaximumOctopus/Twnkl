@@ -1,9 +1,9 @@
 object frmMain: TfrmMain
-  Left = 0
-  Top = 0
+  Left = 4
+  Top = 4
   Caption = 'frmMain'
-  ClientHeight = 675
-  ClientWidth = 1150
+  ClientHeight = 733
+  ClientWidth = 1189
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,6 +11,7 @@ object frmMain: TfrmMain
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Position = poDesigned
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   PixelsPerInch = 96
@@ -18,12 +19,33 @@ object frmMain: TfrmMain
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 1150
+    Width = 1189
     Height = 41
     Align = alTop
     TabOrder = 0
+    object Bevel1: TBevel
+      Left = 88
+      Top = 8
+      Width = 10
+      Height = 25
+      Shape = bsLeftLine
+    end
+    object Bevel2: TBevel
+      Left = 255
+      Top = 8
+      Width = 10
+      Height = 25
+      Shape = bsLeftLine
+    end
+    object Bevel3: TBevel
+      Left = 423
+      Top = 8
+      Width = 10
+      Height = 25
+      Shape = bsLeftLine
+    end
     object bOpenScene: TBitBtn
-      Left = 87
+      Left = 94
       Top = 8
       Width = 75
       Height = 25
@@ -32,7 +54,7 @@ object frmMain: TfrmMain
       OnClick = bOpenSceneClick
     end
     object bRender: TBitBtn
-      Left = 249
+      Left = 262
       Top = 8
       Width = 75
       Height = 25
@@ -40,29 +62,21 @@ object frmMain: TfrmMain
       TabOrder = 1
       OnClick = bRenderClick
     end
-    object BitBtn1: TBitBtn
-      Left = 922
-      Top = 8
-      Width = 75
-      Height = 25
-      TabOrder = 2
-      OnClick = BitBtn1Click
-    end
     object cbResizeToDisplay: TCheckBox
-      Left = 361
+      Left = 433
       Top = 12
       Width = 102
       Height = 17
       Caption = 'Resize to display'
-      TabOrder = 3
+      TabOrder = 2
     end
     object bSaveScene: TBitBtn
-      Left = 168
+      Left = 175
       Top = 8
       Width = 75
       Height = 25
       Caption = 'Save'
-      TabOrder = 4
+      TabOrder = 3
       OnClick = bSaveSceneClick
     end
     object bNew: TBitBtn
@@ -71,20 +85,29 @@ object frmMain: TfrmMain
       Width = 75
       Height = 25
       Caption = 'New'
-      TabOrder = 5
+      TabOrder = 4
       OnClick = bNewClick
+    end
+    object bSaveImage: TBitBtn
+      Left = 343
+      Top = 8
+      Width = 74
+      Height = 25
+      Caption = 'Export'
+      TabOrder = 5
+      OnClick = bSaveImageClick
     end
   end
   object Panel2: TPanel
     Left = 0
     Top = 41
     Width = 281
-    Height = 615
+    Height = 673
     Align = alLeft
     TabOrder = 1
     DesignSize = (
       281
-      615)
+      673)
     object sbAddObject: TSpeedButton
       Left = 8
       Top = 6
@@ -115,7 +138,7 @@ object frmMain: TfrmMain
       Left = 8
       Top = 192
       Width = 268
-      Height = 418
+      Height = 476
       ActivePage = tsCamera
       Anchors = [akLeft, akTop, akBottom]
       TabOrder = 1
@@ -123,28 +146,28 @@ object frmMain: TfrmMain
         Caption = 'Camera'
         ImageIndex = 2
         object Label32: TLabel
-          Left = 39
+          Left = 27
           Top = 11
           Width = 18
           Height = 13
           Caption = 'FoV'
         end
         object Label33: TLabel
-          Left = 39
+          Left = 27
           Top = 150
           Width = 24
           Height = 13
           Caption = 'From'
         end
         object Label34: TLabel
-          Left = 39
+          Left = 27
           Top = 177
           Width = 12
           Height = 13
           Caption = 'To'
         end
         object Label35: TLabel
-          Left = 39
+          Left = 27
           Top = 204
           Width = 13
           Height = 13
@@ -172,18 +195,25 @@ object frmMain: TfrmMain
           Caption = 'Z'
         end
         object Label26: TLabel
-          Left = 39
+          Left = 27
           Top = 51
           Width = 28
           Height = 13
           Caption = 'Width'
         end
         object Label27: TLabel
-          Left = 39
+          Left = 27
           Top = 78
           Width = 31
           Height = 13
           Caption = 'Height'
+        end
+        object Label28: TLabel
+          Left = 27
+          Top = 254
+          Width = 61
+          Height = 13
+          Caption = 'Supersample'
         end
         object eCFoV: TEdit
           Left = 101
@@ -293,47 +323,56 @@ object frmMain: TfrmMain
           Text = '1'
           OnExit = eCWidthExit
         end
+        object eCSuperSamples: TEdit
+          Left = 101
+          Top = 251
+          Width = 56
+          Height = 21
+          TabOrder = 12
+          Text = '0'
+          OnExit = eCWidthExit
+        end
       end
       object tsLight: TTabSheet
         Caption = 'Light'
         ImageIndex = 3
         object Label21: TLabel
-          Left = 3
+          Left = 27
           Top = 14
           Width = 31
           Height = 13
           Caption = 'Colour'
         end
         object sLightIntensity: TShape
-          Left = 79
+          Left = 101
           Top = 11
           Width = 50
           Height = 22
           OnMouseDown = sLightIntensityMouseDown
         end
         object Label10: TLabel
-          Left = 3
+          Left = 27
           Top = 85
           Width = 46
           Height = 13
           Caption = 'Position X'
         end
         object Label24: TLabel
-          Left = 3
+          Left = 27
           Top = 112
           Width = 46
           Height = 13
           Caption = 'Position Y'
         end
         object Label25: TLabel
-          Left = 3
+          Left = 27
           Top = 139
           Width = 46
           Height = 13
           Caption = 'Position Z'
         end
         object eLPositionX: TEdit
-          Left = 79
+          Left = 101
           Top = 82
           Width = 49
           Height = 21
@@ -342,7 +381,7 @@ object frmMain: TfrmMain
           OnExit = eLPositionXExit
         end
         object eLPositionY: TEdit
-          Left = 79
+          Left = 101
           Top = 109
           Width = 49
           Height = 21
@@ -351,7 +390,7 @@ object frmMain: TfrmMain
           OnExit = eLPositionXExit
         end
         object eLPositionZ: TEdit
-          Left = 79
+          Left = 101
           Top = 136
           Width = 49
           Height = 21
@@ -364,21 +403,21 @@ object frmMain: TfrmMain
         Caption = 'Object'
         ImageIndex = 4
         object lOMinimum: TLabel
-          Left = 39
+          Left = 27
           Top = 58
           Width = 40
           Height = 13
           Caption = 'Minimum'
         end
         object lOMaximum: TLabel
-          Left = 39
+          Left = 27
           Top = 85
           Width = 44
           Height = 13
           Caption = 'Maximum'
         end
         object Label9: TLabel
-          Left = 39
+          Left = 27
           Top = 12
           Width = 40
           Height = 13
@@ -398,7 +437,7 @@ object frmMain: TfrmMain
           ParentFont = False
         end
         object lOObjectFileName: TLabel
-          Left = 39
+          Left = 27
           Top = 205
           Width = 32
           Height = 13
@@ -428,7 +467,7 @@ object frmMain: TfrmMain
           Text = '1'
         end
         object cbOClosed: TCheckBox
-          Left = 39
+          Left = 27
           Top = 125
           Width = 97
           Height = 17
@@ -556,8 +595,8 @@ object frmMain: TfrmMain
           Left = 0
           Top = 0
           Width = 260
-          Height = 390
-          ActivePage = tsPattern
+          Height = 448
+          ActivePage = tsBasic
           Align = alClient
           TabOrder = 0
           object tsBasic: TTabSheet
@@ -745,11 +784,10 @@ object frmMain: TfrmMain
             end
             object Label22: TLabel
               Left = 3
-              Top = 332
+              Top = 323
               Width = 37
               Height = 13
               Caption = 'Change'
-              Visible = False
             end
             object Label23: TLabel
               Left = 3
@@ -773,10 +811,9 @@ object frmMain: TfrmMain
             end
             object sbPatternChange: TSpeedButton
               Left = 216
-              Top = 327
+              Top = 318
               Width = 23
               Height = 22
-              Visible = False
               OnClick = sbPatternChangeClick
             end
             object lPScale: TLabel
@@ -851,14 +888,14 @@ object frmMain: TfrmMain
             end
             object cbPatternChangeTo: TComboBox
               Left = 73
-              Top = 328
+              Top = 319
               Width = 137
               Height = 21
               Style = csDropDownList
               ItemIndex = 0
               TabOrder = 0
               Text = 'None'
-              Visible = False
+              OnChange = cbPatternChangeToChange
               Items.Strings = (
                 'None'
                 'Checkerboard'
@@ -960,6 +997,21 @@ object frmMain: TfrmMain
               Width = 28
               Height = 25
               TabOrder = 10
+            end
+            object bSelectNewTexture: TBitBtn
+              Left = 216
+              Top = 344
+              Width = 23
+              Height = 22
+              TabOrder = 11
+            end
+            object eNewTexture: TEdit
+              Left = 73
+              Top = 346
+              Width = 137
+              Height = 21
+              TabOrder = 12
+              OnExit = ePFrequencyExit
             end
           end
           object tsMaterialTransforms: TTabSheet
@@ -1086,29 +1138,25 @@ object frmMain: TfrmMain
       end
     end
   end
-  object Panel3: TPanel
+  object pRender: TPanel
     Left = 281
     Top = 41
-    Width = 869
-    Height = 615
+    Width = 908
+    Height = 673
     Align = alClient
     TabOrder = 2
-    object PaintBox1: TPaintBox
-      Left = 1
-      Top = 1
-      Width = 867
-      Height = 613
-      Align = alClient
-      ExplicitLeft = -584
-      ExplicitTop = 14
-      ExplicitWidth = 825
-      ExplicitHeight = 356
+    object iRender: TImage
+      Left = 4
+      Top = 6
+      Width = 105
+      Height = 105
+      AutoSize = True
     end
   end
   object sbMain: TStatusBar
     Left = 0
-    Top = 656
-    Width = 1150
+    Top = 714
+    Width = 1189
     Height = 19
     Panels = <>
     SimplePanel = True

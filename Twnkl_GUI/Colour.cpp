@@ -115,6 +115,19 @@ int Colour::ToIntRGB()
 }
 
 
+#ifdef _GUI
+TRGBTriple Colour::ToRGBTriple()
+{
+	TRGBTriple t;
+	t.rgbtRed = To255(r);
+	t.rgbtGreen = To255(g);
+	t.rgbtBlue = To255(b);
+
+	return t;
+}
+#endif
+
+
 std::string Colour::RGBString()
 {
 	int nr = To255(r);

@@ -14,12 +14,20 @@
 #include <string>
 
 #ifdef _DEBUG
-static const std::wstring __TwnklVersion = L"0.6 (debug)";
+#ifdef _GUI
+static const std::wstring __TwnklVersion = L"0.8 GUI (debug)";
 #else
-static const std::wstring __TwnklVersion = L"0.6";
+static const std::wstring __TwnklVersion = L"0.6 (debug)";
+#endif
+#else
+#ifdef _GUI
+static const std::wstring __TwnklVersion = L"0.8 GUI";
+#else
+static const std::wstring __TwnklVersion = L"0.5";
+#endif
 #endif
 
-static const std::wstring __TwnklDate = L"April 8th 2023";
+static const std::wstring __TwnklDate = L"April 13th 2023";
 
 static double epsilon = 0.0001;
 
@@ -71,17 +79,3 @@ static std::wstring __SceneChunkPerlin3 = L"{patternperlin3";
 static std::wstring __SceneChunkTexture = L"{patterntexture";
 static std::wstring __SceneChunkFractal = L"{patternfractal";
 static std::wstring __SceneChunkSimplex = L"{patternsimplex";
-
-/*
-
-L"colour", L"color", L"position", L"name",
-L"ambient", L"diffuse", L"reflectivity", L"refractiveindex", L"shininess", L"specular", L"transparency",
-L"type", L"angle", L"xyz",
-L"focallength", L"from", L"to", L"up",
-L"width", L"height",
-L"minimum", L"maximum", L"closed",
-L"uvector", L"vvector",
-L"u", L"v",
-L"filename", L"process", L"scale", L"phase"
-L"frequency", L"amplitude", L"lacunarity", L"persistence", L"simple"
-*/

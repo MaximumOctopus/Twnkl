@@ -28,9 +28,7 @@ __published:	// IDE-managed Components
 	TBitBtn *bOpenScene;
 	TBitBtn *bRender;
 	TPanel *Panel2;
-	TPanel *Panel3;
-	TPaintBox *PaintBox1;
-	TBitBtn *BitBtn1;
+	TPanel *pRender;
 	TCheckBox *cbResizeToDisplay;
 	TTreeView *tvObjects;
 	TPageControl *PageControl1;
@@ -161,11 +159,19 @@ __published:	// IDE-managed Components
 	TEdit *eCWidth;
 	TLabel *Label27;
 	TEdit *eCHeight;
+	TBitBtn *bSelectNewTexture;
+	TEdit *eNewTexture;
+	TLabel *Label28;
+	TEdit *eCSuperSamples;
+	TImage *iRender;
+	TBitBtn *bSaveImage;
+	TBevel *Bevel1;
+	TBevel *Bevel2;
+	TBevel *Bevel3;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall bOpenSceneClick(TObject *Sender);
 	void __fastcall bRenderClick(TObject *Sender);
-	void __fastcall BitBtn1Click(TObject *Sender);
 	void __fastcall tvObjectsClick(TObject *Sender);
 	void __fastcall sMaterialColourMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
           int X, int Y);
@@ -200,6 +206,8 @@ __published:	// IDE-managed Components
 	void __fastcall bNewClick(TObject *Sender);
 	void __fastcall eLPositionXExit(TObject *Sender);
 	void __fastcall eCWidthExit(TObject *Sender);
+	void __fastcall cbPatternChangeToChange(TObject *Sender);
+	void __fastcall bSaveImageClick(TObject *Sender);
 
 private:	// User declarations
 	TTreeNode* cameras = nullptr;

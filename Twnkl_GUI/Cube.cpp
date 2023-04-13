@@ -21,12 +21,11 @@ Cube::Cube(std::wstring name) : Object(name)
 
 std::pair<double, double> Cube::CheckAxis(double origin, double direction) 
 {
-	double tminNumerator = (-1 - origin);
-	double tmaxNumerator = (1 - origin);
+	auto tminNumerator = (-1 - origin);
+	auto tmaxNumerator = (1 - origin);
 
-	double tmin(0);
-	double tmax(0);
-
+	double tmin{ 0 }, tmax{ 0 };
+	
 	if (std::abs(direction) >= epsilon)
 	{
 		tmin = tminNumerator / direction;
@@ -34,15 +33,15 @@ std::pair<double, double> Cube::CheckAxis(double origin, double direction)
 	}
 	else
 	{
-		tmin = tminNumerator * 9999999;
-		tmax = tmaxNumerator * 9999999;
+		tmin = tminNumerator * 9999999;	// C++ builder gives invalid floating point operations if using INFINITY \_(^-^)_/¯
+		tmax = tmaxNumerator * 9999999; //
 	}
 
 	if (tmin > tmax)
 	{
-		std::swap(tmin, tmax);
+		std::swap(tmin, tmax); 
 	}
-
+	
 	return { tmin, tmax };
 }
 
