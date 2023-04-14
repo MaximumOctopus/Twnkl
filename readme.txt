@@ -8,7 +8,7 @@
   Source code, example scenes and textures
     https://github.com/MaximumOctopus/Twnkl
 
-  April 13th 2023
+  April 14th 2023
 ==========================================================================================================================
 ==========================================================================================================================
 
@@ -66,6 +66,11 @@ All of my software is free and open source; please consider donating to a local 
 ==========================================================================================================================
 
 Release History
+
+0.8 Console and GUI / April 14th 2023
+
+Added multi-texture cube texture (one texture per face).
+Few minor tweaks. Core code now identical across console/GUI versions.
 
 0.7 GUI / April 13th 2023
 
