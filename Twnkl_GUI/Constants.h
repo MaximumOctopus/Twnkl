@@ -17,13 +17,13 @@
 #ifdef _GUI
 static const std::wstring __TwnklVersion = L"0.8 GUI (debug)";
 #else
-static const std::wstring __TwnklVersion = L"0.6 (debug)";
+static const std::wstring __TwnklVersion = L"0.8 (debug)";
 #endif
 #else
 #ifdef _GUI
 static const std::wstring __TwnklVersion = L"0.8 GUI";
 #else
-static const std::wstring __TwnklVersion = L"0.6";
+static const std::wstring __TwnklVersion = L"0.8";
 #endif
 #endif
 
