@@ -284,11 +284,19 @@ void TfrmMain::ConfigureTabLayoutFor(int type)
 	case 2:         // object
 		tsCamera->TabVisible = false;
 		tsLight->TabVisible = false;
-        tsObject->TabVisible = true;
+		tsObject->TabVisible = true;
 		tsTransforms->TabVisible = true;
 		tsMaterial->TabVisible = true;
 		break;
 	}
+
+	if (type != LastSelectionType)
+	{
+		pcMain->TabIndex = 0;
+		pcMaterial->TabIndex = 0;
+	}
+
+	LastSelectionType = type;
 }
 
 
@@ -457,6 +465,13 @@ void TfrmMain::BuildTransformTab(int type, int id)
 
 				lbObjectTransforms->Items->Add(tc.TypeAsString().c_str());
             }
+		}
+
+		if (lbObjectTransforms->Count != 0)
+		{
+			lbObjectTransforms->ItemIndex = 0;
+
+            lbObjectTransformsClick(NULL);
         }
 
 		break;
@@ -707,6 +722,10 @@ void TfrmMain::BuildPatternTransformTab(int id)
 
 			lbPatternTransforms->Items->Add(tc.TypeAsString().c_str());
 		}
+
+		lbPatternTransforms->ItemIndex = 0;
+
+        lbPatternTransformsClick(NULL);
 	}
 }
 
@@ -815,7 +834,7 @@ void __fastcall TfrmMain::eOTAngleExit(TObject *Sender)
 	{
 		if (tvObjects->Selected->Data != NULL)
 		{
-            if (lbObjectTransforms->ItemIndex != -1)
+			if (lbObjectTransforms->Items->Count != 0 && lbObjectTransforms->ItemIndex != -1)
 			{
 				int id = PTreeObject(tvObjects->Selected->Data)->ID;
 				int type = PTreeObject(tvObjects->Selected->Data)->Type;
@@ -839,7 +858,7 @@ void __fastcall TfrmMain::eOTXExit(TObject *Sender)
 	{
 		if (tvObjects->Selected->Data != NULL)
 		{
-			if (lbObjectTransforms->ItemIndex != -1)
+			if (lbObjectTransforms->Items->Count != 0 && lbObjectTransforms->ItemIndex != -1)
 			{
 				int id = PTreeObject(tvObjects->Selected->Data)->ID;
 				int type = PTreeObject(tvObjects->Selected->Data)->Type;
@@ -894,16 +913,25 @@ void TfrmMain::UpdatePatternTransformTab(int type, int id, int selected)
 
 void __fastcall TfrmMain::ePTAngleExit(TObject *Sender)
 {
-	int id = PTreeObject(tvObjects->Selected->Data)->ID;
-	int type = PTreeObject(tvObjects->Selected->Data)->Type;
+	if (tvObjects->Selected != NULL)
+	{
+		if (tvObjects->Selected->Data != NULL)
+		{
+			if (lbPatternTransforms->Items->Count != 0 && lbPatternTransforms->ItemIndex != -1)
+			{
+				int id = PTreeObject(tvObjects->Selected->Data)->ID;
+				int type = PTreeObject(tvObjects->Selected->Data)->Type;
 
-	TransformConfiguration tc = GWorld->Objects[id]->TransformAt(lbPatternTransforms->ItemIndex);
+				TransformConfiguration tc = GWorld->Objects[id]->TransformAt(lbPatternTransforms->ItemIndex);
 
-	std::wstring a = ePTAngle->Text.c_str();
+				std::wstring a = ePTAngle->Text.c_str();
 
-	tc.Angle = stod(a);
+				tc.Angle = stod(a);
 
-	GWorld->Objects[id]->Material->SurfacePattern->TransformReplaceAt(lbPatternTransforms->ItemIndex, tc);
+				GWorld->Objects[id]->Material->SurfacePattern->TransformReplaceAt(lbPatternTransforms->ItemIndex, tc);
+			}
+		}
+	}
 }
 
 
@@ -955,18 +983,27 @@ void __fastcall TfrmMain::eLPositionXExit(TObject *Sender)
 
 void __fastcall TfrmMain::ePTXExit(TObject *Sender)
 {
-	int id = PTreeObject(tvObjects->Selected->Data)->ID;
-	int type = PTreeObject(tvObjects->Selected->Data)->Type;
+	if (tvObjects->Selected != NULL)
+	{
+		if (tvObjects->Selected->Data != NULL)
+		{
+			if (lbPatternTransforms->Items->Count != 0 && lbPatternTransforms->ItemIndex != -1)
+			{
+				int id = PTreeObject(tvObjects->Selected->Data)->ID;
+				int type = PTreeObject(tvObjects->Selected->Data)->Type;
 
-	TransformConfiguration tc = GWorld->Objects[id]->Material->SurfacePattern->TransformAt(lbPatternTransforms->ItemIndex);
+				TransformConfiguration tc = GWorld->Objects[id]->Material->SurfacePattern->TransformAt(lbPatternTransforms->ItemIndex);
 
-	tc.XYZ.x = ePTX->Text.ToDouble();
-	tc.XYZ.y = ePTY->Text.ToDouble();
-	tc.XYZ.z = ePTZ->Text.ToDouble();
+				tc.XYZ.x = ePTX->Text.ToDouble();
+				tc.XYZ.y = ePTY->Text.ToDouble();
+				tc.XYZ.z = ePTZ->Text.ToDouble();
 
-    tc.Rebuild();
+				tc.Rebuild();
 
-	GWorld->Objects[id]->Material->SurfacePattern->TransformReplaceAt(lbPatternTransforms->ItemIndex, tc);
+				GWorld->Objects[id]->Material->SurfacePattern->TransformReplaceAt(lbPatternTransforms->ItemIndex, tc);
+			}
+		}
+    }
 }
 
 

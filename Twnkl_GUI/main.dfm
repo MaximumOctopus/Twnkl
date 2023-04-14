@@ -134,12 +134,12 @@ object frmMain: TfrmMain
       TabOrder = 0
       OnClick = tvObjectsClick
     end
-    object PageControl1: TPageControl
+    object pcMain: TPageControl
       Left = 8
       Top = 192
       Width = 268
       Height = 476
-      ActivePage = tsCamera
+      ActivePage = tsMaterial
       Anchors = [akLeft, akTop, akBottom]
       TabOrder = 1
       object tsCamera: TTabSheet
@@ -529,7 +529,7 @@ object frmMain: TfrmMain
             Width = 56
             Height = 21
             TabOrder = 0
-            Text = '.'
+            Text = '0'
             OnExit = eOTAngleExit
           end
         end
@@ -566,7 +566,7 @@ object frmMain: TfrmMain
             Width = 56
             Height = 21
             TabOrder = 0
-            Text = '.'
+            Text = '0'
             OnExit = eOTXExit
           end
           object eOTY: TEdit
@@ -575,7 +575,7 @@ object frmMain: TfrmMain
             Width = 56
             Height = 21
             TabOrder = 1
-            Text = '.'
+            Text = '0'
             OnExit = eOTXExit
           end
           object eOTZ: TEdit
@@ -584,19 +584,19 @@ object frmMain: TfrmMain
             Width = 56
             Height = 21
             TabOrder = 2
-            Text = '.'
+            Text = '0'
             OnExit = eOTXExit
           end
         end
       end
       object tsMaterial: TTabSheet
         Caption = 'Material'
-        object PageControl2: TPageControl
+        object pcMaterial: TPageControl
           Left = 0
           Top = 0
           Width = 260
           Height = 448
-          ActivePage = tsBasic
+          ActivePage = tsMaterialTransforms
           Align = alClient
           TabOrder = 0
           object tsBasic: TTabSheet
@@ -1077,7 +1077,7 @@ object frmMain: TfrmMain
                 Width = 56
                 Height = 21
                 TabOrder = 0
-                Text = '.'
+                Text = '0'
                 OnExit = ePTAngleExit
               end
             end
@@ -1114,7 +1114,7 @@ object frmMain: TfrmMain
                 Width = 56
                 Height = 21
                 TabOrder = 0
-                Text = '.'
+                Text = '0'
                 OnExit = ePTXExit
               end
               object ePTY: TEdit
@@ -1123,7 +1123,7 @@ object frmMain: TfrmMain
                 Width = 56
                 Height = 21
                 TabOrder = 1
-                Text = '.'
+                Text = '0'
                 OnExit = ePTXExit
               end
               object ePTZ: TEdit
@@ -1132,7 +1132,7 @@ object frmMain: TfrmMain
                 Width = 56
                 Height = 21
                 TabOrder = 2
-                Text = '.'
+                Text = '0'
                 OnExit = ePTXExit
               end
             end

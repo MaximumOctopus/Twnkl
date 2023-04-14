@@ -31,9 +31,9 @@ __published:	// IDE-managed Components
 	TPanel *pRender;
 	TCheckBox *cbResizeToDisplay;
 	TTreeView *tvObjects;
-	TPageControl *PageControl1;
+	TPageControl *pcMain;
 	TTabSheet *tsMaterial;
-	TPageControl *PageControl2;
+	TPageControl *pcMaterial;
 	TTabSheet *tsBasic;
 	TTabSheet *tsPattern;
 	TLabel *Label7;
@@ -214,6 +214,8 @@ private:	// User declarations
 	TTreeNode* cameras = nullptr;
 	TTreeNode* lights = nullptr;
 	TTreeNode* objects = nullptr;
+
+	int LastSelectionType = 0;
 
 	void ConfigureTabLayoutFor(int);
 	void PopulateTreeView();
