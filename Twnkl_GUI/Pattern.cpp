@@ -154,6 +154,8 @@ std::wstring Pattern::FriendlyName()
 		return L"Checkerboard (Cube)";
 	case PatternDesign::CubeTexture:
 		return L"Texture (Cube)";
+	case PatternDesign::CubeMultiTexture:
+		return L"Multi-texture (Cube)";
 	case PatternDesign::CylinderCheckerboard:
 		return L"Checkerboard (Cylinder)";
 	case PatternDesign::CylinderTexture:

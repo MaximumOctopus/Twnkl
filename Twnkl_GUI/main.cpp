@@ -113,13 +113,13 @@ void __fastcall TfrmMain::bNewClick(TObject *Sender)
 
 void __fastcall TfrmMain::bOpenSceneClick(TObject *Sender)
 {
-	std::wstring file_name = Utility::GetOpenFileName();
+	std::wstring file_name = Utility::GetOpenFileName(0);
 
 	if (!file_name.empty())
 	{
-    	GWorld->Clear();
+		GWorld->Clear();
 
-		//cameras->DeleteChildren();
+		cameras->DeleteChildren();
 		lights->DeleteChildren();
 		objects->DeleteChildren();
 
@@ -298,7 +298,7 @@ void TfrmMain::PopulateTreeView()
 	lights->DeleteChildren();
 	objects->DeleteChildren();
 
-    TTreeObjectPtr = new TTreeObject;
+	TTreeObjectPtr = new TTreeObject;
 	TTreeObjectPtr->Type = 0;
 	TTreeObjectPtr->ID = 0;
 
@@ -534,6 +534,7 @@ void TfrmMain::BuildPatternTab(int id)
 		break;
 	}
 	case PatternDesign::CubeTexture:
+	case PatternDesign::CubeMultiTexture:
 	{
 		CubeTexture* p = dynamic_cast<CubeTexture*>(GWorld->Objects[id]->Material->SurfacePattern);
 		lTexturePath->Caption = p->FileName.c_str();
@@ -677,7 +678,8 @@ void TfrmMain::BuildPatternTabControls(PatternDesign design)
 		cbPSimple->Visible = false;
 	}
 
-	if (design == PatternDesign::CubeTexture || design == PatternDesign::CylinderTexture || design == PatternDesign::PlanarTexture ||
+	if (design == PatternDesign::CubeTexture || design == PatternDesign::CubeMultiTexture ||design == PatternDesign::CylinderTexture ||
+		design == PatternDesign::PlanarTexture ||
 		design == PatternDesign::SphericalTexture)
 	{
 		lTexture->Visible = true;
@@ -1089,6 +1091,11 @@ void __fastcall TfrmMain::sbPatternChangeClick(TObject *Sender)
 
 				AvailablePatterns ap = GSceneLoader->PatternFromObject2(GWorld->Objects[id]->Primitive, cbPatternChangeTo->ItemIndex);
 
+				if (ap == AvailablePatterns::CubicTexture && pp.FileName.find(L'*') != std::wstring::npos)
+				{
+					ap = AvailablePatterns::CubicMultiTexture;
+                }
+
 				if (ap != AvailablePatterns::None)
 				{
 					delete GWorld->Objects[id]->Material->SurfacePattern;
@@ -1099,6 +1106,18 @@ void __fastcall TfrmMain::sbPatternChangeClick(TObject *Sender)
 				}
 			}
 		}
+	}
+}
+
+
+void __fastcall TfrmMain::bSelectNewTextureClick(TObject *Sender)
+{
+	std::wstring file_name = Utility::GetOpenFileName(1);
+
+	if (!file_name.empty())
+	{
+		eNewTexture->Text = file_name.c_str();
+		eNewTexture->Hint = file_name.c_str();
 	}
 }
 

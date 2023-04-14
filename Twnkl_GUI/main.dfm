@@ -993,8 +993,8 @@ object frmMain: TfrmMain
             end
             object bOpenTexture: TBitBtn
               Left = 216
-              Top = 288
-              Width = 28
+              Top = 287
+              Width = 23
               Height = 25
               TabOrder = 10
             end
@@ -1004,6 +1004,8 @@ object frmMain: TfrmMain
               Width = 23
               Height = 22
               TabOrder = 11
+              Visible = False
+              OnClick = bSelectNewTextureClick
             end
             object eNewTexture: TEdit
               Left = 73
@@ -1011,6 +1013,7 @@ object frmMain: TfrmMain
               Width = 137
               Height = 21
               TabOrder = 12
+              Visible = False
               OnExit = ePFrequencyExit
             end
           end

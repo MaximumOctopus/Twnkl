@@ -208,6 +208,7 @@ __published:	// IDE-managed Components
 	void __fastcall eCWidthExit(TObject *Sender);
 	void __fastcall cbPatternChangeToChange(TObject *Sender);
 	void __fastcall bSaveImageClick(TObject *Sender);
+	void __fastcall bSelectNewTextureClick(TObject *Sender);
 
 private:	// User declarations
 	TTreeNode* cameras = nullptr;

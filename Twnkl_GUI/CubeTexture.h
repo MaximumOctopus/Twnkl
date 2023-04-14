@@ -28,6 +28,7 @@ public:
 	int Height = 0;
 
 	CubeTexture(std::wstring);
+	~CubeTexture();
 
 	[[nodiscard]] Colour ColourAt(Object*, Quaternion&) override;
 

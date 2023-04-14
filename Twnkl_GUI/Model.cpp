@@ -27,7 +27,12 @@ Model::Model(std::wstring name) : Object(name)
 
 Model::~Model()
 {
-	
+	for (int t = 0; t < Objects.size(); t++)
+	{
+		delete Objects[t];
+	}
+
+    Objects.clear();
 }
 
 

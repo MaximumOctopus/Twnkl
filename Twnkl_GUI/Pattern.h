@@ -20,8 +20,8 @@
 enum class PatternDesign {
 	None = 0, Checkerboard = 1, Gradient = 2, Gradient2 = 3, Ring = 4, Stripey = 5,
 	Fractal = 6, Simplex = 7, Perlin1 = 8, Perlin2 = 9, Perlin3 = 10,
-	CubeCheckerboard = 20, CubeTexture = 21, CylinderCheckerboard = 22, CylinderTexture = 23, PlanarTexture = 24,
-	SphericalCheckerboard = 25, SphericalTexture = 26
+	CubeCheckerboard = 20, CubeTexture = 21, CubeMultiTexture = 22, CylinderCheckerboard = 23, CylinderTexture = 24, PlanarTexture = 25,
+	SphericalCheckerboard = 26, SphericalTexture = 27
 };
 
 
