@@ -44,10 +44,15 @@ public:
 
 	void AddNewObject(int, AvailablePatterns, PatternProperties, std::wstring);
 	void SetLastObjectPattern(AvailablePatterns, PatternProperties);
+	void SetObjectPattern(int, AvailablePatterns, PatternProperties);
 
 	void ToString();
 
 	void SaveScene(std::wstring);
+
+	#ifdef _GUI
+	void World::DefaultScene();
+	#endif
 
 	#ifdef _DEBUG
 	void DefaultWorld(int);

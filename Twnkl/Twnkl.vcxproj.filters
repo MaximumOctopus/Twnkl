@@ -282,6 +282,9 @@
     <ClCompile Include="Trinion.cpp">
       <Filter>Source Files\Matrix</Filter>
     </ClCompile>
+    <ClCompile Include="CubeMultiTexture.cpp">
+      <Filter>Source Files\Patterns\Mapped\Cube</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constants.h">
@@ -460,6 +463,9 @@
     </ClInclude>
     <ClInclude Include="Trinion.h">
       <Filter>Header Files\Matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeMultiTexture.h">
+      <Filter>Header Files\Patterns\Mapped\Cube</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

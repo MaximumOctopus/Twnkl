@@ -139,6 +139,7 @@
     <ClCompile Include="Configuration.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="CubeCheckerboard.cpp" />
+    <ClCompile Include="CubeMultiTexture.cpp" />
     <ClCompile Include="CubeTexture.cpp" />
     <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="CylinderCheckerboard.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="CubeCheckerboard.h" />
+    <ClInclude Include="CubeMultiTexture.h" />
     <ClInclude Include="CubeTexture.h" />
     <ClInclude Include="Cylinder.h" />
     <ClInclude Include="CylinderCheckerboard.h" />

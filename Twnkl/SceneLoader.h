@@ -86,7 +86,7 @@ class SceneLoader
 		L"minimum", L"maximum", L"closed",
 		L"uvector", L"vvector",
 		L"u", L"v",
-		L"filename", L"process", L"scale", L"phase"
+		L"filename", L"process", L"scale", L"phase",
 		L"frequency", L"amplitude", L"lacunarity", L"persistence", L"simple"
 	};
 
@@ -150,6 +150,10 @@ public:
 	SceneLoader();
 
 	SceneLoader(const std::wstring, int);
+
+	#ifdef _GUI
+	AvailablePatterns PatternFromObject2(PrimitiveType, int);
+	#endif
 
 	std::pair<int, int> ResizeForDisplay(double, double, double, double);
 
