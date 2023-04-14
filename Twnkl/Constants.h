@@ -17,17 +17,17 @@
 #ifdef _GUI
 static const std::wstring __TwnklVersion = L"0.8 GUI (debug)";
 #else
-static const std::wstring __TwnklVersion = L"0.6 (debug)";
+static const std::wstring __TwnklVersion = L"0.8 (debug)";
 #endif
 #else
 #ifdef _GUI
 static const std::wstring __TwnklVersion = L"0.8 GUI";
 #else
-static const std::wstring __TwnklVersion = L"0.6";
+static const std::wstring __TwnklVersion = L"0.8";
 #endif
 #endif
 
-static const std::wstring __TwnklDate = L"April 13th 2023";
+static const std::wstring __TwnklDate = L"April 14th 2023";
 
 static double epsilon = 0.0001;
 
