@@ -18,7 +18,7 @@
 namespace Utility
 {
 	#ifdef _GUI
-	[[nodiscard]] std::wstring GetOpenFileName();
+	[[nodiscard]] std::wstring GetOpenFileName(int);
 	[[nodiscard]] std::wstring GetSaveFileName(int);
 	#endif
 
