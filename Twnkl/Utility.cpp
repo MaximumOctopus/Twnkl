@@ -30,7 +30,7 @@ namespace Utility
 	static const std::wstring Months[12] = { L"Jan", L"Feb", L"Mar", L"Apr", L"May", L"Jun", L"Jul", L"Aug", L"Sep", L"Oct", L"Nov", L"Dec" };
 
 	#ifdef _GUI
-	std::wstring GetOpenFileName()
+	std::wstring GetOpenFileName(int mode)
 	{
 		OPENFILENAME ofn = { 0 };
 		TCHAR szFile[260] = { 0 };
@@ -39,7 +39,15 @@ namespace Utility
 		ofn.hwndOwner = 0;
 		ofn.lpstrFile = szFile;
 		ofn.nMaxFile = sizeof(szFile);
-		ofn.lpstrFilter = _T("Twnkl Scene Files\0*.twnkl\0Text\0*.twnkl\0");
+		switch (mode)
+		{
+		case 0:
+			ofn.lpstrFilter = _T("Twnkl scene files\0*.twnkl\0");
+			break;
+		case 1:
+			ofn.lpstrFilter = _T("PPM image files\0*.png\0");
+			break;
+		}
 		ofn.nFilterIndex = 1;
 		ofn.lpstrFileTitle = NULL;
 		ofn.nMaxFileTitle = 0;
@@ -66,10 +74,10 @@ namespace Utility
 		switch (mode)
 		{
 		case 0:
-			ofn.lpstrFilter = _T("Twnkl Scene Files\0*.twnkl\0Text\0*.twnkl\0");
+			ofn.lpstrFilter = _T("Twnkl scene files\0*.twnkl\0");
 			break;
 		case 1:
-			ofn.lpstrFilter = _T("PNG Image Files\0*.png\0PNG\0*.png\0");
+			ofn.lpstrFilter = _T("PNG image files\0*.png\0");
 			break;
 		}
 		ofn.nFilterIndex = 1;
