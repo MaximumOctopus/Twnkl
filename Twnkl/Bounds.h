@@ -16,7 +16,7 @@
 #include "Ray.h"
 
 
-class Bounds
+class BoundingBox
 {
 	std::pair<double, double> CheckAxis(double, double, double, double);
 

@@ -28,6 +28,7 @@ public:
 	int Height = 0;
 
 	CylinderTexture(std::wstring);
+	~CylinderTexture();
 
 	[[nodiscard]] Colour ColourAt(Object*, Quaternion&) override;
 

@@ -14,22 +14,21 @@
 #include "Pattern.h"
 
 
-class PlanarTexture : public Pattern
+class CubeMultiTexture : public Pattern
 {
-	Colour UVColourAt(double, double);
-	std::pair<double, double> PlanarMap(Quaternion&);
+	Colour UVColourAt(int, double, double);
 
 public:
 
 	std::wstring FileName = L"";
 
-	Colour* Texture = nullptr;
-
+	Colour* Texture[6] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+	
 	int Width = 0;
 	int Height = 0;
 
-	PlanarTexture(std::wstring);
-	~PlanarTexture();
+	CubeMultiTexture(std::wstring);
+	~CubeMultiTexture();
 
 	[[nodiscard]] Colour ColourAt(Object*, Quaternion&) override;
 

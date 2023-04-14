@@ -32,7 +32,7 @@ enum class AvailablePatterns {
 	Checker = 1, Gradient = 2, Gradient2 = 3, Ring = 4, Stripey = 5,
 	Perlin = 6, Perlin2 = 7, Perlin3 = 8,
 	Fractal = 9, Simplex = 10,
-	SphericalChecker = 11, CylinderChecker = 12, SphericalTexture = 13, PlanarTexture = 14, CubicTexture = 15, CylinderTexture = 16, CubeChecker = 17
+	SphericalChecker = 11, CylinderChecker = 12, SphericalTexture = 13, PlanarTexture = 14, CubicTexture = 15, CubicMultiTexture = 16, CylinderTexture = 17, CubeChecker = 18
 };
 
 struct PatternProperties

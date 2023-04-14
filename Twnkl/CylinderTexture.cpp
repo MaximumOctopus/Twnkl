@@ -22,6 +22,12 @@ CylinderTexture::CylinderTexture(std::wstring name) : Pattern(name)
 }
 
 
+CylinderTexture::~CylinderTexture()
+{
+	delete Texture;
+}
+
+
 Colour CylinderTexture::ColourAt(Object* o, Quaternion& q)
 {
 	Quaternion object_point = o->InverseTransform.MultQ(q);

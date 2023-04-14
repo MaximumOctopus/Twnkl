@@ -23,7 +23,7 @@ class Model : public Object
 {
 	std::wstring FileName = L"";
 
-	Bounds bounds;
+	BoundingBox bounds;
 
 	std::vector<Object*> Objects;
 

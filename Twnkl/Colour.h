@@ -11,6 +11,10 @@
 
 #pragma once
 
+#ifdef _GUI
+#include <Vcl.Graphics.hpp>
+#endif
+
 #include <string>
 
 
@@ -41,6 +45,9 @@ public:
 
 	int ToIntBGR();					// to Windows format: BGR
 	int ToIntRGB();
+	#ifdef _GUI
+	TRGBTriple ToRGBTriple();
+	#endif
 	void FromIntBGR(int);			// from Windows format: BGR
 	void FromIntRGB(int);
 

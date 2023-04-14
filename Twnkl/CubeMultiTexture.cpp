@@ -11,24 +11,27 @@
 
 #include <iostream>
 
-#include "CubeTexture.h"
+#include "CubeMultiTexture.h"
 #include "PatternCommon.h"
 
 
-CubeTexture::CubeTexture(std::wstring name) : Pattern(name)
+CubeMultiTexture::CubeMultiTexture(std::wstring name) : Pattern(name)
 {
 	Name = name;
-	Design = PatternDesign::CubeTexture;
+	Design = PatternDesign::CubeMultiTexture;
 }
 
 
-CubeTexture::~CubeTexture()
+CubeMultiTexture::~CubeMultiTexture()
 {
-	delete Texture;
+	for (int t = 0; t < 6; t++)
+	{
+		delete Texture[t];
+	}
 }
 
 
-Colour CubeTexture::ColourAt(Object* o, Quaternion& q)
+Colour CubeMultiTexture::ColourAt(Object* o, Quaternion& q)
 {
 	Quaternion object_point = o->InverseTransform.MultQ(q);
 	Quaternion pattern_point = InverseTransform.MultQ(object_point);
@@ -47,14 +50,14 @@ Colour CubeTexture::ColourAt(Object* o, Quaternion& q)
 		uv = PatternCommon::CubeUVBack(pattern_point);
 	else if (face == 2)
 		uv = PatternCommon::CubeUVUp(pattern_point);
-	else 
+	else
 		uv = PatternCommon::CubeUVDown(pattern_point);
 
-	return UVColourAt(/*cube_map.faces[face]*/ uv.first, uv.second);
+	return UVColourAt(face, uv.first, uv.second);
 }
 
 
-Colour CubeTexture::UVColourAt(double u, double v)
+Colour CubeMultiTexture::UVColourAt(int face, double u, double v)
 {
 	// flip v over so it matches the image layout, with y at the top
 	v = 1.0 - std::abs(v);
@@ -63,17 +66,17 @@ Colour CubeTexture::UVColourAt(double u, double v)
 	int x = std::abs(static_cast<int>(u * (Width - 1)));
 	int y = std::abs(static_cast<int>(v * (Height - 1)));
 
-	return Texture[y * Width + x];
+	return Texture[face][y * Width + x];
 }
 
 
-std::wstring CubeTexture::ToString()
+std::wstring CubeMultiTexture::ToString()
 {
-	return L"Dimensions " + std::to_wstring(Width) + L" x " + std::to_wstring(Height);
+	return L"Texture " + std::to_wstring(Width) + L" x " + std::to_wstring(Height) + L" (x6)";
 }
 
 
-void CubeTexture::ToFile(std::ofstream& ofile)
+void CubeMultiTexture::ToFile(std::ofstream& ofile)
 {
 	ofile << Formatting::to_utf8(__SceneChunkTexture + L"\n");
 	ofile << Formatting::to_utf8(L"filename=" + FileName + L"\n");

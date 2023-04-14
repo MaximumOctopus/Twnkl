@@ -21,6 +21,12 @@ PlanarTexture::PlanarTexture(std::wstring name) : Pattern(name)
 }
 
 
+PlanarTexture::~PlanarTexture()
+{
+	delete Texture;
+}
+
+
 Colour PlanarTexture::ColourAt(Object* o, Quaternion& q)
 {
 	Quaternion object_point = o->InverseTransform.MultQ(q);
