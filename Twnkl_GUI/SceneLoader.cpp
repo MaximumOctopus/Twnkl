@@ -818,7 +818,7 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail, GUI
 						}
 						break;
 					case FileProperty::Phase:
-						if (ValidateParameter(mode == Chunk::PatternFractal, L"phase", Line))
+						if (ValidateParameter(mode == Chunk::PatternPerlin3, L"phase", Line))
 						{
 							pattern_properties.phase = stod(value);
 						}

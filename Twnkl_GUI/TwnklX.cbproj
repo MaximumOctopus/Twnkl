@@ -231,6 +231,14 @@
             <VirtualFolder>{967BD435-00C3-4BD5-AE8E-3B8E54B1837C}</VirtualFolder>
             <BuildOrder>68</BuildOrder>
         </None>
+        <CppCompile Include="CubeMultiTexture.cpp">
+            <VirtualFolder>{967BD435-00C3-4BD5-AE8E-3B8E54B1837C}</VirtualFolder>
+            <BuildOrder>112</BuildOrder>
+        </CppCompile>
+        <None Include="CubeMultiTexture.h">
+            <VirtualFolder>{967BD435-00C3-4BD5-AE8E-3B8E54B1837C}</VirtualFolder>
+            <BuildOrder>113</BuildOrder>
+        </None>
         <CppCompile Include="CubeTexture.cpp">
             <VirtualFolder>{967BD435-00C3-4BD5-AE8E-3B8E54B1837C}</VirtualFolder>
             <BuildOrder>12</BuildOrder>
@@ -614,8 +622,8 @@
         </None>
         <FormResources Include="main.dfm"/>
         <FormResources Include="FormColourDialog.dfm"/>
-        <FormResources Include="FormAddObject.dfm"/>
         <FormResources Include="FormAddTransform.dfm"/>
+        <FormResources Include="FormAddObject.dfm"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -672,11 +680,6 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'!='true'" LocalName="$(BDS)\bin\cc32270.dll" Class="DependencyModule">
-                    <Platform Name="Win32">
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile Condition="'$(DynamicRTL)'=='true'" LocalName="$(BDS)\Redist\osx32\libcgcrtl.dylib" Class="DependencyModule">
                     <Platform Name="OSX32">
                         <Overwrite>true</Overwrite>
@@ -684,6 +687,11 @@
                 </DeployFile>
                 <DeployFile Condition="'$(DynamicRTL)'=='true'" LocalName="$(BDS)\Redist\osx64\libcgstl.dylib" Class="DependencyModule">
                     <Platform Name="OSX64">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'!='true'" LocalName="$(BDS)\bin\cc32270.dll" Class="DependencyModule">
+                    <Platform Name="Win32">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

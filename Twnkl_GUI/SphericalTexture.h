@@ -28,6 +28,7 @@ public:
 	int Height = 0;
 
 	SphericalTexture(std::wstring);
+	~SphericalTexture();
 
 	[[nodiscard]] Colour ColourAt(Object*, Quaternion&) override;
 

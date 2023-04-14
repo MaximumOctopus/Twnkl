@@ -86,7 +86,7 @@ class SceneLoader
 		L"minimum", L"maximum", L"closed",
 		L"uvector", L"vvector",
 		L"u", L"v",
-		L"filename", L"process", L"scale", L"phase"
+		L"filename", L"process", L"scale", L"phase",
 		L"frequency", L"amplitude", L"lacunarity", L"persistence", L"simple"
 	};
 

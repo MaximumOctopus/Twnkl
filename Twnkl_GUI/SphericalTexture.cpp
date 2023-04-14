@@ -22,6 +22,12 @@ SphericalTexture::SphericalTexture(std::wstring name) : Pattern(name)
 }
 
 
+SphericalTexture::~SphericalTexture()
+{
+	delete Texture;
+}
+
+
 Colour SphericalTexture::ColourAt(Object* o, Quaternion& q)
 {
 	Quaternion object_point = o->InverseTransform.MultQ(q);
