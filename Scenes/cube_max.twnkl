@@ -1,14 +1,14 @@
 // cubic texture test
 //
 {camera
-width=400
-height=200
+width=800
+height=400
 focallength=1.152
 from=-2.6, 1.5, -3.9
 to=-0.6, 1, -0.8
 up=0.0, 1.0, 0.0
 }
-{arealight
+{pointlight
 name=AreaLight
 colour=1.0, 1.0, 1.0
 position=-4.9, 1.9, -1
@@ -45,5 +45,5 @@ shininess=50
 reflectivity=0.1
 }
 {patterntexture
-filename=textures\max.ppm
+filename=C:\Users\iamru\Documents\Software Development\CBuilder\TwnklX\Win64\Debug\Textures\max.ppm
 }

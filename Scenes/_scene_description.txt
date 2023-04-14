@@ -1,7 +1,7 @@
 // ============================================
 // Twnkl scene specification
 //
-// April 8th 2023
+// April 13th 2023
 // ============================================
 
 
@@ -208,9 +208,15 @@ u=
 v=
 }
 
-// for sphere, plane, cylinder, cone, cube
+// for sphere, plane, cylinder, cone, cube (texture is repeated on each side)
 // for sphere, works best when texture width is 2x height (eg 256x128)
 {patterntexture
 process=greyscale
 filename=
+}
+
+// multi-texture for cubes (each side has a separate texture)
+// expects 6 textures, where an * in the file path is replaced with the numbers 1 to 6
+{patterntexture
+filename=texture_*.ppm
 }
