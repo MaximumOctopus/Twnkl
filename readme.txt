@@ -1,5 +1,5 @@
-==========================================================================================================================
-==========================================================================================================================
+=========================================================================================================
+=========================================================================================================
   Twnkl
   (c) Paul Alan Freshney 2023
 
@@ -8,9 +8,9 @@
   Source code, example scenes and textures
     https://github.com/MaximumOctopus/Twnkl
 
-  April 14th 2023
-==========================================================================================================================
-==========================================================================================================================
+  August 13th 2023
+=========================================================================================================
+=========================================================================================================
 
 Implements the following chapters:
 
@@ -51,8 +51,8 @@ An early alpha, proof of concept, WIP, GUI front-end for Twnkl.
 
 
 
-==========================================================================================================================
-==========================================================================================================================
+=========================================================================================================
+=========================================================================================================
 
  Credits:
 
@@ -63,9 +63,32 @@ An early alpha, proof of concept, WIP, GUI front-end for Twnkl.
 
 All of my software is free and open source; please consider donating to a local cat charity or shelter. Thanks.
 
-==========================================================================================================================
+=========================================================================================================
 
 Release History
+
+0.9 Console and GUI / August 2023
+
+GUI
+Added: index of refraction editing and selectable option
+Added: icons to buttons :)
+Added: about box
+Fixed: object loader to correctly load objects used by example scene files
+       face data can appear in a few different formats, and it appears I broke
+       the code so it only loaded one format correctly :(
+       there might still be some objects that won't load, but hopefully all the simple
+       files on the internet will work now.
+Fixed: setting pattern to "none" now removes pattern and sets GUI to reflect that
+
+Rewritten "resize to display" functionality so it works as you'd expect. Moved the checkbox to
+the camera panel. Automatically updates width/height to fit display as main window is resized.
+
+Console
+Object loader code fixed (see above)
+
+Several tweaks and minor changes.
+
+I've disabled bounding box checks for now, there seems to be a bug in there somewhere.
 
 0.8 Console and GUI / April 14th 2023
 
@@ -94,5 +117,5 @@ Scene loader tidy
 
 First public release.
 
-==========================================================================================================================
-==========================================================================================================================
+=========================================================================================================
+=========================================================================================================
