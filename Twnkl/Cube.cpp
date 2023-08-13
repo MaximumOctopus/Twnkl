@@ -39,7 +39,7 @@ std::pair<double, double> Cube::CheckAxis(double origin, double direction)
 
 	if (tmin > tmax)
 	{
-		std::swap(tmin, tmax); 
+		return { tmax, tmin };
 	}
 	
 	return { tmin, tmax };

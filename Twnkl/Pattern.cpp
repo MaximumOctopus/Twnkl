@@ -167,6 +167,8 @@ std::wstring Pattern::FriendlyName()
 	case PatternDesign::SphericalTexture:
 		return L"Texture (Spherical)";
 	}
+
+	return L"Unknown";
 }
 
 

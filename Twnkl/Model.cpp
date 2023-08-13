@@ -9,7 +9,7 @@
 // 
 // 
 
-// represents a collection of objects
+// represents a collection of triangle objects
 
 #include <iostream>
 #include <fstream>
@@ -27,19 +27,24 @@ Model::Model(std::wstring name) : Object(name)
 
 Model::~Model()
 {
-	
+	for (Object* obj : Objects)
+	{
+		delete obj;
+	}
+
+	Objects.clear();
 }
 
 
 void Model::LocalIntersect(Intersections& i, Ray& rt)
 {
-	if (bounds.Intersects(rt))
-	{
+	//if (bounds.Intersects(rt)) bounds is dodgy at the moment, so disabling until i fix it!
+	//{
 		for (int o = 0; o < Objects.size(); o++)
 		{
 			Objects[o]->Intersects(i, rt);
 		}
-	}
+	//}
 }
 
 
@@ -50,6 +55,11 @@ Quaternion Model::LocalNormalAt(Quaternion& q)
 }
 
 
+// must handle three possible face input types :(
+// f x y z
+// f x  y  z                // or any arbitrary number of spaces!
+// f a/b/c a/b/c a/b/c
+// f a//c a//c a//c
 Trinion Model::VectorsFrom(const std::wstring input, int reference_index)
 {
 	int ReferenceType = 0;	// 0 = vector index, 1 = texture index, 2 = vector normal
@@ -58,7 +68,7 @@ Trinion Model::VectorsFrom(const std::wstring input, int reference_index)
 	int components[3] = { 0, 0, 0 };
 	std::wstring temp = L"";
 
-	//std::wcout << L"vf: " << input << L"\n";
+	//std::wcout << L"vf in  : " << input << L"\n";
 
 	for (int t = 0; t < input.length(); t++)
 	{
@@ -76,7 +86,7 @@ Trinion Model::VectorsFrom(const std::wstring input, int reference_index)
 					}
 				}
 
-				if (input[t] == L' ')// && temp.empty()) // TO DO
+				if (input[t] == L' ' && !temp.empty())
 				{
 					ReferenceType = 0;
 					mode++;
@@ -84,11 +94,11 @@ Trinion Model::VectorsFrom(const std::wstring input, int reference_index)
 				else if (input[t] == L'/')
 				{
 					ReferenceType++;
-				}			
+				}
 
 				temp = L"";
 			}
-			else if(isdigit(input[t]) || input[t] == L'.' || input[t] == L'-')
+			else if (isdigit(input[t]) || input[t] == L'.' || input[t] == L'-')
 			{
 				temp += input[t];
 			}
@@ -106,6 +116,8 @@ Trinion Model::VectorsFrom(const std::wstring input, int reference_index)
 		}
 	}
 
+	//std::wcout << L"vf out : " << components[0] << " " << components[1] << " " << components[2] << L"\n";
+
 	return Trinion(components[0], components[1], components[2]);
 }
 
@@ -116,6 +128,8 @@ Quaternion Model::XYZFrom(const std::wstring input)
 	bool InValue = false;
 	double components[3] = { 0, 0, 0 };
 	std::wstring temp = L"";
+
+	//std::wcout << L"xyz in : " << input << L"\n";
 
 	for (int t = 0; t < input.length(); t++)
 	{
@@ -151,10 +165,15 @@ Quaternion Model::XYZFrom(const std::wstring input)
 		}
 	}
 
+	//std::wcout << L"xyz out: " << components[0] << " " << components[1] << " " << components[2] << L"\n";
+
 	return Quaternion(components[0], components[1], components[2], 0);
 }
 
 
+// loads a wavefront object file (.obj)
+// https://en.wikipedia.org/wiki/Wavefront_.obj_file
+// supports only basic vector and face functionality
 void Model::Load(std::wstring file_name)
 {
 	std::wifstream file(file_name);
@@ -214,8 +233,6 @@ void Model::Load(std::wstring file_name)
 						}
 
 						Objects.push_back(tringle);
-
-						SetBounds(tringle);
 						
 						break;
 					}
@@ -225,6 +242,8 @@ void Model::Load(std::wstring file_name)
 		}
 
 		file.close();
+
+		SetBounds();
 	}
 }
 
@@ -242,40 +261,51 @@ void Model::PostSetup(int index)
 }
 
 
-void Model::SetBounds(Triangle* tringle)
+void Model::SetBounds()
 {
-	for (int p = 0; p < 3; p++)
+	for (int t = 0; t < Objects.size(); t++)
 	{
-		if (tringle->Points[p].x > bounds.Maximum.x)
-		{
-			bounds.Maximum.x = tringle->Points[p].x;
-		}
+		Triangle* tringle = (Triangle*)Objects[t];
 
-		if (tringle->Points[p].y > bounds.Maximum.y)
+		for (int p = 0; p < 3; p++)
 		{
-			bounds.Maximum.y = tringle->Points[p].y;
-		}
+			if (tringle->Points[p].x > bounds.Maximum.x)
+			{
+				bounds.Maximum.x = tringle->Points[p].x;
+			}
 
-		if (tringle->Points[p].z > bounds.Maximum.z)
-		{
-			bounds.Maximum.z = tringle->Points[p].z;
-		}
+			if (tringle->Points[p].y > bounds.Maximum.y)
+			{
+				bounds.Maximum.y = tringle->Points[p].y;
+			}
 
-		if (tringle->Points[p].x < bounds.Minimum.x)
-		{
-			bounds.Minimum.x = tringle->Points[p].x;
-		}
+			if (tringle->Points[p].z > bounds.Maximum.z)
+			{
+				bounds.Maximum.z = tringle->Points[p].z;
+			}
 
-		if (tringle->Points[p].y < bounds.Minimum.y)
-		{
-			bounds.Minimum.y = tringle->Points[p].y;
-		}
+			if (tringle->Points[p].x < bounds.Minimum.x)
+			{
+				bounds.Minimum.x = tringle->Points[p].x;
+			}
 
-		if (tringle->Points[p].z < bounds.Minimum.z)
-		{
-			bounds.Minimum.z = tringle->Points[p].z;
+			if (tringle->Points[p].y < bounds.Minimum.y)
+			{
+				bounds.Minimum.y = tringle->Points[p].y;
+			}
+
+			if (tringle->Points[p].z < bounds.Minimum.z)
+			{
+				bounds.Minimum.z = tringle->Points[p].z;
+			}
 		}
 	}
+}
+
+
+std::wstring Model::GetFileName()
+{
+    return FileName;
 }
 
 

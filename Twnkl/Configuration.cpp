@@ -82,7 +82,16 @@ void Configuration::ShowConfiguration()
 
 	std::wcout << L"    Scene source      : " << Render.SceneFileName << L"\n";
 	std::wcout << L"    Image file name   : " << Render.ImageFileName << L"\n";
-	std::wcout << L"    Render size       : " << Render.ImageWidth << L" x " << Render.ImageHeight << L"\n";
+
+	if (Render.ImageWidth != 0 && Render.ImageHeight != 0)
+	{
+		std::wcout << L"    Render size       : " << Render.ImageWidth << L" x " << Render.ImageHeight << L"\n";
+	}
+	else
+	{
+		std::wcout << L"    Render size       : Using scene file settings \n";
+	}
+
 	std::wcout << L"\n";
 	std::wcout << L"    Samples per pixel : " << Render.SamplesPerPixel << L"\n";
 	std::wcout << L"    Ray recursion     : " << Render.LightRecursion << L"\n";

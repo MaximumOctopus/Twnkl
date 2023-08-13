@@ -45,6 +45,9 @@ public:
 	void SetViewport(Quaternion, Quaternion, Quaternion);
 
 	void CalculatePixelSize();
+	
+	// used by the GUI to resize the scene to fit the display window
+	void ResizeToFit(int, int);
 
 	void ToFile(std::ofstream&);
 };
