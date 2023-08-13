@@ -1,7 +1,7 @@
 // ============================================
 // Twnkl scene specification
 //
-// April 13th 2023
+// August 11th 2023
 // ============================================
 
 
@@ -66,16 +66,20 @@ name=
 
 // ============================================
 // object with loaded geometry (obj file)
+// supports only wavefront obj files currently 
+// (only object, not texture or material)
 // ============================================
 
 {objectmodel
 name=
-filename=
+filename=							// path relative to scene file
 }
 
 // ============================================
 // transform (applied to objects and patterns)
 // ============================================
+
+// order or transforms is important
 
 {transform
 type=translate

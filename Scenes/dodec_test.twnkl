@@ -30,7 +30,7 @@ colour=0.65, 0.65, 0.00
 }
 {objectmodel
 name=dodecahedron
-filename=objects/dodecahedron.obj
+filename=objects\dodecahedron.obj
 }
 {transform
 type=translate
