@@ -37,6 +37,7 @@
 #include "../Twnkl/Checkerboard.cpp"
 #include "../Twnkl/CubeCheckerboard.cpp"
 #include "../Twnkl/CubeTexture.cpp"
+#include "../Twnkl/CubeMultiTexture.cpp"
 #include "../Twnkl/CylinderCheckerboard.cpp"
 #include "../Twnkl/CylinderTexture.cpp"
 #include "../Twnkl/Fractal.cpp"

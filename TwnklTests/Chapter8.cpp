@@ -75,7 +75,11 @@ namespace TwnklTestsChapter8
 
 			Computation c = i.PrepareComputation(0, r);
 
-			Assert::IsTrue(c.OverPoint.z < (0.0001 / 2) && c.OverPoint.z > c.OverPoint.z);  // should be point (optimised-out)
+			std::wstring output = std::to_wstring(c.OverPoint.z);
+
+			Logger::WriteMessage(output.c_str());
+
+			Assert::IsTrue(c.OverPoint.z < (0.0001 / 2) && c.OverPoint.z > c.OverPoint.z);  // should be .point (optimised-out)
 		}
 
 	};
