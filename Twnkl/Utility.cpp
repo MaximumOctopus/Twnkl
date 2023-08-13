@@ -47,6 +47,9 @@ namespace Utility
 		case 1:
 			ofn.lpstrFilter = _T("PPM image files\0*.png\0");
 			break;
+		case 2:
+			ofn.lpstrFilter = _T("3D model files\0*.obj\0");
+			break;			
 		}
 		ofn.nFilterIndex = 1;
 		ofn.lpstrFileTitle = NULL;
@@ -102,7 +105,7 @@ namespace Utility
 		#ifdef _CONSOLE
 		localtime_s(&newtime, &now);
 		#else
-		localtime_s(&now, &newtime);	// C++ builder wants the parameters the other way around?!
+		localtime_s(&now, &newtime);	// C++ builder  (used for the GUI version) wants the parameters the other way around?!
 		#endif
 
 		return newtime.tm_year + 1900;
