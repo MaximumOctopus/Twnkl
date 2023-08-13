@@ -6,8 +6,9 @@
 //---------------------------------------------------------------------------
 USEFORM("main.cpp", frmMain);
 USEFORM("FormColourDialog.cpp", frmColourDialog);
-USEFORM("FormAddObject.cpp", frmAddObject);
 USEFORM("FormAddTransform.cpp", frmAddTransform);
+USEFORM("FormAddObject.cpp", frmAddObject);
+USEFORM("FormAbout.cpp", frmAbout);
 //---------------------------------------------------------------------------
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {
@@ -19,6 +20,7 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 		Application->CreateForm(__classid(TfrmColourDialog), &frmColourDialog);
 		Application->CreateForm(__classid(TfrmAddObject), &frmAddObject);
 		Application->CreateForm(__classid(TfrmAddTransform), &frmAddTransform);
+		Application->CreateForm(__classid(TfrmAbout), &frmAbout);
 		Application->Run();
 	}
 	catch (Exception &exception)

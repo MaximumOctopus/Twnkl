@@ -20,14 +20,6 @@
 #include "TransformConfiguration.h"
 
 
-struct GUIProperties
-{
-	bool ResizeToDisplay = false;
-	int DisplayWidth = 0;
-	int DisplayHeight = 0;
-};
-
-
 class SceneLoader
 {
 	enum class Chunk {
@@ -157,5 +149,5 @@ public:
 
 	std::pair<int, int> ResizeForDisplay(double, double, double, double);
 
-	[[nodiscard]] bool LoadScene(const std::wstring, int, GUIProperties);
-}; 
+	[[nodiscard]] bool LoadScene(const std::wstring, int);
+};

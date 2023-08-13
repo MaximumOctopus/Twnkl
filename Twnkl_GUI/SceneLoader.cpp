@@ -50,9 +50,7 @@ SceneLoader::SceneLoader()
 
 SceneLoader::SceneLoader(const std::wstring file_name, int shadow_detail)
 {
-	GUIProperties gui;
-
-	Loaded = LoadScene(file_name, shadow_detail, gui);
+	Loaded = LoadScene(file_name, shadow_detail);
 }
 
 
@@ -369,7 +367,7 @@ bool SceneLoader::ValidateParameter(bool condition, std::wstring parameter, int 
 
 
 // twnkl scene file format
-bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail, GUIProperties gui)
+bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail)
 {
 	std::wifstream file(file_name);
 
@@ -864,14 +862,6 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail, GUI
 		std::wcout << L"  Loaded              : " << GWorld->Objects.size() << " objects, " << GWorld->Lights.size() << L" lights, " << MaterialCount << L" materials, " << TransformCount << L" transforms.\n";
 
 		file.close();
-
-		if (gui.ResizeToDisplay)
-		{
-			std::pair<int, int> newsize = ResizeForDisplay(gui.DisplayWidth, gui.DisplayHeight, GWorld->Cam->Width, GWorld->Cam->Height);
-
-			GWorld->Cam->Width = newsize.first;
-			GWorld->Cam->Height = newsize.second;
-		}
 
 		GWorld->Cam->SetViewport(CameraFrom, CameraTo, CameraUp);
 

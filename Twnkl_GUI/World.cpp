@@ -739,55 +739,23 @@ void World::SetObjectPattern(int id, AvailablePatterns pattern, PatternPropertie
 	}
 	case AvailablePatterns::CubicTexture:
 	{
-		if (properties.FileName.find(L'*') != std::wstring::npos)
+		CubeTexture* p = new CubeTexture(L"CubicTexture");
+		p->FileName = properties.FileName;
+
+		TextureLoader tl;
+
+		if (tl.Go(&p->Texture, properties.FileName, greyscale))
 		{
-			auto asterisk = properties.FileName.find(L'*');
-
-			wchar_t nums[6] = { L'1', L'2', L'3', L'4', L'5', L'6' };
-
-			CubeMultiTexture* p = new CubeMultiTexture(L"CubeMultiTexture");
-
-			p->FileName = properties.FileName;
-
-			TextureLoader tl;
-
-			for (int t = 0; t < 6; t++)
-			{
-				properties.FileName[asterisk] = nums[t];
-
-				if (tl.Go(&p->Texture[t], properties.FileName, greyscale))
-				{
-					p->Width = tl.TextureWidth;
-					p->Height = tl.TextureHeight;
-				}
-				else
-				{
-					std::wcout << L"error loading texture \"" << properties.FileName << L"\"\n";
-				}
-			}
+			p->Width = tl.TextureWidth;
+			p->Height = tl.TextureHeight;
 
 			Objects[id]->Material->SetPattern(p);
 		}
 		else
 		{
-			CubeTexture* p = new CubeTexture(L"CubicTexture");
-
-			p->FileName = properties.FileName;
-
-			TextureLoader tl;
-
-			if (tl.Go(&p->Texture, properties.FileName, greyscale))
-			{
-				p->Width = tl.TextureWidth;
-				p->Height = tl.TextureHeight;
-
-				Objects[id]->Material->SetPattern(p);
-			}
-			else
-			{
-				std::wcout << L"error loading texture \"" << properties.FileName << L"\"\n";
-			}
+			std::wcout << L"error loading texture \"" << properties.FileName << L"\"\n";
 		}
+
 
 		break;
 	}
@@ -804,7 +772,7 @@ void World::SetObjectPattern(int id, AvailablePatterns pattern, PatternPropertie
 			p->Width = tl.TextureWidth;
 			p->Height = tl.TextureHeight;
 
-			Objects[id]->Material->SetPattern(p);
+			GWorld->Objects.back()->Material->SetPattern(p);
 		}
 		else
 		{
