@@ -30,7 +30,7 @@ class Model : public Object
 	Trinion VectorsFrom(const std::wstring, int);
 	Quaternion XYZFrom(const std::wstring);
 
-	void SetBounds(Triangle*);
+	void SetBounds();
 
 public:
 
@@ -44,6 +44,8 @@ public:
 	void PostSetup(int) override;
 
 	void Load(std::wstring);
+	
+	std::wstring GetFileName();
 
 	[[nodiscard]] std::wstring ToString() override;
 

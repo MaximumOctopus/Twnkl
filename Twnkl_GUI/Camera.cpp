@@ -70,6 +70,28 @@ void Camera::SetViewport(Quaternion from, Quaternion to, Quaternion up)
 }
 
 
+void Camera::ResizeToFit(int gui_width, int gui_height)
+{
+	double scene_aspect = (double)gui_width / double(gui_height);
+
+	double xratio = (double)gui_width / (double)Width;
+	double yratio = (double)gui_height / (double)Height;
+
+	if (xratio > yratio)
+	{
+		Width = std::floor(scene_aspect * (double)gui_height);
+		Height = std::floor((double)gui_height);
+	}
+	else
+	{
+		Width = std::floor((double)gui_width);
+		Height = std::floor((1.0 / scene_aspect) * (double)gui_width);
+	}
+
+	CalculatePixelSize();
+}
+
+
 void Camera::ToFile(std::ofstream& ofile)
 {
 	ofile << Formatting::to_utf8(__SceneChunkCamera + L"\n");
@@ -81,4 +103,3 @@ void Camera::ToFile(std::ofstream& ofile)
 	ofile << Formatting::to_utf8(L"up=" + std::to_wstring(Up.x) + L", " + std::to_wstring(Up.y) + L", " + std::to_wstring(Up.z) + L"\n");
 	ofile << Formatting::to_utf8(L"}\n");
 }
-

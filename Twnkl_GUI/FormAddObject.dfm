@@ -3,8 +3,8 @@ object frmAddObject: TfrmAddObject
   Top = 0
   BorderStyle = bsDialog
   Caption = 'Add Object'
-  ClientHeight = 439
-  ClientWidth = 469
+  ClientHeight = 489
+  ClientWidth = 496
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,275 +16,448 @@ object frmAddObject: TfrmAddObject
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object Bevel1: TBevel
-    Left = 168
-    Top = 8
-    Width = 9
-    Height = 385
-    Shape = bsLeftLine
-  end
   object Bevel2: TBevel
-    Left = 6
-    Top = 399
-    Width = 455
+    Left = 8
+    Top = 447
+    Width = 479
     Height = 2
     Shape = bsTopLine
   end
-  object pPattern: TPanel
-    Left = 183
-    Top = 56
-    Width = 280
-    Height = 337
-    TabOrder = 5
-    Visible = False
-    object lPatternColour1: TLabel
-      Left = 11
-      Top = 14
-      Width = 48
-      Height = 13
-      Caption = 'Colour #1'
-    end
-    object sPatternColour1: TShape
-      Left = 81
-      Top = 11
-      Width = 56
-      Height = 22
-      Brush.Color = clSilver
-      OnMouseDown = sPatternColour1MouseDown
-    end
-    object sPatternColour2: TShape
-      Tag = 1
-      Left = 81
-      Top = 39
-      Width = 56
-      Height = 22
-      Brush.Color = clGray
-      OnMouseDown = sPatternColour1MouseDown
-    end
-    object lPatternColour2: TLabel
-      Left = 11
-      Top = 42
-      Width = 48
-      Height = 13
-      Caption = 'Colour #2'
-    end
-    object lPWidth: TLabel
-      Left = 144
-      Top = 14
-      Width = 28
-      Height = 13
-      Caption = 'Width'
-    end
-    object lPHeight: TLabel
-      Left = 144
-      Top = 41
-      Width = 31
-      Height = 13
-      Caption = 'Height'
-    end
-    object lPScale: TLabel
-      Left = 11
-      Top = 90
-      Width = 25
-      Height = 13
-      Caption = 'Scale'
-    end
-    object lPPhase: TLabel
-      Left = 11
-      Top = 117
-      Width = 29
-      Height = 13
-      Caption = 'Phase'
-    end
-    object lPFrequency: TLabel
-      Left = 11
-      Top = 144
-      Width = 51
-      Height = 13
-      Caption = 'Frequency'
-    end
-    object lPLacunarity: TLabel
-      Left = 11
-      Top = 198
-      Width = 50
-      Height = 13
-      Caption = 'Lacunarity'
-    end
-    object lPPersistence: TLabel
-      Left = 11
-      Top = 225
-      Width = 55
-      Height = 13
-      Caption = 'Persistence'
-    end
-    object lPAmplitude: TLabel
-      Left = 11
-      Top = 171
-      Width = 47
-      Height = 13
-      Caption = 'Amplitude'
-    end
-    object lTexture: TLabel
-      Left = 11
-      Top = 305
-      Width = 38
-      Height = 13
-      Caption = 'Texture'
-    end
-    object lTexturePath: TLabel
-      Left = 81
-      Top = 305
-      Width = 12
-      Height = 13
-      Caption = '...'
-    end
-    object ePWidth: TEdit
-      Left = 201
-      Top = 11
-      Width = 56
-      Height = 21
-      TabOrder = 0
-      Text = '.'
-    end
-    object ePHeight: TEdit
-      Left = 201
-      Top = 38
-      Width = 56
-      Height = 21
-      TabOrder = 1
-      Text = '.'
-    end
-    object ePScale: TEdit
-      Left = 81
-      Top = 87
-      Width = 56
-      Height = 21
-      TabOrder = 2
-      Text = '.'
-    end
-    object ePPhase: TEdit
-      Left = 81
-      Top = 114
-      Width = 56
-      Height = 21
-      TabOrder = 3
-      Text = '.'
-    end
-    object ePFrequency: TEdit
-      Left = 81
-      Top = 141
-      Width = 56
-      Height = 21
-      TabOrder = 4
-      Text = '.'
-    end
-    object ePAmplitude: TEdit
-      Left = 81
-      Top = 168
-      Width = 56
-      Height = 21
-      TabOrder = 5
-      Text = '.'
-    end
-    object ePLacunarity: TEdit
-      Left = 81
-      Top = 195
-      Width = 56
-      Height = 21
-      TabOrder = 6
-      Text = '.'
-    end
-    object ePPersistence: TEdit
-      Left = 81
-      Top = 222
-      Width = 56
-      Height = 21
-      TabOrder = 7
-      Text = '.'
-    end
-    object cbPSimple: TCheckBox
-      Left = 143
-      Top = 89
-      Width = 97
-      Height = 17
-      Caption = 'Simple'
-      TabOrder = 8
-    end
-    object bOpenTexture: TBitBtn
-      Left = 245
-      Top = 304
-      Width = 28
-      Height = 25
-      TabOrder = 9
-      OnClick = bOKClick
-    end
-  end
-  object cbPrimitive: TComboBox
-    Left = 8
-    Top = 16
-    Width = 145
-    Height = 21
-    Style = csDropDownList
-    TabOrder = 0
-    OnChange = cbPrimitiveChange
-    Items.Strings = (
-      'Cone'
-      'Cube'
-      'Cylinder'
-      'Model'
-      'Plane'
-      'Sphere')
-  end
   object bOK: TBitBtn
-    Left = 305
-    Top = 407
+    Left = 331
+    Top = 455
     Width = 75
     Height = 25
     Caption = 'OK'
     ModalResult = 1
-    TabOrder = 1
+    TabOrder = 0
     OnClick = bOKClick
   end
   object bCancel: TBitBtn
-    Left = 386
-    Top = 407
+    Left = 412
+    Top = 455
     Width = 75
     Height = 25
     Cancel = True
     Caption = 'Cancel'
     ModalResult = 2
-    TabOrder = 2
+    TabOrder = 1
   end
-  object eName: TEdit
+  object GroupBox1: TGroupBox
     Left = 8
-    Top = 56
-    Width = 145
-    Height = 21
-    TabOrder = 3
-    OnExit = eNameExit
+    Top = 8
+    Width = 177
+    Height = 425
+    Caption = 'Primitive'
+    TabOrder = 2
+    object lObjectFileName: TLabel
+      Left = 16
+      Top = 119
+      Width = 78
+      Height = 13
+      Caption = 'Object file name'
+    end
+    object cbPrimitive: TComboBox
+      Left = 16
+      Top = 24
+      Width = 145
+      Height = 21
+      Style = csDropDownList
+      ItemIndex = 0
+      TabOrder = 0
+      Text = 'Cone'
+      OnChange = cbPrimitiveChange
+      Items.Strings = (
+        'Cone'
+        'Cube'
+        'Cylinder'
+        'Model'
+        'Plane'
+        'Sphere')
+    end
+    object eName: TEdit
+      Left = 16
+      Top = 64
+      Width = 145
+      Height = 21
+      TabOrder = 1
+      OnExit = eNameExit
+    end
+    object bSelectNewObject: TBitBtn
+      Left = 138
+      Top = 116
+      Width = 23
+      Height = 22
+      ImageIndex = 0
+      Images = ImageList1
+      TabOrder = 2
+      Visible = False
+    end
   end
-  object cbPattern: TComboBox
-    Left = 183
-    Top = 16
-    Width = 145
-    Height = 21
-    Style = csDropDownList
-    ItemIndex = 0
-    TabOrder = 4
-    Text = 'None'
-    OnChange = cbPatternChange
-    Items.Strings = (
-      'None'
-      'Checker'
-      'Fractal'
-      'Gradient'
-      'Gradient II'
-      'Perlin'
-      'Perlin II'
-      'Perlin III'
-      'Ring'
-      'Simplex'
-      'Stripey'
-      'Texture')
+  object GroupBox2: TGroupBox
+    Left = 191
+    Top = 8
+    Width = 306
+    Height = 425
+    Caption = 'Pattern / Texture'
+    TabOrder = 3
+    object cbPattern: TComboBox
+      Left = 16
+      Top = 30
+      Width = 145
+      Height = 21
+      Style = csDropDownList
+      ItemIndex = 0
+      TabOrder = 0
+      Text = 'None'
+      OnChange = cbPatternChange
+      Items.Strings = (
+        'None'
+        'Checker'
+        'Fractal'
+        'Gradient'
+        'Gradient II'
+        'Perlin'
+        'Perlin II'
+        'Perlin III'
+        'Ring'
+        'Simplex'
+        'Stripey'
+        'Texture')
+    end
+    object pPattern: TPanel
+      Left = 16
+      Top = 70
+      Width = 280
+      Height = 337
+      TabOrder = 1
+      Visible = False
+      object lPatternColour1: TLabel
+        Left = 11
+        Top = 14
+        Width = 48
+        Height = 13
+        Caption = 'Colour #1'
+      end
+      object sPatternColour1: TShape
+        Left = 81
+        Top = 11
+        Width = 56
+        Height = 22
+        Brush.Color = clSilver
+        OnMouseDown = sPatternColour1MouseDown
+      end
+      object sPatternColour2: TShape
+        Tag = 1
+        Left = 81
+        Top = 39
+        Width = 56
+        Height = 22
+        Brush.Color = clGray
+        OnMouseDown = sPatternColour1MouseDown
+      end
+      object lPatternColour2: TLabel
+        Left = 11
+        Top = 42
+        Width = 48
+        Height = 13
+        Caption = 'Colour #2'
+      end
+      object lPWidth: TLabel
+        Left = 144
+        Top = 14
+        Width = 28
+        Height = 13
+        Caption = 'Width'
+      end
+      object lPHeight: TLabel
+        Left = 144
+        Top = 41
+        Width = 31
+        Height = 13
+        Caption = 'Height'
+      end
+      object lPScale: TLabel
+        Left = 11
+        Top = 90
+        Width = 25
+        Height = 13
+        Caption = 'Scale'
+      end
+      object lPPhase: TLabel
+        Left = 11
+        Top = 117
+        Width = 29
+        Height = 13
+        Caption = 'Phase'
+      end
+      object lPFrequency: TLabel
+        Left = 11
+        Top = 144
+        Width = 51
+        Height = 13
+        Caption = 'Frequency'
+      end
+      object lPLacunarity: TLabel
+        Left = 11
+        Top = 198
+        Width = 50
+        Height = 13
+        Caption = 'Lacunarity'
+      end
+      object lPPersistence: TLabel
+        Left = 11
+        Top = 225
+        Width = 55
+        Height = 13
+        Caption = 'Persistence'
+      end
+      object lPAmplitude: TLabel
+        Left = 11
+        Top = 171
+        Width = 47
+        Height = 13
+        Caption = 'Amplitude'
+      end
+      object lTexture: TLabel
+        Left = 11
+        Top = 305
+        Width = 38
+        Height = 13
+        Caption = 'Texture'
+      end
+      object lTexturePath: TLabel
+        Left = 81
+        Top = 305
+        Width = 12
+        Height = 13
+        Caption = '...'
+      end
+      object ePWidth: TEdit
+        Left = 201
+        Top = 11
+        Width = 56
+        Height = 21
+        TabOrder = 0
+        Text = '.'
+      end
+      object ePHeight: TEdit
+        Left = 201
+        Top = 38
+        Width = 56
+        Height = 21
+        TabOrder = 1
+        Text = '.'
+      end
+      object ePScale: TEdit
+        Left = 81
+        Top = 87
+        Width = 56
+        Height = 21
+        TabOrder = 2
+        Text = '.'
+      end
+      object ePPhase: TEdit
+        Left = 81
+        Top = 114
+        Width = 56
+        Height = 21
+        TabOrder = 3
+        Text = '.'
+      end
+      object ePFrequency: TEdit
+        Left = 81
+        Top = 141
+        Width = 56
+        Height = 21
+        TabOrder = 4
+        Text = '.'
+      end
+      object ePAmplitude: TEdit
+        Left = 81
+        Top = 168
+        Width = 56
+        Height = 21
+        TabOrder = 5
+        Text = '.'
+      end
+      object ePLacunarity: TEdit
+        Left = 81
+        Top = 195
+        Width = 56
+        Height = 21
+        TabOrder = 6
+        Text = '.'
+      end
+      object ePPersistence: TEdit
+        Left = 81
+        Top = 222
+        Width = 56
+        Height = 21
+        TabOrder = 7
+        Text = '.'
+      end
+      object cbPSimple: TCheckBox
+        Left = 143
+        Top = 89
+        Width = 97
+        Height = 17
+        Caption = 'Simple'
+        TabOrder = 8
+      end
+      object bOpenTexture: TBitBtn
+        Left = 245
+        Top = 304
+        Width = 28
+        Height = 25
+        ImageIndex = 0
+        Images = ImageList1
+        TabOrder = 9
+        OnClick = bOKClick
+      end
+    end
+  end
+  object ImageList1: TImageList
+    Left = 400
+    Top = 32
+    Bitmap = {
+      494C010101000800040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      0000000000003600000028000000400000001000000001002000000000000010
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000001111110036363600272727002626
+      2600252525002626260026262600262626002525250025252500262626002525
+      2500383838000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000006E6E6E00F2F2F200E5E5
+      E500E5E5E500E5E5E500E5E5E500E5E5E500E6E6E600E6E6E600E5E5E500E4E4
+      E400000000009292920000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000202020000000000FEFEFE00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00B7B7B7000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000004C4C4C003232320066666600FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF000C0C0C008F8F8F00000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000003D3D3D00DADADA0000000000E5E5
+      E500FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00B7B7B70000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000E0E0E00FFFFFF00666666004949
+      4900FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF0028282800909090000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000E0E0E00FFFFFF00F0F0F0000000
+      0000C4C4C400E5E5E500E5E5E500E5E5E500E6E6E600E5E5E500E5E5E500E8E8
+      E800F3F3F300EBEBEB00A2A2A200000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000012121200F7F7F700FFFFFF009494
+      9400060606002626260026262600252525002525250026262600262626002424
+      2400141414002424240042424200484848000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000011111100F5F5F500FFFFFF00FFFF
+      FF00EBEBEB00EFEFEF00F5F5F500F5F5F500F5F5F500F5F5F500F5F5F500DADA
+      DA0004040400CBCBCB0000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000013131300FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00F5F5F500F5F5F500F5F5F500F5F5F500F5F5F500DADA
+      DA00000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000000000000000000000000000DCDCDC00E5E5E500E5E5
+      E500AAAAAA002525250026262600252525002525250025252500262626002424
+      24005A5A5A000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000005353530026262600252525002626
+      260024242400AAAAAA0000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000424D3E000000000000003E000000
+      2800000040000000100000000100010000000000800000000000000000000000
+      000000000000000000000000FFFFFF00FFFF000000000000FFFF000000000000
+      0007000000000000000300000000000000030000000000000001000000000000
+      0001000000000000000000000000000000000000000000000000000000000000
+      00030000000000000007000000000000000700000000000003FF000000000000
+      FFFF000000000000FFFF00000000000000000000000000000000000000000000
+      000000000000}
   end
 end

@@ -22,8 +22,8 @@ class BoundingBox
 
 public:
 
-	Quaternion Minimum = Quaternion(999999, 999999, 999999, 999999);
-	Quaternion Maximum = Quaternion(-999999, -999999, -999999, -999999);
+	Quaternion Minimum = Quaternion(999999, 999999, 999999, 1);
+	Quaternion Maximum = Quaternion(-999999, -999999, -999999, 1);
 
 	bool ContainsPoint(Quaternion);
 	void Transform(Matrix4);

@@ -29,6 +29,21 @@ __fastcall TfrmAddObject::TfrmAddObject(TComponent* Owner)
 void __fastcall TfrmAddObject::cbPrimitiveChange(TObject *Sender)
 {
 	SelectedPrimitive = cbPrimitive->ItemIndex;
+
+	if (SelectedPrimitive == 3)
+	{
+		lObjectFileName->Visible = true;
+		bSelectNewObject->Visible = true;
+
+		bOK->Enabled = !lObjectFileName->Caption.IsEmpty();
+	}
+	else
+	{
+		lObjectFileName->Visible = false;
+		bSelectNewObject->Visible = false;
+
+        bOK->Enabled = true;
+    }
 }
 
 

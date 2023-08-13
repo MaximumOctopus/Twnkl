@@ -10,6 +10,7 @@
 // 
 
 #include <algorithm>
+#include <iostream>
 
 #include "Constants.h"
 #include "Bounds.h"
@@ -25,6 +26,11 @@ bool BoundingBox::ContainsPoint(Quaternion q)
 
 void BoundingBox::Transform(Matrix4 m)
 {
+    //std::wcout << m.ToString() << "\n";
+
+    //std::wcout << Minimum.x << L" " << Minimum.y << L" " << Minimum.z << "\n";
+    //std::wcout << Maximum.x << L" " << Maximum.y << L" " << Maximum.z << "\n";
+
     Quaternion points[8];
 
     Quaternion q1(Minimum.x, Minimum.y, Maximum.z, 1);
@@ -33,6 +39,9 @@ void BoundingBox::Transform(Matrix4 m)
     Quaternion q4(Maximum.x, Minimum.y, Minimum.z, 1);
     Quaternion q5(Maximum.x, Minimum.y, Maximum.z, 1);
     Quaternion q6(Maximum.x, Maximum.y, Minimum.z, 1);
+
+    Minimum.w = 1;
+    Maximum.w = 1;
 
     points[0] = m.MultQ(Minimum);
     points[1] = m.MultQ(q1);
@@ -52,6 +61,8 @@ void BoundingBox::Transform(Matrix4 m)
 
     for (int t = 0; t < 8; t++)
     {
+        //std::wcout << points[t].ToString() << "\n";
+
         minx = std::min(minx, points[t].x);
         miny = std::min(miny, points[t].y);
         minz = std::min(minz, points[t].z);
@@ -68,6 +79,9 @@ void BoundingBox::Transform(Matrix4 m)
     Maximum.x = maxx;
     Maximum.y = maxy;
     Maximum.z = maxz;
+
+    //std::wcout << Minimum.x << L" " << Minimum.y << L" " << Minimum.z << "\n";
+    // std::wcout << Maximum.x << L" " << Maximum.y << L" " << Maximum.z << "\n";
 }
 
 
@@ -85,14 +99,13 @@ std::pair<double, double> BoundingBox::CheckAxis(double origin, double direction
     }
     else
     {
-        tmin = tminNumerator * 9999999;	// C++ builder gives invalid floating point operations if using INFINITY \_(^-^)_/¯
+        tmin = tminNumerator * 9999999;	// C++ builder gives invalid floating point operations if using INFINITY ¯\_(^-^)_/¯
         tmax = tmaxNumerator * 9999999; //
-
     }
 
     if (tmin > tmax)
     {
-        std::swap(tmin, tmax);
+        return { tmax, tmin };
     }
 
     return { tmin, tmax };

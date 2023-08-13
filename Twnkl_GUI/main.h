@@ -20,6 +20,8 @@
 #include <Vcl.ComCtrls.hpp>
 
 #include "Object.h"
+#include <System.ImageList.hpp>
+#include <Vcl.ImgList.hpp>
 
 class TfrmMain : public TForm
 {
@@ -29,7 +31,6 @@ __published:	// IDE-managed Components
 	TBitBtn *bRender;
 	TPanel *Panel2;
 	TPanel *pRender;
-	TCheckBox *cbResizeToDisplay;
 	TTreeView *tvObjects;
 	TPageControl *pcMain;
 	TTabSheet *tsMaterial;
@@ -89,7 +90,6 @@ __published:	// IDE-managed Components
 	TShape *sLightIntensity;
 	TComboBox *cbPatternChangeTo;
 	TLabel *Label22;
-	TTrackBar *tbIoR;
 	TSpeedButton *sbAddObject;
 	TSpeedButton *sbDeleteObject;
 	TSpeedButton *sbAddMaterialTransform;
@@ -144,7 +144,6 @@ __published:	// IDE-managed Components
 	TLabel *lTexture;
 	TLabel *lTexturePath;
 	TBitBtn *bOpenTexture;
-	TSpeedButton *SpeedButton1;
 	TLabel *Label9;
 	TLabel *lOPrimitive;
 	TLabel *lOObjectFileName;
@@ -168,6 +167,13 @@ __published:	// IDE-managed Components
 	TBevel *Bevel1;
 	TBevel *Bevel2;
 	TBevel *Bevel3;
+	TBitBtn *bAddPattern;
+	TBitBtn *bAbout;
+	TImageList *ImageList1;
+	TComboBox *cbIoRList;
+	TEdit *eIoR;
+	TBevel *Bevel4;
+	TCheckBox *cbResizeToDisplay;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall bOpenSceneClick(TObject *Sender);
@@ -209,6 +215,12 @@ __published:	// IDE-managed Components
 	void __fastcall cbPatternChangeToChange(TObject *Sender);
 	void __fastcall bSaveImageClick(TObject *Sender);
 	void __fastcall bSelectNewTextureClick(TObject *Sender);
+	void __fastcall bAddPatternClick(TObject *Sender);
+	void __fastcall bAboutClick(TObject *Sender);
+	void __fastcall cbIoRListChange(TObject *Sender);
+	void __fastcall eIoRExit(TObject *Sender);
+	void __fastcall FormResize(TObject *Sender);
+	void __fastcall cbResizeToDisplayClick(TObject *Sender);
 
 private:	// User declarations
 	TTreeNode* cameras = nullptr;
@@ -216,6 +228,8 @@ private:	// User declarations
 	TTreeNode* objects = nullptr;
 
 	int LastSelectionType = 0;
+	int OriginalWidth = 0;
+	int OriginalHeight = 0;
 
 	void ConfigureTabLayoutFor(int);
 	void PopulateTreeView();

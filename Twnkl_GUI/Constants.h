@@ -15,19 +15,19 @@
 
 #ifdef _DEBUG
 #ifdef _GUI
-static const std::wstring __TwnklVersion = L"0.8 GUI (debug)";
+static const std::wstring __TwnklVersion = L"0.9 GUI (debug)";
 #else
-static const std::wstring __TwnklVersion = L"0.8 (debug)";
+static const std::wstring __TwnklVersion = L"0.9 (debug)";
 #endif
 #else
 #ifdef _GUI
-static const std::wstring __TwnklVersion = L"0.8 GUI";
+static const std::wstring __TwnklVersion = L"0.9 GUI";
 #else
-static const std::wstring __TwnklVersion = L"0.8";
+static const std::wstring __TwnklVersion = L"0.9";
 #endif
 #endif
 
-static const std::wstring __TwnklDate = L"April 14th 2023";
+static const std::wstring __TwnklDate = L"August 12th 2023";
 
 static double epsilon = 0.0001;
 
@@ -79,3 +79,18 @@ static std::wstring __SceneChunkPerlin3 = L"{patternperlin3";
 static std::wstring __SceneChunkTexture = L"{patterntexture";
 static std::wstring __SceneChunkFractal = L"{patternfractal";
 static std::wstring __SceneChunkSimplex = L"{patternsimplex";
+
+#ifdef _GUI
+static const int IndexOfRefractionCount = 18;
+static const std::wstring IndexOfRefractionName[IndexOfRefractionCount] =
+											  { L"Vacuum", L"Air", L"Helium", L"Hydrogen", L"Carbon dioxide",
+												L"Water", L"Ethanol", L"Olive oil",
+												L"Ice", L"Fused silica", L"PMMA", L"Window glass", L"Polycarbonate",
+												L"Flint glass", L"Sapphire", L"Cubic zirconia", L"Diamond", L"Moissanite" };
+
+static const double IndexOfRefractionValues[IndexOfRefractionCount] =
+										  {	1.0, 1.000293, 1.000036, 1.000132, 1.00045,
+											1.333, 1.36, 1.47,
+											1.31, 1.46,	1.49, 1.52, 1.58,
+											1.69, 1.77, 2.15, 2.417, 2.65 };
+#endif

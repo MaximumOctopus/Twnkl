@@ -20,15 +20,21 @@
 #include <Vcl.ExtCtrls.hpp>
 
 #include "Object.h"
+#include <System.ImageList.hpp>
+#include <Vcl.ImgList.hpp>
 
 class TfrmAddObject : public TForm
 {
 __published:	// IDE-managed Components
-	TComboBox *cbPrimitive;
 	TBitBtn *bOK;
 	TBitBtn *bCancel;
+	TImageList *ImageList1;
+	TGroupBox *GroupBox1;
+	TLabel *lObjectFileName;
+	TComboBox *cbPrimitive;
 	TEdit *eName;
-	TBevel *Bevel1;
+	TBitBtn *bSelectNewObject;
+	TGroupBox *GroupBox2;
 	TBevel *Bevel2;
 	TComboBox *cbPattern;
 	TPanel *pPattern;
@@ -38,24 +44,24 @@ __published:	// IDE-managed Components
 	TLabel *lPatternColour2;
 	TLabel *lPWidth;
 	TLabel *lPHeight;
+	TLabel *lPScale;
+	TLabel *lPPhase;
+	TLabel *lPFrequency;
+	TLabel *lPLacunarity;
+	TLabel *lPPersistence;
+	TLabel *lPAmplitude;
+	TLabel *lTexture;
+	TLabel *lTexturePath;
 	TEdit *ePWidth;
 	TEdit *ePHeight;
 	TEdit *ePScale;
-	TLabel *lPScale;
-	TLabel *lPPhase;
 	TEdit *ePPhase;
 	TEdit *ePFrequency;
-	TLabel *lPFrequency;
 	TEdit *ePAmplitude;
 	TEdit *ePLacunarity;
-	TLabel *lPLacunarity;
-	TLabel *lPPersistence;
 	TEdit *ePPersistence;
-	TLabel *lPAmplitude;
 	TCheckBox *cbPSimple;
-	TLabel *lTexture;
 	TBitBtn *bOpenTexture;
-	TLabel *lTexturePath;
 	void __fastcall cbPrimitiveChange(TObject *Sender);
 	void __fastcall eNameExit(TObject *Sender);
 	void __fastcall cbPatternChange(TObject *Sender);

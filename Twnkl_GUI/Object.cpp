@@ -202,6 +202,8 @@ std::wstring Object::FriendlyName()
 	case PrimitiveType::Triangle:
 		return L"Triangle";
 	}
+
+	return L"Unknown";
 }
 
 

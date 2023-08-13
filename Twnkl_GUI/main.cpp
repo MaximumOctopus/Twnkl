@@ -18,6 +18,7 @@
 #include "main.h"
 
 #include "Constants.h"
+#include "Model.h"
 #include "Renderer.h"
 #include "SceneLoader.h"
 #include "TransformConfiguration.h"
@@ -38,6 +39,7 @@
 #include "SphericalCheckerboard.h"
 #include "SphericalTexture.h"
 
+#include "FormAbout.h"
 #include "FormAddObject.h"
 #include "FormAddTransform.h"
 #include "FormColourDialog.h"
@@ -78,6 +80,13 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 
 	GSceneLoader = new SceneLoader();
 
+	for (int t = 0; t < IndexOfRefractionCount; t++)
+	{
+		cbIoRList->Items->Add(IndexOfRefractionName[t].c_str());
+	}
+
+	cbIoRList->ItemIndex = 0;
+
     bNewClick(NULL);
 }
 
@@ -93,6 +102,24 @@ void __fastcall TfrmMain::FormDestroy(TObject *Sender)
 }
 
 
+void __fastcall TfrmMain::FormResize(TObject *Sender)
+{
+	if (cbResizeToDisplay->Checked)
+	{
+		GWorld->Cam->ResizeToFit(pRender->Width, pRender->Height);
+
+		eCWidth->Text = GWorld->Cam->Width;
+        eCHeight->Text = GWorld->Cam->Height;
+	}
+}
+
+
+void __fastcall TfrmMain::bAboutClick(TObject *Sender)
+{
+	frmAbout->ShowModal();
+}
+
+
 void __fastcall TfrmMain::bNewClick(TObject *Sender)
 {
 	GWorld->Clear();
@@ -101,13 +128,18 @@ void __fastcall TfrmMain::bNewClick(TObject *Sender)
 	lights->DeleteChildren();
 	objects->DeleteChildren();
 
-    GWorld->DefaultScene();
+	GWorld->DefaultScene();
+
+	OriginalWidth = GWorld->Cam->Width;
+	OriginalHeight = GWorld->Cam->Height;
 
 	PopulateTreeView();
 
 	cameras->GetLastChild()->Selected = true;
 
 	tvObjectsClick(NULL);
+
+	FormResize(NULL);
 }
 
 
@@ -125,22 +157,22 @@ void __fastcall TfrmMain::bOpenSceneClick(TObject *Sender)
 
 		sbMain->SimpleText = file_name.c_str();
 
-		GUIProperties gui;
-		gui.ResizeToDisplay = cbResizeToDisplay->Checked;
-		gui.DisplayWidth = pRender->Width;
-		gui.DisplayHeight = pRender->Height;
-
-		if (GSceneLoader->LoadScene(file_name, 0, gui))
+		if (GSceneLoader->LoadScene(file_name, 0))
 		{
 			if (!GWorld->Finalise())
 			{
 				bRender->Enabled = true;
+
+				OriginalWidth = GWorld->Cam->Width;
+				OriginalHeight = GWorld->Cam->Height;
 
 				PopulateTreeView();
 
 				cameras->GetLastChild()->Selected = true;
 
 				tvObjectsClick(NULL);
+
+              	FormResize(NULL);
 			}
 			else
 			{
@@ -337,7 +369,7 @@ void TfrmMain::BuildCameraPanel(int id)
 	eCFoV->Text = GWorld->Cam->FoV;
 
 	eCWidth->Text = GWorld->Cam->Width;
-    eCHeight->Text = GWorld->Cam->Height;
+	eCHeight->Text = GWorld->Cam->Height;
 
 	eCFromX->Text = GWorld->Cam->From.x;
 	eCFromY->Text = GWorld->Cam->From.y;
@@ -393,6 +425,7 @@ void TfrmMain::BuildObjectPanelFromObject(int id)
 		lOObjectFileName->Visible = false;
 		break;
 	case PrimitiveType::Model:
+	{
 		lOMinimum->Visible = false;
 		lOMaximum->Visible = false;
 		eOMinimum->Visible = false;
@@ -401,7 +434,12 @@ void TfrmMain::BuildObjectPanelFromObject(int id)
 
 		eOObjectFileName->Visible = true;
 		lOObjectFileName->Visible = true;
+
+		Model* m = (Model*)GWorld->Objects[id];
+
+		eOObjectFileName->Caption = m->GetFileName().c_str();
 		break;
+    }
 	case PrimitiveType::Cube:
 	case PrimitiveType::Plane:
 	case PrimitiveType::Sphere:
@@ -435,6 +473,8 @@ void TfrmMain::BuildMaterialPanelFromObject(int id)
 	lSurfaceColourWarning->Visible = HasPattern;
 	tsPattern->TabVisible = HasPattern;
     tsMaterialTransforms->TabVisible = HasPattern;
+
+    bAddPattern->Visible = !HasPattern;
 
 	if (GWorld->Objects[id]->Material->HasPattern)
 	{
@@ -846,6 +886,9 @@ void __fastcall TfrmMain::eOTAngleExit(TObject *Sender)
 				tc.Angle = stod(a);
 
 				GWorld->Objects[id]->TransformReplaceAt(lbObjectTransforms->ItemIndex, tc);
+
+                // needed to ensure "model" objects update bounding boxes
+                GWorld->Objects[id]->PostSetup(id);
             }
 		}
     }
@@ -1120,27 +1163,34 @@ void __fastcall TfrmMain::sbPatternChangeClick(TObject *Sender)
 
 			if (type == 2)
 			{
-				PatternProperties pp;
-                pp.FileName = eNewTexture->Text.c_str();
-
-				pp.Colour1 = GWorld->Objects[id]->Material->SurfacePattern->Colours[0];
-				pp.Colour2 = GWorld->Objects[id]->Material->SurfacePattern->Colours[1];
-
-				AvailablePatterns ap = GSceneLoader->PatternFromObject2(GWorld->Objects[id]->Primitive, cbPatternChangeTo->ItemIndex);
-
-				if (ap == AvailablePatterns::CubicTexture && pp.FileName.find(L'*') != std::wstring::npos)
+				if (cbPatternChangeTo->ItemIndex == 0)  // changed to "none"
 				{
-					ap = AvailablePatterns::CubicMultiTexture;
-                }
-
-				if (ap != AvailablePatterns::None)
-				{
-					delete GWorld->Objects[id]->Material->SurfacePattern;
-
-					GWorld->SetObjectPattern(id, ap, pp);
-
-					BuildMaterialPanelFromObject(id);
+					GWorld->Objects[id]->Material->RemovePattern();
 				}
+				else
+				{
+					PatternProperties pp;
+					pp.FileName = eNewTexture->Text.c_str();
+
+					pp.Colour1 = GWorld->Objects[id]->Material->SurfacePattern->Colours[0];
+					pp.Colour2 = GWorld->Objects[id]->Material->SurfacePattern->Colours[1];
+
+					AvailablePatterns ap = GSceneLoader->PatternFromObject2(GWorld->Objects[id]->Primitive, cbPatternChangeTo->ItemIndex);
+
+					if (ap == AvailablePatterns::CubicTexture && pp.FileName.find(L'*') != std::wstring::npos)
+					{
+						ap = AvailablePatterns::CubicMultiTexture;
+					}
+
+					if (ap != AvailablePatterns::None)
+					{
+						delete GWorld->Objects[id]->Material->SurfacePattern;
+
+						GWorld->SetObjectPattern(id, ap, pp);
+					}
+				}
+
+                BuildMaterialPanelFromObject(id);
 			}
 		}
 	}
@@ -1165,8 +1215,8 @@ void __fastcall TfrmMain::sbAddObjectClick(TObject *Sender)
 	{
 		AddNewObject(frmAddObject->SelectedPrimitive, frmAddObject->SelectedPattern, frmAddObject->Properties, frmAddObject->Name);
 
-        PopulateTreeView();
-    }
+		PopulateTreeView();
+	}
 }
 
 
@@ -1179,13 +1229,18 @@ void __fastcall TfrmMain::sbDeleteObjectClick(TObject *Sender)
 			int id = PTreeObject(tvObjects->Selected->Data)->ID;
 			int type = PTreeObject(tvObjects->Selected->Data)->Type;
 
-			if (type == 2)
+			switch (type)
 			{
+			case 1:
+				delete GWorld->Lights[id];
+				GWorld->Lights.erase(GWorld->Lights.begin() + id);
+				PopulateTreeView();
+				break;
+			case 2:
 				delete GWorld->Objects[id];
-
 				GWorld->Objects.erase(GWorld->Objects.begin() + id);
-
-                PopulateTreeView();
+				PopulateTreeView();
+				break;
 			}
 		}
 	}
@@ -1400,6 +1455,15 @@ void __fastcall TfrmMain::eCWidthExit(TObject *Sender)
 }
 
 
+void __fastcall TfrmMain::cbResizeToDisplayClick(TObject *Sender)
+{
+	if (cbResizeToDisplay->Checked)
+	{
+		FormResize(NULL);
+	}
+}
+
+
 void __fastcall TfrmMain::ePFrequencyExit(TObject *Sender)
 {
 	if (tvObjects->Selected != NULL)
@@ -1587,4 +1651,57 @@ void __fastcall TfrmMain::cbPatternChangeToChange(TObject *Sender)
 		eNewTexture->Visible = false;
 		bSelectNewTexture->Visible = false;
     }
+}
+
+
+void __fastcall TfrmMain::bAddPatternClick(TObject *Sender)
+{
+if (tvObjects->Selected != NULL)
+	{
+		if (tvObjects->Selected->Data != NULL)
+		{
+			int id = PTreeObject(tvObjects->Selected->Data)->ID;
+			int type = PTreeObject(tvObjects->Selected->Data)->Type;
+
+			if (type == 2)
+			{
+				Checkerboard* p = new Checkerboard(L"Checkboard");
+				p->SetColours(Colour(0.6, 0.6, 0.6), Colour(0.2, 0.2, 0.2));
+				GWorld->Objects[id]->Material->SetPattern(p);
+
+                BuildMaterialPanelFromObject(id);
+			}
+		}
+	}
+}
+
+
+void __fastcall TfrmMain::cbIoRListChange(TObject *Sender)
+{
+	eIoR->Text = IndexOfRefractionValues[cbIoRList->ItemIndex];
+
+    eIoRExit(eIoR);
+}
+
+
+void __fastcall TfrmMain::eIoRExit(TObject *Sender)
+{
+	if (tvObjects->Selected != NULL)
+	{
+		if (tvObjects->Selected->Data != NULL)
+		{
+			int id = PTreeObject(tvObjects->Selected->Data)->ID;
+
+			double ior = eIoR->Text.ToDouble();
+
+			if (ior < 1)
+			{
+				ior = 1;
+
+                eIoR->Text = "1";
+            }
+
+			GWorld->Objects[id]->Material->RefractiveIndex = ior;
+		}
+	}
 }
