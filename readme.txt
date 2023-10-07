@@ -8,7 +8,7 @@
   Source code, example scenes and textures
     https://github.com/MaximumOctopus/Twnkl
 
-  August 13th 2023
+  October 7th 2023
 =========================================================================================================
 =========================================================================================================
 
@@ -45,10 +45,9 @@ Console application
 C++ 20 with Visual Studio 2022.
 
 \Twnkl_GUI\
-C++ 17 with C++ Builder 10.4
+C++ 17 with C++ Builder 11.3
 	
-An early alpha, proof of concept, WIP, GUI front-end for Twnkl.
-
+An early beta, proof of concept, WIP, GUI front-end for Twnkl. Mostly built as something for me to play with.
 
 
 =========================================================================================================
@@ -67,7 +66,22 @@ All of my software is free and open source; please consider donating to a local 
 
 Release History
 
-0.9 Console and GUI / August 2023
+0.10 Console and GUI / October 7th 2023
+
+GUI/Console
+Added: Noise option to many of the pattern types (include textures)
+Added: Many new example scenes to show off the new noise options
+
+GUI
+Added: Texture viewer on the right hand panel
+Added: Error/status output viewer for sceneloader and world handler
+Fixed: (GUI) error when loading scenes with arealights
+
+Added: Project information to scene files.
+
+Lots of minor fixes and tweaks.
+
+0.9 Console and GUI / August 13th 2023
 
 GUI
 Added: index of refraction editing and selectable option
@@ -111,7 +125,6 @@ Added three Perlin noise pattern options.
 Added cube checkerboard pattern
 Simplified scene file pattern syntax.
 Scene loader tidy
-
 
 0.5 / March 28th 2023
 
