@@ -16,6 +16,7 @@
 
 class PlanarTexture : public Pattern
 {
+
 	Colour UVColourAt(double, double);
 	std::pair<double, double> PlanarMap(Quaternion&);
 
@@ -25,11 +26,7 @@ public:
 
 	Colour* Texture = nullptr;
 
-	int Width = 0;
-	int Height = 0;
-
-	PlanarTexture(std::wstring);
-	~PlanarTexture();
+	PlanarTexture(bool, std::wstring);
 
 	[[nodiscard]] Colour ColourAt(Object*, Quaternion&) override;
 

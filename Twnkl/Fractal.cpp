@@ -13,24 +13,10 @@
 #include "Fractal.h"
 
 
-Fractal::Fractal(std::wstring name) : Pattern(name)
+Fractal::Fractal(bool noise, std::wstring name) : Pattern(noise, name)
 {
 	Name = name;
     Design = PatternDesign::Fractal;
-
-    noize = new Noise();
-}
-
-
-Fractal::~Fractal()
-{
-    delete noize;
-}
-
-
-void Fractal::SetFALP(double f, double a, double l, double p)
-{
-    noize->SetFALP(f, a, l, p);
 }
 
 

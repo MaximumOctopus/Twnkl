@@ -13,6 +13,7 @@
 
 #pragma once
 
+#include "Constants.h"
 #include "Quaternion.h"
 
 
@@ -41,15 +42,20 @@ class Noise
 
 public:
 
-	double Frequency = 1.0;
-	double Amplitude = 1.0;
-	double Lacunarity = 2.0;
-	double Persistence = 0.5;
+	double Frequency = __DefaultFractalFrequency;
+	double Amplitude = __DefaultFractalAmplitude;
+	double Lacunarity = __DefaultFractalLacunarity;
+	double Persistence = __DefaultFractalPersistence;
+	double Iterations = __DefaultFractalIterations;
 
 	Noise();
 
-	void SetFALP(double, double, double, double);
+	void SetFALPI(double, double, double, double, double);
 
 	double Simplex(double, double, double);
 	double Fractal(Quaternion&);
+
+	Quaternion TripleFractal(Quaternion&, double);
+
+	std::wstring Debug();
 };

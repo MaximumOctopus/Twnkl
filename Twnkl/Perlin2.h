@@ -39,7 +39,7 @@ public:
 	double Scale = __DefaultPerlinScale;
 	int Depth = 7;
 
-	Perlin2(std::wstring);
+	Perlin2(bool, std::wstring);
 	~Perlin2();
 
 	void SetDimensions(double, double, double);

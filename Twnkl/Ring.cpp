@@ -15,7 +15,7 @@
 #include "Ring.h"
 
 
-Ring::Ring(std::wstring name) : Pattern(name)
+Ring::Ring(bool noise, std::wstring name) : Pattern(noise, name)
 {
 	Name = name;
 	Design = PatternDesign::Ring;

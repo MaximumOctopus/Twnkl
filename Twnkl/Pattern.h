@@ -7,12 +7,18 @@
 // 
 // https://github.com/MaximumOctopus/Twnkl
 // 
-// 
+//
+
+// Primitive
+//   PhongMaterial
+//     Pattern     (optional)
+//       Noise     (optional)
 
 #pragma once
 
 #include "Colour.h"
 #include "Object.h"
+#include "Noise.h"
 #include "Quaternion.h"
 #include "TransformConfiguration.h"
 
@@ -32,7 +38,23 @@ protected:
 
 	std::vector<TransformConfiguration> Transforms;
 
+private:
+
 public:
+
+   	Noise* noize = nullptr;
+
+	bool IncludeNoise = false;
+	bool HasTexture = false;
+
+	int TextureWidth = 0;
+	int TextureHeight = 0;
+
+	double PatternWidth = 0;
+	double PatternHeight = 0;
+
+	double pscale = 0.9;
+	double scale = 0.1;
 
 	PatternDesign Design = PatternDesign::None;
 
@@ -45,7 +67,10 @@ public:
 	double Reflectivity[2] = { 0, 0 };
 	bool HasReflectivity = false;
 
-	Pattern(std::wstring);
+	Pattern(bool noise, std::wstring);
+	~Pattern();
+
+	void SetNoise(double, double, double, double, double, double);
 
 	void SetColours(Colour, Colour);
 	void SetReflectivity(double, double);

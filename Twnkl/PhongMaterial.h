@@ -11,6 +11,11 @@
 
 // http://hyperphysics.phy-astr.gsu.edu/hbase/Tables/indrf.html
 
+// Primitive
+//   PhongMaterial
+//     Pattern     (optional)
+//     Noise     (optional)
+
 #pragma once
 
 
@@ -22,6 +27,7 @@ class Pattern;
 #include "Colour.h"
 #include "Formatting.h"
 #include "Pattern.h"
+#include "PatternProperties.h"
 
 
 class PhongMaterial
@@ -49,6 +55,8 @@ public:
 	void SetPattern(Pattern*);
 
 	void RemovePattern();
+
+    PatternProperties GetProperties();
 
 	void ToFile(std::ofstream& ofile);
 };

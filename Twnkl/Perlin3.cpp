@@ -16,7 +16,7 @@
 #include "Perlin3.h"
 
 
-Perlin3::Perlin3(std::wstring name) : Pattern(name)
+Perlin3::Perlin3(bool noise, std::wstring name) : Pattern(noise, name)
 {
 	Name = name;
 	Design = PatternDesign::Perlin3;

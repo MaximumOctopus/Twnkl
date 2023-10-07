@@ -20,10 +20,7 @@ class CubeChecker : public Pattern
 
 public:
 
-	double Width = 0;
-	double Height = 0;
-
-	CubeChecker(std::wstring);
+	CubeChecker(bool, std::wstring);
 
 	void SetDimensions(double, double);
 

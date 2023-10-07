@@ -23,6 +23,8 @@ class Light
 {
 public:
 
+	bool HasSamples = false;
+
 	int Samples = 0;
 
 	Colour Intensity;

@@ -16,6 +16,7 @@
 
 class CylinderTexture : public Pattern
 {
+
 	Colour UVColourAt(double, double);
 
 public:
@@ -24,10 +25,7 @@ public:
 
 	Colour* Texture = nullptr;
 
-	int Width = 0;
-	int Height = 0;
-
-	CylinderTexture(std::wstring);
+	CylinderTexture(bool, std::wstring);
 	~CylinderTexture();
 
 	[[nodiscard]] Colour ColourAt(Object*, Quaternion&) override;

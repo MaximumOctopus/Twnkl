@@ -13,7 +13,7 @@
 #include "Gradient2.h"
 
 
-Gradient2::Gradient2(std::wstring name) : Pattern(name)
+Gradient2::Gradient2(bool noise, std::wstring name) : Pattern(noise, name)
 {
 	Name = name;
 	Design = PatternDesign::Gradient2;

@@ -16,7 +16,7 @@
 #include "Perlin2.h"
 
 
-Perlin2::Perlin2(std::wstring name) : Pattern(name)
+Perlin2::Perlin2(bool noise, std::wstring name) : Pattern(noise, name)
 {
 	Name = name;
 	Design = PatternDesign::Perlin2;

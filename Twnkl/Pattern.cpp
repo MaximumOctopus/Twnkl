@@ -12,9 +12,32 @@
 #include "Pattern.h"
 
 
-Pattern::Pattern(std::wstring name)
+Pattern::Pattern(bool noise, std::wstring name)
 {
+	IncludeNoise = noise;
 
+	if (IncludeNoise)
+	{
+		noize = new Noise();
+	}
+}
+
+
+Pattern::~Pattern()
+{
+	if (IncludeNoise)
+	{
+		delete noize;
+	}
+}
+
+
+void Pattern::SetNoise(double f, double a, double l, double p, double ps, double sl)
+{
+   	noize->SetFALPI(f, a, l, p, 10);
+
+	pscale = ps;
+	scale = sl;
 }
 
 
@@ -105,6 +128,8 @@ void Pattern::TransformReplaceAt(int index, TransformConfiguration tc)
 
 	switch (Transforms[index].Type)
 	{
+	case TransformType::None:
+        break;
 	case TransformType::Scale:
 		Transforms[index].Transform = Matrix4(0, tc.XYZ.x, tc.XYZ.y, tc.XYZ.z);
 		break;
@@ -126,49 +151,79 @@ void Pattern::TransformReplaceAt(int index, TransformConfiguration tc)
 
 std::wstring Pattern::FriendlyName()
 {
+	std::wstring name = L"";
+
 	switch (Design)
 	{
 	case PatternDesign::None:
-		return L"None!";
+		name = L"None!";
+		break;
 	case PatternDesign::Checkerboard:
-		return L"Checkerboard";
+		name = L"Checkerboard";
+		break;
 	case PatternDesign::Gradient:
-		return L"Gradient";
+		name = L"Gradient";
+		break;
 	case PatternDesign::Gradient2:
-		return L"Gradient II";
+		name = L"Gradient II";
+		break;
 	case PatternDesign::Ring:
-		return L"Ring";
+		name = L"Ring";
+		break;
 	case PatternDesign::Stripey:
-		return L"Stripey";
+		name = L"Stripey";
+		break;
 	case PatternDesign::Fractal:
-		return L"Fractal";
+		name = L"Fractal";
+		break;
 	case PatternDesign::Simplex:
-		return L"Simplex";
+		name = L"Simplex";
+		break;
 	case PatternDesign::Perlin1:
-		return L"Perlin";
+		name = L"Perlin";
+		break;
 	case PatternDesign::Perlin2:
-		return L"Perlin II";
+		name = L"Perlin II";
+		break;
 	case PatternDesign::Perlin3:
-		return L"Perlin III";
+		name = L"Perlin III";
+		break;
 	case PatternDesign::CubeCheckerboard:
-		return L"Checkerboard (Cube)";
+		name = L"Checkerboard (Cube)";
+		break;
 	case PatternDesign::CubeTexture:
-		return L"Texture (Cube)";
+		name = L"Texture (Cube)";
+		break;
 	case PatternDesign::CubeMultiTexture:
-		return L"Multi-texture (Cube)";
+		name = L"Multi-texture (Cube)";
+		break;
 	case PatternDesign::CylinderCheckerboard:
-		return L"Checkerboard (Cylinder)";
+		name = L"Checkerboard (Cylinder)";
+		break;
 	case PatternDesign::CylinderTexture:
-		return L"Texture (Cylinder)";
+		name = L"Texture (Cylinder)";
+		break;
 	case PatternDesign::PlanarTexture:
-		return L"Texture (Planar)";
+		name = L"Texture (Planar)";
+		break;
 	case PatternDesign::SphericalCheckerboard:
-		return L"Checkerboard (Sphere)";
+		name = L"Checkerboard (Sphere)";
+		break;
 	case PatternDesign::SphericalTexture:
-		return L"Texture (Spherical)";
+		name = L"Texture (Spherical)";
+		break;
+
+	default:
+		return L"Unknown";
+		break;
 	}
 
-	return L"Unknown";
+	if (IncludeNoise)
+	{
+        name += L" (+ noise)";
+	}
+
+	return name;
 }
 
 

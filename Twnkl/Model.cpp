@@ -4,10 +4,10 @@
 // (c) Paul Alan Freshney 2023
 //
 // paul@freshney.org
-// 
+//
 // https://github.com/MaximumOctopus/Twnkl
-// 
-// 
+//
+//
 
 // represents a collection of triangle objects
 
@@ -209,7 +209,7 @@ void Model::Load(std::wstring file_name)
 						{
 							Vectors.push_back(XYZFrom(s.substr(2) + L" "));
 						}
-						break;	
+						break;
 					}
 					case L'f':					// faces
 					{
@@ -233,7 +233,7 @@ void Model::Load(std::wstring file_name)
 						}
 
 						Objects.push_back(tringle);
-						
+
 						break;
 					}
 					}

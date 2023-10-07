@@ -14,6 +14,8 @@
 
 AreaLight::AreaLight(std::wstring name, double r, double g, double b, double x, double y, double z) : Light(name, r, g, b, x, y, z)
 {
+	HasSamples = true;
+
 	Name = name;
 
 	Intensity.r = r;

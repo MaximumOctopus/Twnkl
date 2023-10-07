@@ -18,7 +18,7 @@ class Gradient2 : public Pattern
 
 public:
 
-	Gradient2(std::wstring);
+	Gradient2(bool, std::wstring);
 
 	[[nodiscard]] Colour ColourAt(Object*, Quaternion&) override;
 

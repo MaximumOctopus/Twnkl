@@ -19,7 +19,7 @@ class Ring : public Pattern
 
 public:
 
-	Ring(std::wstring);
+	Ring(bool, std::wstring);
 
 	[[nodiscard]] Colour ColourAt(Object*, Quaternion&) override;
 

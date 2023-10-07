@@ -40,7 +40,7 @@ public:
 	double Phase = __DefaultPerlinPhase;
 	int Depth = 7;
 
-	Perlin3(std::wstring);
+	Perlin3(bool, std::wstring);
 	~Perlin3();
 
 	void SetDimensions(double, double, double, double);

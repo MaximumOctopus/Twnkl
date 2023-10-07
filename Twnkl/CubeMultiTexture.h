@@ -24,10 +24,7 @@ public:
 
 	Colour* Texture[6] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 	
-	int Width = 0;
-	int Height = 0;
-
-	CubeMultiTexture(std::wstring);
+	CubeMultiTexture(bool, std::wstring);
 	~CubeMultiTexture();
 
 	[[nodiscard]] Colour ColourAt(Object*, Quaternion&) override;

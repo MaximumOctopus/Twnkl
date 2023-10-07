@@ -20,12 +20,7 @@ class Fractal : public Pattern
 
 public:
 
-	Noise* noize;
-
-    Fractal(std::wstring);
-	~Fractal();
-
-	void SetFALP(double, double, double, double);
+    Fractal(bool, std::wstring);
 
 	[[nodiscard]] Colour ColourAt(Object*, Quaternion&) override;
 
