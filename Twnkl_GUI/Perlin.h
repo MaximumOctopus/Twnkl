@@ -38,7 +38,7 @@ public:
 	double Height = 0;
 	double Scale = 1.0;
 
-	Perlin(std::wstring);
+	Perlin(bool, std::wstring);
 	~Perlin();
 
 	void SetDimensions(double, double, double);

@@ -56,6 +56,8 @@ struct TransformConfiguration
 	{
 		switch (Type)
 		{
+		case TransformType::None:
+            break;
 		case TransformType::Scale:
 			Transform = Matrix4(0, XYZ.x, XYZ.y, XYZ.z);
 			break;

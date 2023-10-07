@@ -4,10 +4,10 @@
 // (c) Paul Alan Freshney 2023
 //
 // paul@freshney.org
-// 
+//
 // https://github.com/MaximumOctopus/Twnkl
-// 
-// 
+//
+//
 
 // based on SRombauts' Fractal and Simplex code: https://github.com/SRombauts/SimplexNoise
 
@@ -20,12 +20,14 @@ Noise::Noise()
 }
 
 
-void Noise::SetFALP(double f, double a, double l, double p)
+void Noise::SetFALPI(double f, double a, double l, double p, double i)
 {
-    Frequency = f;
-    Amplitude = a;
-    Lacunarity = l;
-    Persistence = p;
+	Frequency = f;
+	Amplitude = a;
+	Lacunarity = l;
+	Persistence = p;
+
+    Iterations = i;
 }
 
 
@@ -184,14 +186,32 @@ double Noise::Fractal(Quaternion& q)
     double frequency = Frequency;
     double amplitude = Amplitude;
 
-    for (int i = 0; i < 10; i++)
-    {
-        output += (amplitude * Simplex(q.x * frequency, q.y * frequency, q.z * frequency));
-        denom += amplitude;
+	for (int i = 0; i < Iterations; i++)
+	{
+		output += (amplitude * Simplex(q.x * frequency, q.y * frequency, q.z * frequency));
+		denom += amplitude;
 
-        frequency *= Lacunarity;
-        amplitude *= Persistence;
-    }
+		frequency *= Lacunarity;
+		amplitude *= Persistence;
+	}
 
-    return (output / denom);
+	return (output / denom);
+}
+
+
+Quaternion Noise::TripleFractal(Quaternion& q, double scale)
+{
+	double nx = Fractal(q) * scale;
+	q.z++;
+	double ny = Fractal(q) * scale;
+	q.z++;
+	double nz = Fractal(q) * scale;
+
+	return Quaternion(nx, ny, nz, 1);
+}
+
+
+std::wstring Noise::Debug()
+{
+    return L"Hello!";
 }

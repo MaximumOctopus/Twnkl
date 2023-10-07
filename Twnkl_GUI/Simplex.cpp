@@ -13,7 +13,7 @@
 #include "Simplex.h"
 
 
-Simplex::Simplex(std::wstring name) : Pattern(name)
+Simplex::Simplex(bool noise, std::wstring name) : Pattern(noise, name)
 {
     Name = name;
     Design = PatternDesign::Simplex;

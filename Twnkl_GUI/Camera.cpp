@@ -72,7 +72,7 @@ void Camera::SetViewport(Quaternion from, Quaternion to, Quaternion up)
 
 void Camera::ResizeToFit(int gui_width, int gui_height)
 {
-	double scene_aspect = (double)gui_width / double(gui_height);
+	double scene_aspect = (double)Width / double(Height);
 
 	double xratio = (double)gui_width / (double)Width;
 	double yratio = (double)gui_height / (double)Height;

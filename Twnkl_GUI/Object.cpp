@@ -98,6 +98,8 @@ void Object::TransformReplaceAt(int index, TransformConfiguration tc)
 
 	switch (Transforms[index].Type)
 	{
+	case TransformType::None:
+        break;
 	case TransformType::Scale:
 		Transforms[index].Transform = Matrix4(0, tc.XYZ.x, tc.XYZ.y, tc.XYZ.z);
 		break;

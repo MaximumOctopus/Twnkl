@@ -5,10 +5,11 @@
 #include <tchar.h>
 //---------------------------------------------------------------------------
 USEFORM("main.cpp", frmMain);
-USEFORM("FormColourDialog.cpp", frmColourDialog);
 USEFORM("FormAddTransform.cpp", frmAddTransform);
 USEFORM("FormAddObject.cpp", frmAddObject);
 USEFORM("FormAbout.cpp", frmAbout);
+USEFORM("FormColourDialog.cpp", frmColourDialog);
+USEFORM("FormDebug.cpp", frmDebug);
 //---------------------------------------------------------------------------
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {
@@ -21,6 +22,7 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 		Application->CreateForm(__classid(TfrmAddObject), &frmAddObject);
 		Application->CreateForm(__classid(TfrmAddTransform), &frmAddTransform);
 		Application->CreateForm(__classid(TfrmAbout), &frmAbout);
+		Application->CreateForm(__classid(TfrmDebug), &frmDebug);
 		Application->Run();
 	}
 	catch (Exception &exception)

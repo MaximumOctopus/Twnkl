@@ -45,10 +45,13 @@ namespace Utility
 			ofn.lpstrFilter = _T("Twnkl scene files\0*.twnkl\0");
 			break;
 		case 1:
-			ofn.lpstrFilter = _T("PPM image files\0*.png\0");
+			ofn.lpstrFilter = _T("PNG image files\0*.png\0");
 			break;
 		case 2:
 			ofn.lpstrFilter = _T("3D model files\0*.obj\0");
+			break;
+		case 3:
+			ofn.lpstrFilter = _T("PPM image files\0*.ppm\0");
 			break;
 		}
 		ofn.nFilterIndex = 1;

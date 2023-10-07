@@ -4,7 +4,7 @@ object frmColourDialog: TfrmColourDialog
   BorderStyle = bsDialog
   Caption = 'Colour Select'
   ClientHeight = 198
-  ClientWidth = 521
+  ClientWidth = 562
   Color = clBtnFace
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
@@ -26,8 +26,8 @@ object frmColourDialog: TfrmColourDialog
   object Bevel1: TBevel
     Left = 8
     Top = 152
-    Width = 505
-    Height = 9
+    Width = 545
+    Height = 5
     Shape = bsTopLine
   end
   object Label1: TLabel
@@ -46,6 +46,27 @@ object frmColourDialog: TfrmColourDialog
   end
   object Label3: TLabel
     Left = 170
+    Top = 102
+    Width = 6
+    Height = 13
+    Caption = 'B'
+  end
+  object lRValue: TLabel
+    Left = 519
+    Top = 24
+    Width = 7
+    Height = 13
+    Caption = 'R'
+  end
+  object lGValue: TLabel
+    Left = 519
+    Top = 63
+    Width = 7
+    Height = 13
+    Caption = 'G'
+  end
+  object lBValue: TLabel
+    Left = 519
     Top = 102
     Width = 6
     Height = 13
@@ -79,8 +100,8 @@ object frmColourDialog: TfrmColourDialog
     OnChange = tbRedChange
   end
   object BitBtn1: TBitBtn
-    Left = 357
-    Top = 167
+    Left = 397
+    Top = 165
     Width = 75
     Height = 25
     Caption = 'OK'
@@ -88,8 +109,8 @@ object frmColourDialog: TfrmColourDialog
     TabOrder = 3
   end
   object BitBtn2: TBitBtn
-    Left = 438
-    Top = 167
+    Left = 478
+    Top = 165
     Width = 75
     Height = 25
     Cancel = True

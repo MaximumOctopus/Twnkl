@@ -15,19 +15,24 @@
 
 #ifdef _DEBUG
 #ifdef _GUI
-static const std::wstring __TwnklVersion = L"0.9 GUI (debug)";
+static const std::wstring __TwnklVersion = L"0.10 GUI (debug)";
 #else
-static const std::wstring __TwnklVersion = L"0.9 (debug)";
+static const std::wstring __TwnklVersion = L"0.10 (debug)";
 #endif
 #else
 #ifdef _GUI
-static const std::wstring __TwnklVersion = L"0.9 GUI";
+static const std::wstring __TwnklVersion = L"0.10 GUI";
 #else
-static const std::wstring __TwnklVersion = L"0.9";
+static const std::wstring __TwnklVersion = L"0.10";
 #endif
 #endif
 
-static const std::wstring __TwnklDate = L"August 12th 2023";
+static const int __TypeCamera = 0;
+static const int __TypeLight = 1;
+static const int __TypeObject = 2;
+static const int __TypeProject = 3;
+
+static const std::wstring __TwnklDate = L"October 7th 2023";
 
 static double epsilon = 0.0001;
 
@@ -50,6 +55,9 @@ static double __DefaultFractalFrequency = 1.0;
 static double __DefaultFractalAmplitude = 1.0;
 static double __DefaultFractalLacunarity = 2.0;
 static double __DefaultFractalPersistence = 0.5;
+static double __DefaultFractalIterations = 5;
+
+static std::wstring __SceneChunkProject = L"{project";
 
 static std::wstring __SceneChunkCamera = L"{camera";
 static std::wstring __SceneChunkPointLight = L"{pointlight";

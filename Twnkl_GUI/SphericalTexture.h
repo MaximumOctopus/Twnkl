@@ -24,10 +24,7 @@ public:
 
 	Colour* Texture = nullptr;
 
-	int Width = 0;
-	int Height = 0;
-
-	SphericalTexture(std::wstring);
+	SphericalTexture(bool, std::wstring);
 	~SphericalTexture();
 
 	[[nodiscard]] Colour ColourAt(Object*, Quaternion&) override;

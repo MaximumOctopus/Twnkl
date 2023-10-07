@@ -22,6 +22,7 @@
 #include "Object.h"
 #include <System.ImageList.hpp>
 #include <Vcl.ImgList.hpp>
+#include <Vcl.Menus.hpp>
 
 class TfrmMain : public TForm
 {
@@ -141,9 +142,6 @@ __published:	// IDE-managed Components
 	TLabel *lOMaximum;
 	TCheckBox *cbOClosed;
 	TCheckBox *cbPSimple;
-	TLabel *lTexture;
-	TLabel *lTexturePath;
-	TBitBtn *bOpenTexture;
 	TLabel *Label9;
 	TLabel *lOPrimitive;
 	TLabel *lOObjectFileName;
@@ -174,6 +172,44 @@ __published:	// IDE-managed Components
 	TEdit *eIoR;
 	TBevel *Bevel4;
 	TCheckBox *cbResizeToDisplay;
+	TCheckBox *cbPNoise;
+	TBitBtn *bDebug;
+	TLabel *lLSamples;
+	TEdit *eLSamples;
+	TMainMenu *MainMenu1;
+	TMenuItem *File1;
+	TMenuItem *File2;
+	TMenuItem *Render1;
+	TMenuItem *Render2;
+	TMenuItem *Help1;
+	TMenuItem *About1;
+	TMenuItem *Openproject1;
+	TMenuItem *N1;
+	TMenuItem *N2;
+	TMenuItem *Saveproject1;
+	TMenuItem *Exportrender1;
+	TMenuItem *N3;
+	TLabel *lMBAmbience;
+	TLabel *lMBDiffuse;
+	TLabel *lMBReflectivity;
+	TLabel *lMBShininess;
+	TLabel *lMBSpecular;
+	TLabel *lMBTransparency;
+	TTabSheet *tsTexture;
+	TImage *iTexture;
+	TLabel *lTextureDimensions;
+	TLabel *lTexture;
+	TLabel *lTexturePath;
+	TBitBtn *bOpenTexture;
+	TBevel *Bevel5;
+	TTabSheet *tsProject;
+	TMemo *mDescription;
+	TLabel *Label29;
+	TSpeedButton *sbCopyObject;
+	TLabel *Name;
+	TEdit *eOName;
+	TLabel *Label30;
+	TEdit *eAuthor;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall bOpenSceneClick(TObject *Sender);
@@ -221,8 +257,18 @@ __published:	// IDE-managed Components
 	void __fastcall eIoRExit(TObject *Sender);
 	void __fastcall FormResize(TObject *Sender);
 	void __fastcall cbResizeToDisplayClick(TObject *Sender);
+	void __fastcall cbPNoiseClick(TObject *Sender);
+	void __fastcall bDebugClick(TObject *Sender);
+	void __fastcall eLSamplesExit(TObject *Sender);
+	void __fastcall File2Click(TObject *Sender);
+	void __fastcall tbAmbientChange(TObject *Sender);
+	void __fastcall pcMaterialChange(TObject *Sender);
+	void __fastcall sbCopyObjectClick(TObject *Sender);
+	void __fastcall eONameExit(TObject *Sender);
+	void __fastcall bOpenTextureClick(TObject *Sender);
 
 private:	// User declarations
+	TTreeNode* project = nullptr;
 	TTreeNode* cameras = nullptr;
 	TTreeNode* lights = nullptr;
 	TTreeNode* objects = nullptr;
@@ -231,25 +277,30 @@ private:	// User declarations
 	int OriginalWidth = 0;
 	int OriginalHeight = 0;
 
+    void ResetScene();
+
 	void ConfigureTabLayoutFor(int);
 	void PopulateTreeView();
 
 	void AddNewObject(int, int, PatternProperties, std::wstring);
 
+	void BuildProjectPanel();
 	void BuildCameraPanel(int);
-
-    void BuildLightPanel(int);
+	void BuildLightPanel(int);
 
     void BuildObjectPanelFromObject(int);
 	void BuildMaterialPanelFromObject(int);
 	void BuildPatternTab(int);
-    void BuildPatternTabControls(PatternDesign);
+    void BuildPatternTabControls(PatternDesign, bool);
 	void BuildPatternTransformTab(int);
 
 	void BuildTransformTab(int, int);
 
 	void UpdateTransformTab(int, int, int);
 	void UpdatePatternTransformTab(int, int, int);
+
+	void ShowTexture(Colour*, int, int);
+
 public:		// User declarations
 	__fastcall TfrmMain(TComponent* Owner);
 };

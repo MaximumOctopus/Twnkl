@@ -23,9 +23,9 @@ class Colour
 
 public:
 
-	double r = 0;
-	double g = 0;
-	double b = 0;
+	double r = 0;   // 0 to 1
+	double g = 0;   // 0 to 1
+	double b = 0;   // 0 to 1
 
 	[[nodiscard]] Colour Add(Colour&);
 	void AddTo(Colour&);

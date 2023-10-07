@@ -4,12 +4,18 @@
 // (c) Paul Alan Freshney 2023
 //
 // paul@freshney.org
-// 
+//
 // https://github.com/MaximumOctopus/Twnkl
-// 
-// 
+//
+//
 
 #include "PhongMaterial.h"
+
+#include "CubeTexture.h"
+#include "CubeMultiTexture.h"
+#include "CylinderTexture.h"
+#include "PlanarTexture.h"
+#include "SphericalTexture.h"
 
 
 PhongMaterial::PhongMaterial()
@@ -77,4 +83,82 @@ void PhongMaterial::ToFile(std::ofstream& ofile)
 	{
 		SurfacePattern->ToFile(ofile);
 	}
+}
+
+
+PatternProperties PhongMaterial::GetProperties()
+{
+	PatternProperties properties;
+
+	properties.SurfaceColour = SurfaceColour;
+	properties.Ambient         = Ambient;
+	properties.Diffuse         = Diffuse;
+	properties.Reflectivity    = Reflectivity;
+	properties.RefractiveIndex = RefractiveIndex;
+	properties.Shininess       = Shininess;
+	properties.Specular        = Specular;
+	properties.Transparency    = Transparency;
+
+	if (HasPattern)
+	{
+		properties.Colour1 = SurfacePattern->Colours[0];
+		properties.Colour2 = SurfacePattern->Colours[1];
+
+		properties.noise = SurfacePattern->IncludeNoise;
+		properties.npscale = SurfacePattern->pscale;
+		properties.nscale = SurfacePattern->scale;
+
+		if (SurfacePattern->IncludeNoise)
+		{
+			properties.scale = SurfacePattern->scale;
+			properties.phase = SurfacePattern->pscale;
+
+			properties.frequency = SurfacePattern->noize->Frequency;
+			properties.amplitude = SurfacePattern->noize->Amplitude;
+			properties.lacunarity = SurfacePattern->noize->Lacunarity;
+			properties.persistence = SurfacePattern->noize->Persistence;
+			properties.simple = false;
+		}
+
+		switch (SurfacePattern->Design)
+		{
+		case PatternDesign::CubeTexture:
+		{
+			CubeTexture* p = dynamic_cast<CubeTexture*>(SurfacePattern);
+			properties.FileName = p->FileName;
+			break;
+		}
+		case PatternDesign::CubeMultiTexture:
+		{
+			CubeMultiTexture* p = dynamic_cast<CubeMultiTexture*>(SurfacePattern);
+			properties.FileName = p->FileName;
+			break;
+		}
+		case PatternDesign::PlanarTexture:
+		{
+			PlanarTexture* p = dynamic_cast<PlanarTexture*>(SurfacePattern);
+			properties.FileName = p->FileName;
+			break;
+		}
+		case PatternDesign::CylinderTexture:
+		{
+			CylinderTexture* p = dynamic_cast<CylinderTexture*>(SurfacePattern);
+			properties.FileName = p->FileName;
+			break;
+		}
+		case PatternDesign::SphericalTexture:
+		{
+			SphericalTexture* p = dynamic_cast<SphericalTexture*>(SurfacePattern);
+			properties.FileName = p->FileName;
+			break;
+		}
+		}
+
+		properties.u = SurfacePattern->PatternWidth;
+        properties.v = SurfacePattern->PatternHeight;
+	}
+
+//	properties.process = ImageProcess::None;
+
+	return properties;
 }

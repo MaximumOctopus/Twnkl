@@ -19,8 +19,11 @@
 #include "Plane.h"
 #include "Sphere.h"
 
-#ifdef _DEBUG
+#ifdef _GUI
 #include "PointLight.h"
+#endif
+
+#ifdef _DEBUG
 #ifndef _GUI
 #include "TestPattern.h"
 #endif
@@ -68,6 +71,8 @@ World::~World()
 
 void World::Clear()
 {
+    Project.Description = L"";
+
 	for (int t = 0; t < Objects.size(); t++)
 	{
 		delete Objects[t];
@@ -99,7 +104,11 @@ bool World::Finalise()
 		{		
 			if (Objects[t]->Material->RefractiveIndex < epsilon)
 			{
+				#ifdef _GUI
+				Errors.push_back(L"Object (" + std::to_wstring(t) + L", " + Objects[t]->Name + L") has zero IoR! This will cause rendering issues.");
+				#else
 				std::wcout << L"    Object (" << t << L", " << Objects[t]->Name << L") has zero IoR! This will cause rendering issues.\n";
+				#endif
 			}
 
 			if (Objects[t]->Material->HasPattern)
@@ -111,7 +120,11 @@ bool World::Finalise()
 		}
 		else
 		{
+			#ifdef _GUI
+			Errors.push_back(L"Object (" + std::to_wstring(t) + L", " + Objects[t]->Name + L") has no assigned material! This will cause serious rendering issues.");
+			#else
 			std::wcout << L"    Object (" << t << L", " << Objects[t]->Name << L") has no assigned material! This will cause serious rendering issues.\n";
+			#endif
 
 			HasErrors = true;
 		}
@@ -143,7 +156,11 @@ bool World::SaveCanvasToFile(const std::wstring file_name)
 
 	if (file)
 	{
+		#ifdef _GUI
+		Errors.push_back(L"Saving image: " + file_name);
+		#else
 		std::wcout << L"  Saving image        : " << file_name << L"\n";
+		#endif
 
 		file << "P3\n";
 		file << Cam->Width << " " << Cam->Height << "\n";
@@ -165,6 +182,12 @@ bool World::SaveCanvasToFile(const std::wstring file_name)
 
 		return true;
 	}
+
+	#ifdef _GUI
+	Errors.push_back(L"Error writing image :(");
+	#else
+	std::wcout << L"  Error writing image :(" << L"\n";
+	#endif
 
 	return false;
 }
@@ -231,6 +254,8 @@ void World::ToString()
 
 				switch (tc.Type)
 				{
+				case TransformType::None:
+					break;
 				case TransformType::Scale:
 				case TransformType::Translate:
 					std::wcout << L"        XYZ             : " << tc.XYZ.ToString() << L"\n";
@@ -271,6 +296,8 @@ void World::ToString()
 
 					switch (tc.Type)
 					{
+					case TransformType::None:
+						break;
 					case TransformType::Scale:
 					case TransformType::Translate:
 						std::wcout << L"            XYZ             : " << tc.XYZ.ToString() << L"\n";
@@ -300,7 +327,70 @@ void World::ToString()
 }
 
 
-void World::AddNewObject(int primitive, AvailablePatterns pattern, PatternProperties properties, std::wstring name)
+#ifdef _GUI
+void World::MakeCopyOfObjectAt(int id)
+{
+	int primitive = -1;
+
+	switch (Objects[id]->Primitive)
+	{
+	case PrimitiveType::Cone:
+		primitive = 0;
+		break;
+	case PrimitiveType::Cube:
+		primitive = 1;
+		break;
+	case PrimitiveType::Cylinder:
+		primitive = 2;
+		break;
+	case PrimitiveType::Plane:
+		primitive = 4;
+		break;
+	case PrimitiveType::Sphere:
+		primitive = 5;
+		break;
+	}
+
+	if (primitive != -1)
+	{
+		PatternDesign pattern = PatternDesign::None;
+		PatternProperties properties = Objects[id]->Material->GetProperties();
+
+		if (Objects[id]->Material->HasPattern)
+		{
+			pattern = Objects[id]->Material->SurfacePattern->Design;
+		}
+
+		AddNewObject(primitive, pattern, properties, L"copy of " + Objects[id]->Name);
+
+		if (Objects[id]->TransformsCount() != 0)
+		{
+			for (int t = 0; t < Objects[id]->TransformsCount(); t++)
+			{
+				Objects.back()->AddTransform(Objects[id]->TransformAt(t));
+			}
+
+			Objects.back()->ProcessTransforms();
+		}
+
+		if (Objects[id]->Material->HasPattern)
+		{
+			if (Objects[id]->Material->SurfacePattern->TransformsCount() != 0)
+			{
+				for (int t = 0; t < Objects[id]->Material->SurfacePattern->TransformsCount(); t++)
+				{
+					Objects.back()->Material->SurfacePattern->AddTransform(Objects[id]->TransformAt(t));
+				}
+
+				Objects.back()->Material->SurfacePattern->ProcessTransforms();
+			}
+
+		}
+	}
+}
+
+
+void World::AddNewObject(int primitive, PatternDesign pattern, PatternProperties properties, std::wstring name)
 {
 	switch (primitive)
 	{
@@ -348,14 +438,20 @@ void World::AddNewObject(int primitive, AvailablePatterns pattern, PatternProper
 	PhongMaterial* p = new PhongMaterial();
 	Objects.back()->Material = p;
 
-	if (pattern != AvailablePatterns::None)
+	if (pattern != PatternDesign::None)
 	{
-		SetLastObjectPattern(pattern, properties);
+		if (!SetLastObjectPattern(pattern, properties))
+		{
+			#ifdef _GUI
+			Errors.push_back(LastError);
+			#endif
+        }
 	}
 }
+#endif
 
 
-void World::SetLastObjectPattern(AvailablePatterns pattern, PatternProperties properties)
+bool World::SetLastObjectPattern(PatternDesign pattern, PatternProperties properties)
 {
 	bool greyscale = false;
 
@@ -366,224 +462,535 @@ void World::SetLastObjectPattern(AvailablePatterns pattern, PatternProperties pr
 
 	switch (pattern)
 	{
-	case AvailablePatterns::Checker:
-	{
-		Checkerboard* p = new Checkerboard(L"Checkboard");
-		p->SetColours(properties.Colour1, properties.Colour2);
-		GWorld->Objects.back()->Material->SetPattern(p);
+	case PatternDesign::None:
 		break;
+
+	case PatternDesign::Checkerboard:
+		return AddCheckerTo(__LastObject, properties);
+
+	case PatternDesign::Gradient:
+		return AddGradientTo(__LastObject, properties);
+
+	case PatternDesign::Gradient2:
+		return AddGradient2To(__LastObject, properties);
+
+	case PatternDesign::Ring:
+		return AddRingTo(__LastObject, properties);
+
+	case PatternDesign::Stripey:
+		return AddStripeyTo(__LastObject, properties);
+
+	case PatternDesign::Fractal:
+		return AddFractalTo(__LastObject, properties);
+
+	case PatternDesign::Simplex:
+		return AddSimplexTo(__LastObject, properties);
+
+	case PatternDesign::Perlin1:
+		return AddPerlinTo(__LastObject, properties);
+
+	case PatternDesign::Perlin2:
+		return AddPerlin2To(__LastObject, properties);
+
+	case PatternDesign::Perlin3:
+		return AddPerlin3To(__LastObject, properties);
+
+	case PatternDesign::CubeCheckerboard:
+		return AddCheckerCubeTo(__LastObject, properties);
+
+	case PatternDesign::CubeTexture:
+	case PatternDesign::CubeMultiTexture:
+		return AddTextureCubeTo(__LastObject, properties, greyscale);
+
+	case PatternDesign::CylinderCheckerboard:
+		return AddCheckerCylinderTo(__LastObject, properties);
+
+	case PatternDesign::CylinderTexture:
+		return AddTextureCylinderTo(__LastObject, properties, greyscale);
+
+	case PatternDesign::PlanarTexture:
+		return AddTexturePlaneTo(__LastObject, properties, greyscale);
+
+	case PatternDesign::SphericalCheckerboard:
+		return AddCheckerSphereTo(__LastObject, properties);
+
+	case PatternDesign::SphericalTexture:
+		return AddTextureSphereTo(__LastObject, properties, greyscale);
 	}
-	case AvailablePatterns::Gradient:
+
+	return false;
+}
+
+
+bool World::AddCheckerTo(int id, PatternProperties properties)
+{
+	Checkerboard* p = new Checkerboard(properties.noise, L"Checkerboard");
+	p->SetColours(properties.Colour1, properties.Colour2);
+
+	if (properties.noise)
 	{
-		Gradient* p = new Gradient(L"Gradient");
-		p->SetColours(properties.Colour1, properties.Colour2);
+		p->SetNoise(properties.frequency, properties.amplitude, properties.lacunarity, properties.persistence,
+			properties.npscale, properties.nscale);
+	}
+
+	if (id == __LastObject)
+	{
 		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
 	}
-	case AvailablePatterns::Gradient2:
+	else
 	{
-		Gradient2* p = new Gradient2(L"Gradient2");
-		p->SetColours(properties.Colour1, properties.Colour2);
+		GWorld->Objects[id]->Material->SetPattern(p);
+	}
+
+	return true;
+}
+
+
+bool World::AddGradientTo(int id, PatternProperties properties)
+{
+	Gradient* p = new Gradient(false, L"Gradient");
+	p->SetColours(properties.Colour1, properties.Colour2);
+
+	if (id == __LastObject)
+	{
 		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
 	}
-	case AvailablePatterns::Ring:
+	else
 	{
-		Ring* p = new Ring(L"Ring");
-		p->SetColours(properties.Colour1, properties.Colour2);
+		GWorld->Objects[id]->Material->SetPattern(p);
+	}
+
+	return true;
+}
+
+
+bool World::AddGradient2To(int id, PatternProperties properties)
+{
+	Gradient2* p = new Gradient2(false, L"Gradient2");
+	p->SetColours(properties.Colour1, properties.Colour2);
+
+	if (id == __LastObject)
+	{
 		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
 	}
-	case AvailablePatterns::Stripey:
+	else
 	{
-		Stripey* p = new Stripey(L"Stripey");
-		p->SetColours(properties.Colour1, properties.Colour2);
+		GWorld->Objects[id]->Material->SetPattern(p);
+	}
+
+	return true;
+}
+
+
+bool World::AddRingTo(int id, PatternProperties properties)
+{
+	Ring* p = new Ring(false, L"Ring");
+	p->SetColours(properties.Colour1, properties.Colour2);
+
+	if (id == __LastObject)
+	{
 		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
 	}
-	case AvailablePatterns::Perlin:
+	else
 	{
-		Perlin* p = new Perlin(L"Perlin");
-		p->SetColours(properties.Colour1, properties.Colour2);
-		p->SetDimensions(properties.u, properties.v, properties.scale);
+		GWorld->Objects[id]->Material->SetPattern(p);
+	}
+
+	return true;
+}
+
+
+bool World::AddStripeyTo(int id, PatternProperties properties)
+{
+	Stripey* p = new Stripey(properties.noise, L"Stripey");
+	p->SetColours(properties.Colour1, properties.Colour2);
+
+	if (properties.noise)
+	{
+		p->SetNoise(properties.frequency, properties.amplitude, properties.lacunarity, properties.persistence,
+			properties.npscale, properties.nscale);
+	}
+
+	if (id == __LastObject)
+	{
 		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
 	}
-	case AvailablePatterns::Perlin2:
+	else
 	{
-		Perlin2* p = new Perlin2(L"Perlin2");
-		p->SetColours(properties.Colour1, properties.Colour2);
-		p->SetDimensions(properties.u, properties.v, properties.scale);
+		GWorld->Objects[id]->Material->SetPattern(p);
+	}
+
+	return true;
+}
+
+
+bool World::AddPerlinTo(int id, PatternProperties properties)
+{
+	Perlin* p = new Perlin(false, L"Perlin");
+	p->SetColours(properties.Colour1, properties.Colour2);
+	p->SetDimensions(properties.u, properties.v, properties.scale);
+
+	if (id == __LastObject)
+	{
 		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
 	}
-	case AvailablePatterns::Perlin3:
+	else
 	{
-		Perlin3* p = new Perlin3(L"Perlin3");
-		p->SetColours(properties.Colour1, properties.Colour2);
-		p->SetDimensions(properties.u, properties.v, properties.scale, properties.phase);
+		GWorld->Objects[id]->Material->SetPattern(p);
+	}
+
+	return true;
+}
+
+
+bool World::AddPerlin2To(int id, PatternProperties properties)
+{
+	Perlin2* p = new Perlin2(false, L"Perlin2");
+	p->SetColours(properties.Colour1, properties.Colour2);
+	p->SetDimensions(properties.u, properties.v, properties.scale);
+
+	if (id == __LastObject)
+	{
 		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
 	}
-	case AvailablePatterns::Fractal:
+	else
 	{
-		Fractal* p = new Fractal(L"Fractal");
-		p->SetColours(properties.Colour1, properties.Colour2);
-		p->SetFALP(properties.frequency, properties.amplitude, properties.lacunarity, properties.persistence);
+		GWorld->Objects[id]->Material->SetPattern(p);
+	}
+
+	return true;
+}
+
+
+bool World::AddPerlin3To(int id, PatternProperties properties)
+{
+	Perlin3* p = new Perlin3(false, L"Perlin3");
+	p->SetColours(properties.Colour1, properties.Colour2);
+	p->SetDimensions(properties.u, properties.v, properties.scale, properties.phase);
+
+	if (id == __LastObject)
+	{
 		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
 	}
-	case AvailablePatterns::Simplex:
+	else
 	{
-		Simplex* p = new Simplex(L"Simplex");
-		p->SetColours(properties.Colour1, properties.Colour2);
-		p->Simple = properties.simple;
+		GWorld->Objects[id]->Material->SetPattern(p);
+	}
+
+	return true;
+}
+
+
+bool World::AddFractalTo(int id, PatternProperties properties)
+{
+	Fractal* p = new Fractal(false, L"Fractal");
+	p->SetColours(properties.Colour1, properties.Colour2);
+	p->SetNoise(properties.frequency, properties.amplitude, properties.lacunarity, properties.persistence, 1, 1);
+
+	if (id == __LastObject)
+	{
 		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
 	}
-	case AvailablePatterns::SphericalChecker:
+	else
 	{
-		SphericalCheckerboard* p = new SphericalCheckerboard(L"SphericalChecker");
-		p->SetColours(properties.Colour1, properties.Colour2);
-		p->SetDimensions(properties.u, properties.v);
+		GWorld->Objects[id]->Material->SetPattern(p);
+	}
+
+	return true;
+}
+
+
+bool World::AddSimplexTo(int id, PatternProperties properties)
+{
+	Simplex* p = new Simplex(false, L"Simplex");
+	p->SetColours(properties.Colour1, properties.Colour2);
+	p->Simple = properties.simple;
+
+	if (id == __LastObject)
+	{
 		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
 	}
-	case AvailablePatterns::CylinderChecker:
+	else
 	{
-		CylinderCheckerboard* p = new CylinderCheckerboard(L"CylinderChecker");
-		p->SetColours(properties.Colour1, properties.Colour2);
-		p->SetDimensions(properties.u, properties.v);
+		GWorld->Objects[id]->Material->SetPattern(p);
+	}
+
+	return true;
+}
+
+
+bool World::AddCheckerSphereTo(int id, PatternProperties properties)
+{
+	SphericalCheckerboard* p = new SphericalCheckerboard(properties.noise, L"SphericalChecker");
+	p->SetColours(properties.Colour1, properties.Colour2);
+	p->SetDimensions(properties.u, properties.v);
+
+	if (properties.noise)
+	{
+		p->SetNoise(properties.frequency, properties.amplitude, properties.lacunarity, properties.persistence,
+			properties.npscale, properties.nscale);
+	}
+
+	if (id == __LastObject)
+	{
 		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
 	}
-	case AvailablePatterns::CubeChecker:
+	else
 	{
-		CubeChecker* p = new CubeChecker(L"CubeChecker");
-		p->SetColours(properties.Colour1, properties.Colour2);
-		p->SetDimensions(properties.u, properties.v);
+		GWorld->Objects[id]->Material->SetPattern(p);
+	}
+
+	return true;
+}
+
+
+bool World::AddCheckerCylinderTo(int id, PatternProperties properties)
+{
+	CylinderCheckerboard* p = new CylinderCheckerboard(properties.noise, L"CylinderChecker");
+	p->SetColours(properties.Colour1, properties.Colour2);
+	p->SetDimensions(properties.u, properties.v);
+
+	if (properties.noise)
+	{
+		p->SetNoise(properties.frequency, properties.amplitude, properties.lacunarity, properties.persistence,
+			properties.npscale, properties.nscale);
+	}
+
+	if (id == __LastObject)
+	{
 		GWorld->Objects.back()->Material->SetPattern(p);
-		break;
 	}
-	case AvailablePatterns::SphericalTexture:
+	else
 	{
-		SphericalTexture* p = new SphericalTexture(L"SphericalTexture");
+		GWorld->Objects[id]->Material->SetPattern(p);
+	}
+
+	return true;
+}
+
+
+bool World::AddCheckerCubeTo(int id, PatternProperties properties)
+{
+	CubeChecker* p = new CubeChecker(properties.noise, L"CubeChecker");
+	p->SetColours(properties.Colour1, properties.Colour2);
+	p->SetDimensions(properties.u, properties.v);
+
+	if (properties.noise)
+	{
+		p->SetNoise(properties.frequency, properties.amplitude, properties.lacunarity, properties.persistence,
+			properties.npscale, properties.nscale);
+	}
+
+	if (id == __LastObject)
+	{
+		GWorld->Objects.back()->Material->SetPattern(p);
+	}
+	else
+	{
+		GWorld->Objects[id]->Material->SetPattern(p);
+	}
+
+	return true;
+}
+
+
+bool World::AddTextureCubeTo(int id, PatternProperties properties, bool greyscale)
+{
+	if (properties.FileName.find(L'*') != std::wstring::npos)
+	{
+		auto asterisk = properties.FileName.find(L'*');
+
+		wchar_t nums[6] = { L'1', L'2', L'3', L'4', L'5', L'6' };
+
+		CubeMultiTexture* p = new CubeMultiTexture(properties.noise, L"CubeMultiTexture");
+
+		p->FileName = properties.FileName;
+
+		TextureLoader tl;
+
+		for (int t = 0; t < 6; t++)
+		{
+			properties.FileName[asterisk] = nums[t];
+
+			if (tl.Go(&p->Texture[t], properties.FileName, greyscale))
+			{
+				p->TextureWidth = tl.TextureWidth;
+				p->TextureHeight = tl.TextureHeight;
+			}
+			else
+				{
+				LastError = L"error loading texture \"" + properties.FileName + L"\"\n";
+				return false;
+			}
+		}
+
+		if (properties.noise)
+		{
+			p->SetNoise(properties.frequency, properties.amplitude, properties.lacunarity, properties.persistence,
+				properties.npscale, properties.nscale);
+		}
+
+		if (id == __LastObject)
+		{
+			GWorld->Objects.back()->Material->SetPattern(p);
+		}
+		else
+		{
+			GWorld->Objects[id]->Material->SetPattern(p);
+		}
+	}
+	else
+	{
+		CubeTexture* p = new CubeTexture(properties.noise, L"CubicTexture");
+
+		p->FileName = properties.FileName;
 
 		TextureLoader tl;
 
 		if (tl.Go(&p->Texture, properties.FileName, greyscale))
 		{
-			p->Width = tl.TextureWidth;
-			p->Height = tl.TextureHeight;
-
-			GWorld->Objects.back()->Material->SetPattern(p);
-		}
-		else
-		{
-			std::wcout << L"error loading texture \"" << properties.FileName << L"\"\n";
-		}
-
-		break;
-	}
-	case AvailablePatterns::PlanarTexture:
-	{
-		PlanarTexture* p = new PlanarTexture(L"PlanarTexture");
-
-		TextureLoader tl;
-
-		if (tl.Go(&p->Texture, properties.FileName, greyscale))
-		{
-			p->Width = tl.TextureWidth;
-			p->Height = tl.TextureHeight;
-
-			GWorld->Objects.back()->Material->SetPattern(p);
-		}
-		else
-		{
-			std::wcout << L"error loading texture \"" << properties.FileName << L"\"\n";
-		}
-
-		break;
-	}
-	case AvailablePatterns::CubicTexture:
-	{
-		if (properties.FileName.find(L'*') != std::wstring::npos)
-		{
-			auto asterisk = properties.FileName.find(L'*');
-
-			wchar_t nums[6] = { L'1', L'2', L'3', L'4', L'5', L'6' };
-
-			CubeMultiTexture* p = new CubeMultiTexture(L"CubeMultiTexture");
-
+			p->TextureWidth = tl.TextureWidth;
+			p->TextureHeight = tl.TextureHeight;
 			p->FileName = properties.FileName;
 
-			TextureLoader tl;
-
-			for (int t = 0; t < 6; t++)
+			if (properties.noise)
 			{
-				properties.FileName[asterisk] = nums[t];
-
-				if (tl.Go(&p->Texture[t], properties.FileName, greyscale))
-				{
-					p->Width = tl.TextureWidth;
-					p->Height = tl.TextureHeight;
-				}
-				else
-				{
-					std::wcout << L"error loading texture \"" << properties.FileName << L"\"\n";
-				}
+				p->SetNoise(properties.frequency, properties.amplitude, properties.lacunarity, properties.persistence,
+					properties.npscale, properties.nscale);
 			}
 
-			GWorld->Objects.back()->Material->SetPattern(p);
-		}
-		else
-		{
-			CubeTexture* p = new CubeTexture(L"CubicTexture");
-
-			p->FileName = properties.FileName;
-
-			TextureLoader tl;
-
-			if (tl.Go(&p->Texture, properties.FileName, greyscale))
+			if (id == __LastObject)
 			{
-				p->Width = tl.TextureWidth;
-				p->Height = tl.TextureHeight;
-
 				GWorld->Objects.back()->Material->SetPattern(p);
 			}
 			else
 			{
-				std::wcout << L"error loading texture \"" << properties.FileName << L"\"\n";
+				GWorld->Objects[id]->Material->SetPattern(p);
 			}
 		}
-
-		break;
-	}
-	case AvailablePatterns::CylinderTexture:
-	{
-		CylinderTexture* p = new CylinderTexture(L"CylinderTexture");
-
-		TextureLoader tl;
-
-		if (tl.Go(&p->Texture, properties.FileName, greyscale))
+		else
 		{
-			p->Width = tl.TextureWidth;
-			p->Height = tl.TextureHeight;
+			LastError = L"error loading texture \"" + properties.FileName + L"\"\n";
+			return false;
+		}
+	}
 
+	return true;
+}
+
+
+bool World::AddTextureCylinderTo(int id, PatternProperties properties, bool greyscale)
+{
+	CylinderTexture* p = new CylinderTexture(properties.noise, L"CylinderTexture");
+
+	TextureLoader tl;
+
+	if (tl.Go(&p->Texture, properties.FileName, greyscale))
+	{
+		p->TextureWidth = tl.TextureWidth;
+		p->TextureHeight = tl.TextureHeight;
+		p->FileName = properties.FileName;
+
+		if (properties.noise)
+		{
+			p->SetNoise(properties.frequency, properties.amplitude, properties.lacunarity, properties.persistence,
+				properties.npscale, properties.nscale);
+		}
+
+		if (id == __LastObject)
+		{
 			GWorld->Objects.back()->Material->SetPattern(p);
 		}
 		else
 		{
-			std::wcout << L"error loading texture \"" << properties.FileName << L"\"\n";
+			GWorld->Objects[id]->Material->SetPattern(p);
 		}
+	}
+	else
+	{
+		LastError = L"error loading texture \"" + properties.FileName + L"\"\n";
+		return false;
+	}
 
-		break;
-	}
-	}
+	return true;
 }
 
 
-void World::SetObjectPattern(int id, AvailablePatterns pattern, PatternProperties properties)
+bool World::AddTexturePlaneTo(int id, PatternProperties properties, bool greyscale)
+{
+	PlanarTexture* p = new PlanarTexture(properties.noise, L"PlanarTexture");
+
+	TextureLoader tl;
+
+	if (tl.Go(&p->Texture, properties.FileName, greyscale))
+	{
+		p->TextureWidth = tl.TextureWidth;
+		p->TextureHeight = tl.TextureHeight;
+		p->FileName = properties.FileName;
+
+		if (properties.noise)
+		{
+			p->SetNoise(properties.frequency, properties.amplitude, properties.lacunarity, properties.persistence,
+				properties.npscale, properties.nscale);
+		}
+
+		if (id == __LastObject)
+		{
+			GWorld->Objects.back()->Material->SetPattern(p);
+		}
+		else
+		{
+			GWorld->Objects[id]->Material->SetPattern(p);
+		}
+	}
+	else
+	{
+		LastError = L"error loading texture \"" + properties.FileName + L"\"\n";
+		return false;
+	}
+
+	return true;
+}
+
+
+bool World::AddTextureSphereTo(int id, PatternProperties properties, bool greyscale)
+{
+	SphericalTexture* p = new SphericalTexture(properties.noise, L"SphericalTexture");
+
+	TextureLoader tl;
+
+	if (tl.Go(&p->Texture, properties.FileName, greyscale))
+	{
+		p->TextureWidth = tl.TextureWidth;
+		p->TextureHeight = tl.TextureHeight;
+        p->FileName = properties.FileName;
+
+		if (properties.noise)
+		{
+			p->SetNoise(properties.frequency, properties.amplitude, properties.lacunarity, properties.persistence,
+				properties.npscale, properties.nscale);
+		}
+
+		if (id == __LastObject)
+		{
+			GWorld->Objects.back()->Material->SetPattern(p);
+		}
+		else
+		{
+			GWorld->Objects[id]->Material->SetPattern(p);
+		}
+	}
+	else
+	{
+		LastError = L"error loading texture \"" + properties.FileName + L"\"\n";
+		return false;
+	}
+
+	return true;
+}
+
+
+bool World::SetObjectPattern(int id, PatternDesign pattern, PatternProperties properties)
 {
 	bool greyscale = false;
 
@@ -594,198 +1001,182 @@ void World::SetObjectPattern(int id, AvailablePatterns pattern, PatternPropertie
 
 	switch (pattern)
 	{
-	case AvailablePatterns::Checker:
-	{
-		Checkerboard* p = new Checkerboard(L"Checkboard");
-		p->SetColours(properties.Colour1, properties.Colour2);
-		GWorld->Objects[id]->Material->SetPattern(p);
+	case PatternDesign::None:
 		break;
+
+	case PatternDesign::Checkerboard:
+		return AddCheckerTo(id, properties);
+
+	case PatternDesign::Gradient:
+		return AddGradientTo(id, properties);
+
+	case PatternDesign::Gradient2:
+		return AddGradient2To(id, properties);
+
+	case PatternDesign::Ring:
+		return AddRingTo(id, properties);
+
+	case PatternDesign::Stripey:
+		return AddStripeyTo(id, properties);
+
+	case PatternDesign::Perlin1:
+		return AddPerlinTo(id, properties);
+
+	case PatternDesign::Perlin2:
+		return AddPerlin2To(id, properties);
+
+	case PatternDesign::Perlin3:
+		return AddPerlin3To(id, properties);
+
+	case PatternDesign::Fractal:
+		return AddFractalTo(id, properties);
+
+	case PatternDesign::Simplex:
+		return AddSimplexTo(id, properties);
+
+	case PatternDesign::SphericalCheckerboard:
+		return AddCheckerSphereTo(id, properties);
+
+	case PatternDesign::CylinderCheckerboard:
+		return AddCheckerCylinderTo(id, properties);
+
+	case PatternDesign::CubeCheckerboard:
+		return AddCheckerCubeTo(id, properties);
+
+	case PatternDesign::SphericalTexture:
+		return AddTextureSphereTo(id, properties, greyscale);
+
+	case PatternDesign::PlanarTexture:
+		return AddTexturePlaneTo(id, properties, greyscale);
+
+	case PatternDesign::CubeTexture:
+	case PatternDesign::CubeMultiTexture:
+		return AddTextureCubeTo(id, properties, greyscale);
+
+	case PatternDesign::CylinderTexture:
+		return AddTextureCylinderTo(id, properties, greyscale);
 	}
-	case AvailablePatterns::Gradient:
-	{
-		Gradient* p = new Gradient(L"Gradient");
-		p->SetColours(properties.Colour1, properties.Colour2);
-		GWorld->Objects[id]->Material->SetPattern(p);
-		break;
-	}
-	case AvailablePatterns::Gradient2:
-	{
-		Gradient2* p = new Gradient2(L"Gradient2");
-		p->SetColours(properties.Colour1, properties.Colour2);
-		GWorld->Objects[id]->Material->SetPattern(p);
-		break;
-	}
-	case AvailablePatterns::Ring:
-	{
-		Ring* p = new Ring(L"Ring");
-		p->SetColours(properties.Colour1, properties.Colour2);
-		GWorld->Objects[id]->Material->SetPattern(p);
-		break;
-	}
-	case AvailablePatterns::Stripey:
-	{
-		Stripey* p = new Stripey(L"Stripey");
-		p->SetColours(properties.Colour1, properties.Colour2);
-		GWorld->Objects[id]->Material->SetPattern(p);
-		break;
-	}
-	case AvailablePatterns::Perlin:
-	{
-		Perlin* p = new Perlin(L"Perlin");
-		p->SetColours(properties.Colour1, properties.Colour2);
-		p->SetDimensions(properties.u, properties.v, properties.scale);
-		Objects[id]->Material->SetPattern(p);
-		break;
-	}
-	case AvailablePatterns::Perlin2:
-	{
-		Perlin2* p = new Perlin2(L"Perlin2");
-		p->SetColours(properties.Colour1, properties.Colour2);
-		p->SetDimensions(properties.u, properties.v, properties.scale);
-		GWorld->Objects[id]->Material->SetPattern(p);
-		break;
-	}
-	case AvailablePatterns::Perlin3:
-	{
-		Perlin3* p = new Perlin3(L"Perlin3");
-		p->SetColours(properties.Colour1, properties.Colour2);
-		p->SetDimensions(properties.u, properties.v, properties.scale, properties.phase);
-		GWorld->Objects[id]->Material->SetPattern(p);
-		break;
-	}
-	case AvailablePatterns::Fractal:
-	{
-		Fractal* p = new Fractal(L"Fractal");
-		p->SetColours(properties.Colour1, properties.Colour2);
-		p->SetFALP(properties.frequency, properties.amplitude, properties.lacunarity, properties.persistence);
-		GWorld->Objects[id]->Material->SetPattern(p);
-		break;
-	}
-	case AvailablePatterns::Simplex:
-	{
-		Simplex* p = new Simplex(L"Simplex");
-		p->SetColours(properties.Colour1, properties.Colour2);
-		p->Simple = properties.simple;
-		GWorld->Objects[id]->Material->SetPattern(p);
-		break;
-	}
-	case AvailablePatterns::SphericalChecker:
-	{
-		SphericalCheckerboard* p = new SphericalCheckerboard(L"SphericalChecker");
-		p->SetColours(properties.Colour1, properties.Colour2);
-		p->SetDimensions(properties.u, properties.v);
-		GWorld->Objects[id]->Material->SetPattern(p);
-		break;
-	}
-	case AvailablePatterns::CylinderChecker:
-	{
-		CylinderCheckerboard* p = new CylinderCheckerboard(L"CylinderChecker");
-		p->SetColours(properties.Colour1, properties.Colour2);
-		p->SetDimensions(properties.u, properties.v);
-		GWorld->Objects[id]->Material->SetPattern(p);
-		break;
-	}
-	case AvailablePatterns::CubeChecker:
-	{
-		CubeChecker* p = new CubeChecker(L"CubeChecker");
-		p->SetColours(properties.Colour1, properties.Colour2);
-		p->SetDimensions(properties.u, properties.v);
-		GWorld->Objects[id]->Material->SetPattern(p);
-		break;
-	}
-	case AvailablePatterns::SphericalTexture:
-	{
-		SphericalTexture* p = new SphericalTexture(L"SphericalTexture");
 
-		p->FileName = properties.FileName;
-
-		TextureLoader tl;
-
-		if (tl.Go(&p->Texture, properties.FileName, greyscale))
-		{
-			p->Width = tl.TextureWidth;
-			p->Height = tl.TextureHeight;
-
-			Objects[id]->Material->SetPattern(p);
-		}
-		else
-		{
-			std::wcout << L"error loading texture \"" << properties.FileName << L"\"\n";
-		}
-
-		break;
-	}
-	case AvailablePatterns::PlanarTexture:
-	{
-		PlanarTexture* p = new PlanarTexture(L"PlanarTexture");
-
-		p->FileName = properties.FileName;
-
-		TextureLoader tl;
-
-		if (tl.Go(&p->Texture, properties.FileName, greyscale))
-		{
-			p->Width = tl.TextureWidth;
-			p->Height = tl.TextureHeight;
-
-			Objects[id]->Material->SetPattern(p);
-		}
-		else
-		{
-			std::wcout << L"error loading texture \"" << properties.FileName << L"\"\n";
-		}
-
-		break;
-	}
-	case AvailablePatterns::CubicTexture:
-	{
-		CubeTexture* p = new CubeTexture(L"CubicTexture");
-		p->FileName = properties.FileName;
-
-		TextureLoader tl;
-
-		if (tl.Go(&p->Texture, properties.FileName, greyscale))
-		{
-			p->Width = tl.TextureWidth;
-			p->Height = tl.TextureHeight;
-
-			Objects[id]->Material->SetPattern(p);
-		}
-		else
-		{
-			std::wcout << L"error loading texture \"" << properties.FileName << L"\"\n";
-		}
-
-
-		break;
-	}
-	case AvailablePatterns::CylinderTexture:
-	{
-		CylinderTexture* p = new CylinderTexture(L"CylinderTexture");
-
-		p->FileName = properties.FileName;
-
-		TextureLoader tl;
-
-		if (tl.Go(&p->Texture, properties.FileName, greyscale))
-		{
-			p->Width = tl.TextureWidth;
-			p->Height = tl.TextureHeight;
-
-			GWorld->Objects.back()->Material->SetPattern(p);
-		}
-		else
-		{
-			std::wcout << L"error loading texture \"" << properties.FileName << L"\"\n";
-		}
-
-		break;
-	}
-	}
+	return true;
 }
 
 
 #ifdef _GUI
+void World::ReplaceTexture(int id, std::wstring file_name)
+{
+	TextureLoader tl;
+
+	switch(Objects[id]->Material->SurfacePattern->Design)
+	{
+	case PatternDesign::CubeTexture:
+	{
+		CubeTexture* p = dynamic_cast<CubeTexture*>(GWorld->Objects[id]->Material->SurfacePattern);
+
+		if (p->Texture != nullptr)
+		{
+			delete[] p->Texture;
+		}
+
+		if (tl.Go(&p->Texture, file_name, false))
+		{
+			p->TextureWidth = tl.TextureWidth;
+			p->TextureHeight = tl.TextureHeight;
+			p->FileName = file_name;
+			return;
+		}
+		break;
+	}
+	case PatternDesign::CubeMultiTexture:
+	{
+		if (file_name.find(L'*') != std::wstring::npos)
+		{
+			auto asterisk = file_name.find(L'*');
+
+			wchar_t nums[6] = { L'1', L'2', L'3', L'4', L'5', L'6' };
+
+			CubeMultiTexture* p = dynamic_cast<CubeMultiTexture*>(GWorld->Objects[id]->Material->SurfacePattern);
+
+			p->FileName = file_name;
+
+			for (int t = 0; t < 6; t++)
+			{
+				file_name[asterisk] = nums[t];
+
+				if (tl.Go(&p->Texture[t], file_name, false))
+				{
+					p->TextureWidth = tl.TextureWidth;
+					p->TextureHeight = tl.TextureHeight;
+				}
+				else
+				{
+					Errors.push_back(L"error loading texture \"" + file_name + L"\"");
+					return;
+				}
+			}
+			return;
+		}
+		break;
+	}
+	case PatternDesign::CylinderTexture:
+	{
+		CylinderTexture* p = dynamic_cast<CylinderTexture*>(GWorld->Objects[id]->Material->SurfacePattern);
+
+		if (p->Texture != nullptr)
+		{
+			delete[] p->Texture;
+		}
+
+		if (tl.Go(&p->Texture, file_name, false))
+		{
+			p->TextureWidth = tl.TextureWidth;
+			p->TextureHeight = tl.TextureHeight;
+			p->FileName = file_name;
+			return;
+		}
+		break;
+	}
+	case PatternDesign::PlanarTexture:
+	{
+		PlanarTexture* p = dynamic_cast<PlanarTexture*>(GWorld->Objects[id]->Material->SurfacePattern);
+
+		if (p->Texture != nullptr)
+		{
+			delete[] p->Texture;
+		}
+
+		if (tl.Go(&p->Texture, file_name, false))
+		{
+			p->TextureWidth = tl.TextureWidth;
+			p->TextureHeight = tl.TextureHeight;
+			p->FileName = file_name;
+			return;
+		}
+		break;
+	}
+	case PatternDesign::SphericalTexture:
+	{
+		SphericalTexture* p = dynamic_cast<SphericalTexture*>(GWorld->Objects[id]->Material->SurfacePattern);
+
+		if (p->Texture != nullptr)
+		{
+			delete[] p->Texture;
+		}
+
+		if (tl.Go(&p->Texture, file_name, false))
+		{
+			p->TextureWidth = tl.TextureWidth;
+			p->TextureHeight = tl.TextureHeight;
+			p->FileName = file_name;
+			return;
+		}
+		break;
+	}
+	}
+
+	Errors.push_back(L"error loading texture \"" + file_name + L"\"");
+}
+
+
 void World::DefaultScene()
 {
 	PointLight* l = new PointLight(L"pointlight", 1.0, 1.0, 1.0, -4.9, 4.9, -1);
@@ -797,7 +1188,7 @@ void World::DefaultScene()
 	mf->Specular = 0.0;
 	p->Material = mf;
 
-	Checkerboard* cp = new Checkerboard(L"cbfloor");
+	Checkerboard* cp = new Checkerboard(false, L"cbfloor");
 	cp->SetColours(Colour(0.35, 0.35, 0.35), Colour(0.65, 0.65, 0.65));
 	p->Material->SetPattern(cp);
 
@@ -810,7 +1201,7 @@ void World::DefaultScene()
 	s->Material = sm;
 	s->AddTransform({ TransformType::Translate, Matrix4(1, 4.6, 0.4, 1.0), Quaternion(4.6, 0.4, 1.0, 1.0), 0 });
 
-	SphericalCheckerboard* sc = new SphericalCheckerboard(L"scball");
+	SphericalCheckerboard* sc = new SphericalCheckerboard(false, L"scball");
 	sc->SetColours(Colour(0.8, 0.4, 0.0), Colour(0.2, 0.1, 0.0));
 	sc->SetDimensions(16, 8);
 
@@ -880,7 +1271,7 @@ void World::DefaultWorld(int testid)
 	{
 		Objects[0]->Material->Ambient = 1.0;
 
-		TestPattern* p = new TestPattern(L"TestPattern");
+		TestPattern* p = new TestPattern(false, L"TestPattern");
 		p->ProcessTransforms();
 
 		Objects[0]->Material->SetPattern(p);

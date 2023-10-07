@@ -18,7 +18,7 @@ class Checkerboard : public Pattern
 
 public:
 
-	Checkerboard(std::wstring);
+	Checkerboard(bool, std::wstring);
 
 	[[nodiscard]] Colour ColourAt(Object*, Quaternion&) override;
 

@@ -16,14 +16,12 @@
 
 class CylinderCheckerboard : public Pattern
 {
+
 	Colour UVColourAt(double, double);
 
 public:
 
-	double Width = 0;
-	double Height = 0;
-
-	CylinderCheckerboard(std::wstring);
+	CylinderCheckerboard(bool, std::wstring);
 
 	void SetDimensions(double, double);
 

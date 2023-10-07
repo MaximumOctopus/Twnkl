@@ -33,6 +33,9 @@ __published:	// IDE-managed Components
 	TLabel *Label1;
 	TLabel *Label2;
 	TLabel *Label3;
+	TLabel *lRValue;
+	TLabel *lGValue;
+	TLabel *lBValue;
 	void __fastcall tbRedChange(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
 private:	// User declarations

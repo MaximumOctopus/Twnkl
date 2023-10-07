@@ -11,11 +11,13 @@
 
 #pragma once
 
+#include "Noise.h"
 #include "Pattern.h"
 
 
 class CubeTexture : public Pattern
 {
+
 	Colour UVColourAt(double, double);
 
 public:
@@ -24,10 +26,7 @@ public:
 
 	Colour* Texture = nullptr;
 
-	int Width = 0;
-	int Height = 0;
-
-	CubeTexture(std::wstring);
+	CubeTexture(bool, std::wstring);
 	~CubeTexture();
 
 	[[nodiscard]] Colour ColourAt(Object*, Quaternion&) override;

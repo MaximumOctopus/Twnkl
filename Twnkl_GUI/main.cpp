@@ -25,9 +25,11 @@
 #include "Utility.h"
 #include "World.h"
 
+#include "AreaLight.h"
 #include "Checkerboard.h"
 #include "CubeCheckerboard.h"
 #include "CubeTexture.h"
+#include "CubeMultiTexture.h"
 #include "CylinderCheckerboard.h"
 #include "CylinderTexture.h"
 #include "Fractal.h"
@@ -43,6 +45,7 @@
 #include "FormAddObject.h"
 #include "FormAddTransform.h"
 #include "FormColourDialog.h"
+#include "FormDebug.h"
 
 TfrmMain *frmMain;
 
@@ -52,7 +55,7 @@ extern SceneLoader* GSceneLoader;
 
 typedef struct TreeObject
 {
-	int Type = 0;
+	int Type = -1;
 	int ID = 0;
 } TTreeObject;
 
@@ -70,9 +73,16 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 {
 	std::wstring c = L"Twnkl " + __TwnklVersion + L" :: " + __TwnklDate;
 
+	project = tvObjects->Items->Add(NULL, "Twnkl");
 	cameras = tvObjects->Items->Add(NULL, "Cameras");
 	lights = tvObjects->Items->Add(NULL, "Lights");
 	objects = tvObjects->Items->Add(NULL, "Objects");
+
+	TTreeObjectPtr = new TTreeObject;
+	TTreeObjectPtr->Type = __TypeProject;
+	TTreeObjectPtr->ID = 0;
+
+	tvObjects->Items->AddChildObject(project, "Project", TTreeObjectPtr);
 
 	Caption = c.c_str();
 
@@ -87,7 +97,7 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 
 	cbIoRList->ItemIndex = 0;
 
-    bNewClick(NULL);
+    ResetScene();
 }
 
 
@@ -114,6 +124,18 @@ void __fastcall TfrmMain::FormResize(TObject *Sender)
 }
 
 
+void __fastcall TfrmMain::File2Click(TObject *Sender)
+{
+	Application->Free();
+}
+
+
+void __fastcall TfrmMain::bDebugClick(TObject *Sender)
+{
+    frmDebug->ShowModal();
+}
+
+
 void __fastcall TfrmMain::bAboutClick(TObject *Sender)
 {
 	frmAbout->ShowModal();
@@ -122,24 +144,10 @@ void __fastcall TfrmMain::bAboutClick(TObject *Sender)
 
 void __fastcall TfrmMain::bNewClick(TObject *Sender)
 {
-	GWorld->Clear();
-
-	//cameras->DeleteChildren();
-	lights->DeleteChildren();
-	objects->DeleteChildren();
-
-	GWorld->DefaultScene();
-
-	OriginalWidth = GWorld->Cam->Width;
-	OriginalHeight = GWorld->Cam->Height;
-
-	PopulateTreeView();
-
-	cameras->GetLastChild()->Selected = true;
-
-	tvObjectsClick(NULL);
-
-	FormResize(NULL);
+	if (MessageDlg("Are you sure?", mtWarning, mbOKCancel, 0) == mrOk)
+	{
+		ResetScene();
+	}
 }
 
 
@@ -149,6 +157,12 @@ void __fastcall TfrmMain::bOpenSceneClick(TObject *Sender)
 
 	if (!file_name.empty())
 	{
+		if (!cbResizeToDisplay->Checked)
+		{
+			GWorld->Cam->Width = 0;
+            GWorld->Cam->Height = 0;
+		}
+
 		GWorld->Clear();
 
 		cameras->DeleteChildren();
@@ -166,9 +180,14 @@ void __fastcall TfrmMain::bOpenSceneClick(TObject *Sender)
 				OriginalWidth = GWorld->Cam->Width;
 				OriginalHeight = GWorld->Cam->Height;
 
+				iRender->Width = OriginalWidth;
+				iRender->Height = OriginalHeight;
+
+				BuildProjectPanel();
+
 				PopulateTreeView();
 
-				cameras->GetLastChild()->Selected = true;
+				project->GetLastChild()->Selected = true;
 
 				tvObjectsClick(NULL);
 
@@ -247,26 +266,40 @@ void __fastcall TfrmMain::tvObjectsClick(TObject *Sender)
 	{
 		if (tvObjects->Selected->Data != NULL)
 		{
-            ConfigureTabLayoutFor(PTreeObject(tvObjects->Selected->Data)->Type);
+			ConfigureTabLayoutFor(PTreeObject(tvObjects->Selected->Data)->Type);
 
             int id = PTreeObject(tvObjects->Selected->Data)->ID;
 			int type = PTreeObject(tvObjects->Selected->Data)->Type;
 
 			switch (type)
 			{
-			case 0:         // camera
+			case __TypeCamera:
 				BuildCameraPanel(0);
 				break;
-			case 1:         // light
-                BuildLightPanel(id);
+			case __TypeLight:
+				BuildLightPanel(id);
 				break;
-			case 2:         // object
+			case __TypeObject:
 			{
 				BuildObjectPanelFromObject(id);
 				BuildMaterialPanelFromObject(id);
 				BuildTransformTab(type, id);
+
+				if (GWorld->Objects[id]->Material->HasPattern)
+				{
+					BuildPatternTransformTab(id);
+				}
+				else
+				{
+					lbPatternTransforms->Clear();
+				}
 				break;
 			}
+			case __TypeProject:
+			{
+				BuildProjectPanel();
+                break;
+            }
 			}
 		}
 	}
@@ -295,30 +328,66 @@ void __fastcall TfrmMain::sMaterialColourMouseDown(TObject *Sender, TMouseButton
 }
 
 
+void TfrmMain::ResetScene()
+{
+	GWorld->Clear();
+
+	//cameras->DeleteChildren();
+
+	lights->DeleteChildren();
+	objects->DeleteChildren();
+
+	GWorld->DefaultScene();
+
+	OriginalWidth = GWorld->Cam->Width;
+	OriginalHeight = GWorld->Cam->Height;
+
+	PopulateTreeView();
+
+	project->GetLastChild()->Selected = true;
+
+	tvObjectsClick(NULL);
+
+	FormResize(NULL);
+}
+
+
+
 void TfrmMain::ConfigureTabLayoutFor(int type)
 {
 	switch (type)
 	{
-	case 0:         // camera
+	case __TypeCamera:
+		tsProject->TabVisible = false;
 		tsCamera->TabVisible = true;
 		tsLight->TabVisible = false;
 		tsObject->TabVisible = false;
 		tsTransforms->TabVisible = false;
 		tsMaterial->TabVisible = false;
 		break;
-	case 1:         // light
+	case __TypeLight:
+		tsProject->TabVisible = false;
 		tsCamera->TabVisible = false;
 		tsLight->TabVisible = true;
 		tsObject->TabVisible = false;
 		tsTransforms->TabVisible = false;
 		tsMaterial->TabVisible = false;
 		break;
-	case 2:         // object
+	case __TypeObject:
+		tsProject->TabVisible = false;
 		tsCamera->TabVisible = false;
 		tsLight->TabVisible = false;
 		tsObject->TabVisible = true;
 		tsTransforms->TabVisible = true;
 		tsMaterial->TabVisible = true;
+		break;
+	case __TypeProject:
+		tsProject->TabVisible = true;
+		tsCamera->TabVisible = false;
+		tsLight->TabVisible = false;
+		tsObject->TabVisible = false;
+		tsTransforms->TabVisible = false;
+		tsMaterial->TabVisible = false;
 		break;
 	}
 
@@ -347,7 +416,7 @@ void TfrmMain::PopulateTreeView()
 	for (int t = 0; t < GWorld->Lights.size(); t++)
 	{
 		TTreeObjectPtr = new TTreeObject;
-		TTreeObjectPtr->Type = 1;
+		TTreeObjectPtr->Type = __TypeLight;
 		TTreeObjectPtr->ID = t;
 
 		tvObjects->Items->AddChildObject(lights, GWorld->Lights[t]->Name.c_str(), TTreeObjectPtr);
@@ -356,11 +425,18 @@ void TfrmMain::PopulateTreeView()
 	for (int t = 0; t < GWorld->Objects.size(); t++)
 	{
 		TTreeObjectPtr = new TTreeObject;
-		TTreeObjectPtr->Type = 2;
+		TTreeObjectPtr->Type = __TypeObject;
 		TTreeObjectPtr->ID = t;
 
 		tvObjects->Items->AddChildObject(objects, GWorld->Objects[t]->Name.c_str(), TTreeObjectPtr);
 	}
+}
+
+
+void TfrmMain::BuildProjectPanel()
+{
+	mDescription->Text = GWorld->Project.Description.c_str();
+	eAuthor->Text = GWorld->Project.Author.c_str();
 }
 
 
@@ -394,13 +470,26 @@ void TfrmMain::BuildLightPanel(int id)
 			int id = PTreeObject(tvObjects->Selected->Data)->ID;
 			int type = PTreeObject(tvObjects->Selected->Data)->Type;
 
-			if (type == 1)
+			if (type == __TypeLight)
 			{
 				sLightIntensity->Brush->Color = TColor(GWorld->Lights[id]->Intensity.ToIntBGR());
 
 				eLPositionX->Text = GWorld->Lights[id]->Position.x;
 				eLPositionY->Text = GWorld->Lights[id]->Position.y;
 				eLPositionZ->Text = GWorld->Lights[id]->Position.z;
+
+				if (GWorld->Lights[id]->HasSamples)
+				{
+					lLSamples->Visible = true;
+					eLSamples->Visible = true;
+
+                    eLSamples->Text = GWorld->Lights[id]->Samples;
+				}
+				else
+				{
+					lLSamples->Visible = false;
+					eLSamples->Visible = false;
+                }
 			}
 		}
 	}
@@ -409,10 +498,16 @@ void TfrmMain::BuildLightPanel(int id)
 
 void TfrmMain::BuildObjectPanelFromObject(int id)
 {
+	eOName->Text = GWorld->Objects[id]->Name.c_str();
+
 	lOPrimitive->Caption = GWorld->Objects[id]->FriendlyName().c_str();
 
 	switch (GWorld->Objects[id]->Primitive)
 	{
+	case PrimitiveType::None:
+	case PrimitiveType::Triangle:
+	case PrimitiveType::SmoothTriangle:
+        break;
 	case PrimitiveType::Cone:
 	case PrimitiveType::Cylinder:
 		lOMinimum->Visible = true;
@@ -463,10 +558,16 @@ void TfrmMain::BuildMaterialPanelFromObject(int id)
 	tbAmbient->Position = GWorld->Objects[id]->Material->Ambient * 100.0;
 	tbDiffuse->Position = GWorld->Objects[id]->Material->Diffuse * 100.0;
 	tbReflectivity->Position = GWorld->Objects[id]->Material->Reflectivity * 100.0;
-	//tbIoR->Position = GWorld->Objects[id]->Material->Ambient * 100.0;
 	tbShininess->Position = GWorld->Objects[id]->Material->Shininess * 100.0;
 	tbSpecular->Position = GWorld->Objects[id]->Material->Specular * 100.0;
 	tbTransparency->Position = GWorld->Objects[id]->Material->Transparency * 100.0;
+
+	lMBAmbience->Caption = GWorld->Objects[id]->Material->Ambient;
+	lMBDiffuse->Caption = GWorld->Objects[id]->Material->Diffuse;
+	lMBReflectivity->Caption = GWorld->Objects[id]->Material->Reflectivity;
+	lMBShininess->Caption = GWorld->Objects[id]->Material->Shininess;
+	lMBSpecular->Caption = GWorld->Objects[id]->Material->Specular;
+	lMBTransparency->Caption = GWorld->Objects[id]->Material->Transparency;
 
 	bool HasPattern = GWorld->Objects[id]->Material->HasPattern;
 
@@ -474,9 +575,9 @@ void TfrmMain::BuildMaterialPanelFromObject(int id)
 	tsPattern->TabVisible = HasPattern;
     tsMaterialTransforms->TabVisible = HasPattern;
 
-    bAddPattern->Visible = !HasPattern;
+	bAddPattern->Visible = !HasPattern;
 
-	if (GWorld->Objects[id]->Material->HasPattern)
+	if (HasPattern)
 	{
 		BuildPatternTab(id);
 	}
@@ -491,9 +592,9 @@ void TfrmMain::BuildTransformTab(int type, int id)
 {
 	switch (type)
 	{
-	case 1:
+	case __TypeLight:
 		break;
-	case 2:
+	case __TypeObject:
 	{
 		lbObjectTransforms->Clear();
 
@@ -522,12 +623,13 @@ void TfrmMain::BuildTransformTab(int type, int id)
 
 void TfrmMain::BuildPatternTab(int id)
 {
-    lPatternDesign->Caption = GWorld->Objects[id]->Material->SurfacePattern->FriendlyName().c_str();
+	lPatternDesign->Caption = GWorld->Objects[id]->Material->SurfacePattern->FriendlyName().c_str();
 
 	sPatternColour1->Brush->Color = TColor(GWorld->Objects[id]->Material->SurfacePattern->Colours[0].ToIntBGR());
 	sPatternColour2->Brush->Color = TColor(GWorld->Objects[id]->Material->SurfacePattern->Colours[1].ToIntBGR());
 
-	BuildPatternTabControls(GWorld->Objects[id]->Material->SurfacePattern->Design);
+	BuildPatternTabControls(GWorld->Objects[id]->Material->SurfacePattern->Design,
+		GWorld->Objects[id]->Material->SurfacePattern->IncludeNoise);
 
 	eNewTexture->Text = "";
 	lTexturePath->Caption = "";
@@ -535,6 +637,8 @@ void TfrmMain::BuildPatternTab(int id)
 
 	switch (GWorld->Objects[id]->Material->SurfacePattern->Design)
 	{
+	case PatternDesign::None:
+		break;
 	case PatternDesign::Checkerboard:
 	case PatternDesign::Gradient:
 	case PatternDesign::Gradient2:
@@ -544,7 +648,7 @@ void TfrmMain::BuildPatternTab(int id)
 	case PatternDesign::Fractal:
 	{
 		Fractal* p = dynamic_cast<Fractal*>(GWorld->Objects[id]->Material->SurfacePattern);
-		ePFrequency->Text = p->noize->Frequency;
+	   	ePFrequency->Text = p->noize->Frequency;
 		ePAmplitude->Text = p->noize->Amplitude;
 		ePLacunarity->Text = p->noize->Lacunarity;
 		ePPersistence->Text = p->noize->Persistence;
@@ -584,14 +688,20 @@ void TfrmMain::BuildPatternTab(int id)
 	case PatternDesign::CubeCheckerboard:
 	{
 		CubeChecker* p = dynamic_cast<CubeChecker*>(GWorld->Objects[id]->Material->SurfacePattern);
-		ePWidth->Text = p->Width;
-		ePHeight->Text = p->Height;
+		ePWidth->Text = p->PatternWidth;
+		ePHeight->Text = p->PatternHeight;
 		break;
 	}
 	case PatternDesign::CubeTexture:
-	case PatternDesign::CubeMultiTexture:
 	{
 		CubeTexture* p = dynamic_cast<CubeTexture*>(GWorld->Objects[id]->Material->SurfacePattern);
+		lTexturePath->Caption = p->FileName.c_str();
+		lTexturePath->Hint = p->FileName.c_str();
+		break;
+    }
+	case PatternDesign::CubeMultiTexture:
+	{
+		CubeMultiTexture* p = dynamic_cast<CubeMultiTexture*>(GWorld->Objects[id]->Material->SurfacePattern);
 		lTexturePath->Caption = p->FileName.c_str();
 		lTexturePath->Hint = p->FileName.c_str();
 		break;
@@ -599,8 +709,8 @@ void TfrmMain::BuildPatternTab(int id)
 	case PatternDesign::CylinderCheckerboard:
 	{
 		CylinderCheckerboard* p = dynamic_cast<CylinderCheckerboard*>(GWorld->Objects[id]->Material->SurfacePattern);
-		ePWidth->Text = p->Width;
-		ePHeight->Text = p->Height;
+		ePWidth->Text = p->PatternWidth;
+		ePHeight->Text = p->PatternHeight;
 		break;
 	}
 	case PatternDesign::CylinderTexture:
@@ -620,8 +730,8 @@ void TfrmMain::BuildPatternTab(int id)
 	case PatternDesign::SphericalCheckerboard:
 	{
 		SphericalCheckerboard* p = dynamic_cast<SphericalCheckerboard*>(GWorld->Objects[id]->Material->SurfacePattern);
-		ePWidth->Text = p->Width;
-		ePHeight->Text = p->Height;
+		ePWidth->Text = p->PatternWidth;
+		ePHeight->Text = p->PatternHeight;
 		break;
 	}
 	case PatternDesign::SphericalTexture:
@@ -631,11 +741,36 @@ void TfrmMain::BuildPatternTab(int id)
 		lTexturePath->Hint = p->FileName.c_str();
 		break;
 	}
-    }
+	}
+
+	if (GWorld->Objects[id]->Material->SurfacePattern->HasTexture)
+	{
+		tsTexture->TabVisible = true;
+		pcMaterialChange(nullptr);
+	}
+	else
+	{
+		tsTexture->TabVisible = false;
+	}
+
+	if (GWorld->Objects[id]->Material->SurfacePattern->IncludeNoise)
+	{
+		Pattern* p = GWorld->Objects[id]->Material->SurfacePattern;
+
+		ePFrequency->Text = p->noize->Frequency;
+		ePAmplitude->Text = p->noize->Amplitude;
+		ePLacunarity->Text = p->noize->Lacunarity;
+		ePPersistence->Text = p->noize->Persistence;
+
+		ePScale->Text = p->pscale;
+		ePPhase->Text = p->scale;
+	}
+
+	cbPNoise->Checked = GWorld->Objects[id]->Material->SurfacePattern->IncludeNoise;
 }
 
 
-void TfrmMain::BuildPatternTabControls(PatternDesign design)
+void TfrmMain::BuildPatternTabControls(PatternDesign design, bool has_noise)
 {
 	if (design == PatternDesign::Perlin1 || design == PatternDesign::Perlin2 || design == PatternDesign::Perlin3)
 	{
@@ -660,7 +795,7 @@ void TfrmMain::BuildPatternTabControls(PatternDesign design)
 		lPatternColour2->Visible = true;
 	}
 
-	if (design == PatternDesign::Fractal)
+	if (design == PatternDesign::Fractal || has_noise)
 	{
 		ePFrequency->Visible = true;
 		ePAmplitude->Visible = true;
@@ -683,12 +818,12 @@ void TfrmMain::BuildPatternTabControls(PatternDesign design)
 		lPPersistence->Visible = false;
 	}
 
-	if (design == PatternDesign::Perlin1 || design == PatternDesign::Perlin2 || design == PatternDesign::Perlin3)
+	if (design == PatternDesign::Perlin1 || design == PatternDesign::Perlin2 || design == PatternDesign::Perlin3 || has_noise)
 	{
 		ePScale->Visible = true;
 		lPScale->Visible = true;
 
-		if (design == PatternDesign::Perlin3)
+		if (design == PatternDesign::Perlin3 || has_noise)
 		{
 			ePPhase->Visible = true;
 			lPPhase->Visible = true;
@@ -733,7 +868,8 @@ void TfrmMain::BuildPatternTabControls(PatternDesign design)
 		cbPSimple->Visible = false;
 	}
 
-	if (design == PatternDesign::CubeTexture || design == PatternDesign::CubeMultiTexture ||design == PatternDesign::CylinderTexture ||
+	if (design == PatternDesign::CubeTexture || design == PatternDesign::CubeMultiTexture ||
+		design == PatternDesign::CylinderTexture ||
 		design == PatternDesign::PlanarTexture ||
 		design == PatternDesign::SphericalTexture)
 	{
@@ -747,6 +883,18 @@ void TfrmMain::BuildPatternTabControls(PatternDesign design)
 		lTexturePath->Visible = false;
 		bOpenTexture->Visible = false;
 	}
+
+	// all pattern types that can have a noise addon
+	if (design == PatternDesign::Checkerboard || design == PatternDesign::Stripey || design == PatternDesign::CubeCheckerboard ||
+		design == PatternDesign::CubeTexture || design == PatternDesign::CubeMultiTexture || design == PatternDesign::CylinderCheckerboard ||
+		design == PatternDesign::CylinderTexture || design == PatternDesign::PlanarTexture)
+	{
+		cbPNoise->Visible = true;
+	}
+	else
+	{
+        cbPNoise->Visible = false;
+    }
 }
 
 
@@ -754,7 +902,7 @@ void TfrmMain::BuildPatternTransformTab(int id)
 {
 	lbPatternTransforms->Clear();
 
-	if (GWorld->Objects[id]->Material->SurfacePattern->TransformsCount != 0)
+	if (GWorld->Objects[id]->Material->SurfacePattern->TransformsCount() != 0)
 	{
 		for (int t = 0; t < GWorld->Objects[id]->Material->SurfacePattern->TransformsCount(); t++)
 		{
@@ -765,7 +913,63 @@ void TfrmMain::BuildPatternTransformTab(int id)
 
 		lbPatternTransforms->ItemIndex = 0;
 
-        lbPatternTransformsClick(NULL);
+		lbPatternTransformsClick(NULL);
+	}
+}
+
+
+void __fastcall TfrmMain::pcMaterialChange(TObject *Sender)
+{
+	if (pcMaterial->TabIndex == 2)
+	{
+		if (tvObjects->Selected != NULL)
+		{
+			if (tvObjects->Selected->Data != NULL)
+			{
+				int id = PTreeObject(tvObjects->Selected->Data)->ID;
+				int type = PTreeObject(tvObjects->Selected->Data)->Type;
+
+				if (id != iTexture->Tag)
+				{
+					if (type == __TypeObject)
+					{
+						switch (GWorld->Objects[id]->Material->SurfacePattern->Design)
+						{
+						case PatternDesign::CubeTexture:
+						{
+							CubeTexture* p = dynamic_cast<CubeTexture*>(GWorld->Objects[id]->Material->SurfacePattern);
+
+							ShowTexture(p->Texture, p->TextureWidth, p->TextureHeight);
+							break;
+						}
+						case PatternDesign::CylinderTexture:
+						{
+							CylinderTexture* p = dynamic_cast<CylinderTexture*>(GWorld->Objects[id]->Material->SurfacePattern);
+
+							ShowTexture(p->Texture, p->TextureWidth, p->TextureHeight);
+							break;
+						}
+						case PatternDesign::PlanarTexture:
+						{
+							PlanarTexture* p = dynamic_cast<PlanarTexture*>(GWorld->Objects[id]->Material->SurfacePattern);
+
+							ShowTexture(p->Texture, p->TextureWidth, p->TextureHeight);
+							break;
+						}
+						case PatternDesign::SphericalTexture:
+						{
+							SphericalTexture* p = dynamic_cast<SphericalTexture*>(GWorld->Objects[id]->Material->SurfacePattern);
+
+							ShowTexture(p->Texture, p->TextureWidth, p->TextureHeight);
+							break;
+						}
+					}
+					}
+
+					iTexture->Tag = id;
+				}
+			}
+		}
 	}
 }
 
@@ -827,8 +1031,40 @@ void __fastcall TfrmMain::tbAmbientExit(TObject *Sender)
 			case 6:
 				GWorld->Objects[id]->Material->Transparency = (double)trackbar->Position / 100.0;
 				break;
-            }
+			}
 		}
+	}
+}
+
+
+void __fastcall TfrmMain::tbAmbientChange(TObject *Sender)
+{
+	int id = PTreeObject(tvObjects->Selected->Data)->ID;
+
+	TTrackBar *trackbar = (TTrackBar*)Sender;
+
+	System::UnicodeString value = FloatToStr((double)trackbar->Position / 100);
+
+	switch (trackbar->Tag)
+	{
+	case 0:
+		lMBAmbience->Caption = value;
+		break;
+	case 1:
+		lMBDiffuse->Caption = value;
+		break;
+	case 2:
+		lMBReflectivity->Caption = value;
+		break;
+	case 4:
+		lMBShininess->Caption = value;
+		break;
+	case 5:
+		lMBSpecular->Caption = value;
+		break;
+	case 6:
+		lMBTransparency->Caption = value;
+		break;
 	}
 }
 
@@ -933,24 +1169,27 @@ void __fastcall TfrmMain::lbPatternTransformsClick(TObject *Sender)
 
 void TfrmMain::UpdatePatternTransformTab(int type, int id, int selected)
 {
-	TransformConfiguration tc = GWorld->Objects[id]->Material->SurfacePattern->TransformAt(selected);
-
-	if (tc.Type == TransformType::Scale || tc.Type == TransformType::Translate)
+	if (selected >= 0)
 	{
-		ePTX->Text = tc.XYZ.x;
-		ePTY->Text = tc.XYZ.y;
-		ePTZ->Text = tc.XYZ.z;
+		TransformConfiguration tc = GWorld->Objects[id]->Material->SurfacePattern->TransformAt(selected);
 
-		pPTAngle->Visible = false;
-		pPTXYZ->Visible = true;
-	}
-	else
-	{
-		ePTAngle->Text = tc.Angle;
-
-		pPTAngle->Visible = true;
-		pPTXYZ->Visible = false;
-	}
+		if (tc.Type == TransformType::Scale || tc.Type == TransformType::Translate)
+		{
+			ePTX->Text = tc.XYZ.x;
+			ePTY->Text = tc.XYZ.y;
+			ePTZ->Text = tc.XYZ.z;
+	
+			pPTAngle->Visible = false;
+			pPTXYZ->Visible = true;
+		}
+		else
+		{
+			ePTAngle->Text = tc.Angle;
+	
+			pPTAngle->Visible = true;
+			pPTXYZ->Visible = false;
+		}
+    }
 }
 
 
@@ -992,7 +1231,7 @@ void __fastcall TfrmMain::sLightIntensityMouseDown(TObject *Sender, TMouseButton
 				int id = PTreeObject(tvObjects->Selected->Data)->ID;
 				int type = PTreeObject(tvObjects->Selected->Data)->Type;
 
-				if (type == 1)
+				if (type == __TypeLight)
 				{
 					sLightIntensity->Brush->Color = TColor(frmColourDialog->SelectedColour);
 
@@ -1013,11 +1252,39 @@ void __fastcall TfrmMain::eLPositionXExit(TObject *Sender)
 			int id = PTreeObject(tvObjects->Selected->Data)->ID;
 			int type = PTreeObject(tvObjects->Selected->Data)->Type;
 
-			if (type == 1)
+			if (type == __TypeLight)
 			{
 				GWorld->Lights[id]->Position.x = eLPositionX->Text.ToDouble();
 				GWorld->Lights[id]->Position.y = eLPositionY->Text.ToDouble();
 				GWorld->Lights[id]->Position.z = eLPositionZ->Text.ToDouble();
+			}
+		}
+	}
+}
+
+
+void __fastcall TfrmMain::eLSamplesExit(TObject *Sender)
+{
+	if (tvObjects->Selected != NULL)
+	{
+		if (tvObjects->Selected->Data != NULL)
+		{
+			int id = PTreeObject(tvObjects->Selected->Data)->ID;
+			int type = PTreeObject(tvObjects->Selected->Data)->Type;
+
+			if (type == __TypeLight)
+			{
+				int samples = eLSamples->Text.ToIntDef(-1);
+
+				if (samples == -1)
+				{
+					samples = 8;
+					eLSamples->Text = "8";
+				}
+
+				AreaLight* al = dynamic_cast<AreaLight*>(GWorld->Lights[id]);
+
+			    al->SetDimensions(GWorld->Lights[id]->uvec, GWorld->Lights[id]->vvec, samples);
 			}
 		}
 	}
@@ -1106,7 +1373,7 @@ void __fastcall TfrmMain::sbAddMaterialTransformClick(TObject *Sender)
 				int id = PTreeObject(tvObjects->Selected->Data)->ID;
 				int type = PTreeObject(tvObjects->Selected->Data)->Type;
 
-				if (type == 2)
+				if (type == __TypeObject)
 				{
 					if (GWorld->Objects[id]->Material->HasPattern)
 					{
@@ -1128,7 +1395,7 @@ void __fastcall TfrmMain::sbDeleteMaterialTransformClick(TObject *Sender)
         int id = PTreeObject(tvObjects->Selected->Data)->ID;
 		int type = PTreeObject(tvObjects->Selected->Data)->Type;
 
-		if (type == 2)
+		if (type == __TypeObject)
 		{
 			if (GWorld->Objects[id]->Material->HasPattern)
 			{
@@ -1161,7 +1428,7 @@ void __fastcall TfrmMain::sbPatternChangeClick(TObject *Sender)
 			int id = PTreeObject(tvObjects->Selected->Data)->ID;
 			int type = PTreeObject(tvObjects->Selected->Data)->Type;
 
-			if (type == 2)
+			if (type == __TypeObject)
 			{
 				if (cbPatternChangeTo->ItemIndex == 0)  // changed to "none"
 				{
@@ -1175,14 +1442,14 @@ void __fastcall TfrmMain::sbPatternChangeClick(TObject *Sender)
 					pp.Colour1 = GWorld->Objects[id]->Material->SurfacePattern->Colours[0];
 					pp.Colour2 = GWorld->Objects[id]->Material->SurfacePattern->Colours[1];
 
-					AvailablePatterns ap = GSceneLoader->PatternFromObject2(GWorld->Objects[id]->Primitive, cbPatternChangeTo->ItemIndex);
+					PatternDesign ap = GSceneLoader->PatternFromObject2(GWorld->Objects[id]->Primitive, cbPatternChangeTo->ItemIndex);
 
-					if (ap == AvailablePatterns::CubicTexture && pp.FileName.find(L'*') != std::wstring::npos)
+					if (ap == PatternDesign::CubeTexture && pp.FileName.find(L'*') != std::wstring::npos)
 					{
-						ap = AvailablePatterns::CubicMultiTexture;
+						ap = PatternDesign::CubeMultiTexture;
 					}
 
-					if (ap != AvailablePatterns::None)
+					if (ap != PatternDesign::None)
 					{
 						delete GWorld->Objects[id]->Material->SurfacePattern;
 
@@ -1231,12 +1498,12 @@ void __fastcall TfrmMain::sbDeleteObjectClick(TObject *Sender)
 
 			switch (type)
 			{
-			case 1:
+			case __TypeLight:
 				delete GWorld->Lights[id];
 				GWorld->Lights.erase(GWorld->Lights.begin() + id);
 				PopulateTreeView();
 				break;
-			case 2:
+			case __TypeObject:
 				delete GWorld->Objects[id];
 				GWorld->Objects.erase(GWorld->Objects.begin() + id);
 				PopulateTreeView();
@@ -1249,7 +1516,7 @@ void __fastcall TfrmMain::sbDeleteObjectClick(TObject *Sender)
 
 void TfrmMain::AddNewObject(int primitive, int pattern, PatternProperties properties, std::wstring name)
 {
-	AvailablePatterns ap = AvailablePatterns::None;
+	PatternDesign ap = PatternDesign::None;
 
 	switch (pattern)
 	{
@@ -1258,62 +1525,62 @@ void TfrmMain::AddNewObject(int primitive, int pattern, PatternProperties proper
 		{
 		case 0:
 		case 2:
-			ap = AvailablePatterns::CylinderChecker;
+			ap = PatternDesign::CylinderCheckerboard;
 			break;
 		case 1:
-			ap = AvailablePatterns::CubeChecker;
+			ap = PatternDesign::CubeCheckerboard;
 			break;
 		case 4:
-			ap = AvailablePatterns::Checker;
+			ap = PatternDesign::Checkerboard;
 			break;
 		case 5:
-			ap = AvailablePatterns::SphericalChecker;
+			ap = PatternDesign::SphericalCheckerboard;
 			break;
 		}
 		break;
 	case 2:
-		ap = AvailablePatterns::Fractal;
+		ap = PatternDesign::Fractal;
 		break;
 	case 3:
-		ap = AvailablePatterns::Gradient;
+		ap = PatternDesign::Gradient;
 		break;
 	case 4:
-		ap = AvailablePatterns::Gradient2;
+		ap = PatternDesign::Gradient2;
 		break;
 	case 5:
-		ap = AvailablePatterns::Perlin;
+		ap = PatternDesign::Perlin1;
 		break;
 	case 6:
-		ap = AvailablePatterns::Perlin2;
+		ap = PatternDesign::Perlin2;
 		break;
 	case 7:
-		ap = AvailablePatterns::Perlin3;
+		ap = PatternDesign::Perlin3;
 		break;
 	case 8:
-		ap = AvailablePatterns::Ring;
+		ap = PatternDesign::Ring;
 		break;
 	case 9:
-		ap = AvailablePatterns::Simplex;
+		ap = PatternDesign::Simplex;
 		break;
 	case 10:
-		ap = AvailablePatterns::Stripey;
+		ap = PatternDesign::Stripey;
 		break;
 	case 11:
 		switch (primitive)
 		{
 		case 0:
 		case 2:
-			ap = AvailablePatterns::CylinderTexture;
+			ap = PatternDesign::CylinderTexture;
 			break;
 		case 1:
-			ap = AvailablePatterns::CubicTexture;
+			ap = PatternDesign::CubeTexture;
 			break;
 		case 4:
-			ap = AvailablePatterns::PlanarTexture;
+			ap = PatternDesign::PlanarTexture;
 			break;
 		case 5:
-			ap = AvailablePatterns::SphericalTexture;
-            break;
+			ap = PatternDesign::SphericalTexture;
+			break;
 		}
 		break;
 	}
@@ -1378,7 +1645,7 @@ void __fastcall TfrmMain::sbAddTransformClick(TObject *Sender)
 				int id = PTreeObject(tvObjects->Selected->Data)->ID;
 				int type = PTreeObject(tvObjects->Selected->Data)->Type;
 
-				if (type == 2)
+				if (type == __TypeObject)
 				{
 					GWorld->Objects[id]->AddTransform(tc);
 
@@ -1436,7 +1703,7 @@ void __fastcall TfrmMain::eCFoVExit(TObject *Sender)
 		{
 			int type = PTreeObject(tvObjects->Selected->Data)->Type;
 
-			if (type == 0)
+			if (type == __TypeCamera)
 			{
 				GWorld->Cam->FoV = eCFoV->Text.ToDouble();
 
@@ -1473,14 +1740,25 @@ void __fastcall TfrmMain::ePFrequencyExit(TObject *Sender)
 			int id = PTreeObject(tvObjects->Selected->Data)->ID;
 			int type = PTreeObject(tvObjects->Selected->Data)->Type;
 
-			if (type == 2)
+			if (type == __TypeObject)
 			{
-				Fractal* p = dynamic_cast<Fractal*>(GWorld->Objects[id]->Material->SurfacePattern);
+				if (GWorld->Objects[id]->Material->SurfacePattern->IncludeNoise)
+				{
+					GWorld->Objects[id]->Material->SurfacePattern->SetNoise(
+						ePFrequency->Text.ToDouble(),
+						ePAmplitude->Text.ToDouble(),
+						ePLacunarity->Text.ToDouble(),
+						ePPersistence->Text.ToDouble(),
+						ePScale->Text.ToDouble(),
+						ePPhase->Text.ToDouble());
+				}
 
-				p->SetFALP(ePFrequency->Text.ToDouble(),
-					 ePAmplitude->Text.ToDouble(),
-					 ePLacunarity->Text.ToDouble(),
-					 ePPersistence->Text.ToDouble());
+//				Fractal* p = dynamic_cast<Fractal*>(GWorld->Objects[id]->Material->SurfacePattern);
+
+//				p->SetNoise(ePFrequency->Text.ToDouble(),
+//					ePAmplitude->Text.ToDouble(),
+//					ePLacunarity->Text.ToDouble(),
+//					ePPersistence->Text.ToDouble(), 1, 1); // to check, generic code should work for fractal
 			}
 		}
 	}
@@ -1496,7 +1774,7 @@ void __fastcall TfrmMain::ePScaleExit(TObject *Sender)
 			int id = PTreeObject(tvObjects->Selected->Data)->ID;
 			int type = PTreeObject(tvObjects->Selected->Data)->Type;
 
-			if (type == 2)
+			if (type == __TypeObject)
 			{
 				switch (GWorld->Objects[id]->Material->SurfacePattern->Design)
 				{
@@ -1518,6 +1796,10 @@ void __fastcall TfrmMain::ePScaleExit(TObject *Sender)
 					p->Scale = ePScale->Text.ToDouble();
 					break;
 				}
+
+				default:
+					ePFrequencyExit(NULL);
+					break;
 				}
 			}
 		}
@@ -1534,7 +1816,7 @@ void __fastcall TfrmMain::ePPhaseExit(TObject *Sender)
 			int id = PTreeObject(tvObjects->Selected->Data)->ID;
 			int type = PTreeObject(tvObjects->Selected->Data)->Type;
 
-			if (type == 2)
+			if (type == __TypeObject)
 			{
 				switch (GWorld->Objects[id]->Material->SurfacePattern->Design)
 				{
@@ -1544,6 +1826,10 @@ void __fastcall TfrmMain::ePPhaseExit(TObject *Sender)
 					p->Scale = ePScale->Text.ToDouble();
 					break;
 				}
+
+				default:
+					ePFrequencyExit(NULL);
+					break;
 				}
 			}
 		}
@@ -1560,22 +1846,22 @@ void __fastcall TfrmMain::ePWidthExit(TObject *Sender)
 			int id = PTreeObject(tvObjects->Selected->Data)->ID;
 			int type = PTreeObject(tvObjects->Selected->Data)->Type;
 
-			if (type == 2)
+			if (type == __TypeObject)
 			{
 				switch (GWorld->Objects[id]->Material->SurfacePattern->Design)
 				{
 				case PatternDesign::CubeCheckerboard:
 				{
 					CubeChecker* p = dynamic_cast<CubeChecker*>(GWorld->Objects[id]->Material->SurfacePattern);
-					p->Width = ePWidth->Text.ToDouble();
-					p->Height = ePHeight->Text.ToDouble();
+					p->PatternWidth = ePWidth->Text.ToDouble();
+					p->PatternHeight = ePHeight->Text.ToDouble();
 					break;
 				}
 				case PatternDesign::CylinderCheckerboard:
 				{
 					CylinderCheckerboard* p = dynamic_cast<CylinderCheckerboard*>(GWorld->Objects[id]->Material->SurfacePattern);
-					p->Width = ePWidth->Text.ToDouble();
-					p->Height = ePHeight->Text.ToDouble();
+					p->PatternWidth = ePWidth->Text.ToDouble();
+					p->PatternHeight = ePHeight->Text.ToDouble();
 					break;
 				}
 				case PatternDesign::Perlin1:
@@ -1602,12 +1888,45 @@ void __fastcall TfrmMain::ePWidthExit(TObject *Sender)
 				case PatternDesign::SphericalCheckerboard:
 				{
 					SphericalCheckerboard* p = dynamic_cast<SphericalCheckerboard*>(GWorld->Objects[id]->Material->SurfacePattern);
-					p->Width = ePWidth->Text.ToDouble();
-					p->Height = ePHeight->Text.ToDouble();
+					p->PatternWidth = ePWidth->Text.ToDouble();
+					p->PatternHeight = ePHeight->Text.ToDouble();
 					break;
 				}
 				}
 			}
+		}
+	}
+}
+
+
+void __fastcall TfrmMain::cbPNoiseClick(TObject *Sender)
+{
+	if (tvObjects->Selected != NULL)
+	{
+		if (tvObjects->Selected->Data != NULL)
+		{
+			int id = PTreeObject(tvObjects->Selected->Data)->ID;
+			int type = PTreeObject(tvObjects->Selected->Data)->Type;
+
+			if (type == __TypeObject)
+			{
+				Pattern* p = GWorld->Objects[id]->Material->SurfacePattern;
+				p->IncludeNoise = cbPNoise->Checked;
+			}
+
+			ePScale->Visible = cbPNoise->Checked;
+			ePPhase->Visible = cbPNoise->Checked;
+			ePFrequency->Visible = cbPNoise->Checked;
+			ePAmplitude->Visible = cbPNoise->Checked;
+			ePLacunarity->Visible = cbPNoise->Checked;
+			ePPersistence->Visible = cbPNoise->Checked;
+
+			lPScale->Visible = cbPNoise->Checked;
+			lPPhase->Visible = cbPNoise->Checked;
+			lPFrequency->Visible = cbPNoise->Checked;
+			lPAmplitude->Visible = cbPNoise->Checked;
+			lPLacunarity->Visible = cbPNoise->Checked;
+			lPPersistence->Visible = cbPNoise->Checked;
 		}
 	}
 }
@@ -1622,7 +1941,7 @@ void __fastcall TfrmMain::cbPSimpleClick(TObject *Sender)
 			int id = PTreeObject(tvObjects->Selected->Data)->ID;
 			int type = PTreeObject(tvObjects->Selected->Data)->Type;
 
-			if (type == 2)
+			if (type == __TypeObject)
 			{
 				switch (GWorld->Objects[id]->Material->SurfacePattern->Design)
 				{
@@ -1656,20 +1975,20 @@ void __fastcall TfrmMain::cbPatternChangeToChange(TObject *Sender)
 
 void __fastcall TfrmMain::bAddPatternClick(TObject *Sender)
 {
-if (tvObjects->Selected != NULL)
+	if (tvObjects->Selected != NULL)
 	{
 		if (tvObjects->Selected->Data != NULL)
 		{
 			int id = PTreeObject(tvObjects->Selected->Data)->ID;
 			int type = PTreeObject(tvObjects->Selected->Data)->Type;
 
-			if (type == 2)
+			if (type == __TypeObject)
 			{
-				Checkerboard* p = new Checkerboard(L"Checkboard");
+				Checkerboard* p = new Checkerboard(false, L"Checkboard");
 				p->SetColours(Colour(0.6, 0.6, 0.6), Colour(0.2, 0.2, 0.2));
 				GWorld->Objects[id]->Material->SetPattern(p);
 
-                BuildMaterialPanelFromObject(id);
+				BuildMaterialPanelFromObject(id);
 			}
 		}
 	}
@@ -1702,6 +2021,103 @@ void __fastcall TfrmMain::eIoRExit(TObject *Sender)
             }
 
 			GWorld->Objects[id]->Material->RefractiveIndex = ior;
+		}
+	}
+}
+
+
+void TfrmMain::ShowTexture(Colour* data, int width, int height)
+{
+	TBitmap* bit = new TBitmap();
+	bit->PixelFormat = pf24bit;
+	bit->Width = width;
+	bit->Height = height;
+
+	TRGBTriple *ptr;
+
+	for (int y = 0; y < height; y++)
+	{
+		ptr = reinterpret_cast<TRGBTriple *>(bit->ScanLine[y]);
+
+		for (int x = 0; x < width; x++)
+		{
+			ptr[x].rgbtRed = std::floor(data[y * width + x].r * 255);
+			ptr[x].rgbtGreen = std::floor(data[y * width + x].g * 255);
+			ptr[x].rgbtBlue = std::floor(data[y * width + x].b * 255);
+		}
+	}
+
+	iTexture->Picture->Assign(bit);
+
+    lTextureDimensions->Caption = IntToStr(width) + " x " + IntToStr(height);
+
+	delete bit;
+}
+
+
+void __fastcall TfrmMain::sbCopyObjectClick(TObject *Sender)
+{
+	if (tvObjects->Selected != NULL)
+	{
+		if (tvObjects->Selected->Data != NULL)
+		{
+			int id = PTreeObject(tvObjects->Selected->Data)->ID;
+			int type = PTreeObject(tvObjects->Selected->Data)->Type;
+
+			if (type == __TypeObject)
+			{
+				GWorld->MakeCopyOfObjectAt(id);
+
+				PopulateTreeView();
+			}
+		}
+	}
+}
+
+
+void __fastcall TfrmMain::eONameExit(TObject *Sender)
+{
+	if (tvObjects->Selected != NULL)
+	{
+		if (tvObjects->Selected->Data != NULL)
+		{
+			int id = PTreeObject(tvObjects->Selected->Data)->ID;
+			int type = PTreeObject(tvObjects->Selected->Data)->Type;
+
+			if (type == __TypeObject)
+			{
+			   GWorld->Objects[id]->Name = eOName->Text;
+
+			   tvObjects->Selected->Text = eOName->Text;
+			}
+		}
+	}
+}
+
+
+void __fastcall TfrmMain::bOpenTextureClick(TObject *Sender)
+{
+	if (tvObjects->Selected != NULL)
+	{
+		if (tvObjects->Selected->Data != NULL)
+		{
+			int id = PTreeObject(tvObjects->Selected->Data)->ID;
+			int type = PTreeObject(tvObjects->Selected->Data)->Type;
+
+			if (type == __TypeObject)
+			{
+				std::wstring file_name = Utility::GetOpenFileName(3);
+
+                if (!file_name.empty())
+				{
+					GWorld->ReplaceTexture(id, file_name);
+
+					iTexture->Tag = -1;
+                    lTexturePath->Caption = file_name.c_str();
+
+                    pcMaterialChange(nullptr);
+                }
+			}
 		}
 	}
 }
