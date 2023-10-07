@@ -18,11 +18,41 @@
 #include "Colour.h"
 #include "Light.h"
 #include "Object.h"
+#include "Pattern.h"
+#include "Project.h"
 
 
 class World
 {
+	static const int __LastObject = -1;
+
+	bool AddCheckerTo(int, PatternProperties);
+	bool AddGradientTo(int, PatternProperties);
+	bool AddGradient2To(int, PatternProperties);
+	bool AddRingTo(int, PatternProperties);
+	bool AddStripeyTo(int, PatternProperties);
+	bool AddPerlinTo(int, PatternProperties);
+	bool AddPerlin2To(int, PatternProperties);
+	bool AddPerlin3To(int, PatternProperties);
+	bool AddFractalTo(int, PatternProperties);
+	bool AddSimplexTo(int, PatternProperties);
+	bool AddCheckerSphereTo(int, PatternProperties);
+	bool AddCheckerCylinderTo(int, PatternProperties);
+	bool AddCheckerCubeTo(int, PatternProperties);
+	bool AddTextureCubeTo(int, PatternProperties, bool);
+	bool AddTextureCylinderTo(int, PatternProperties, bool);
+	bool AddTexturePlaneTo(int, PatternProperties, bool);
+	bool AddTextureSphereTo(int, PatternProperties, bool);
+
 public:
+
+	std::wstring LastError = L"";
+
+	TwnklProject Project;
+
+	#ifdef _GUI
+	std::vector<std::wstring> Errors;
+	#endif
 
 	Colour* Canvas = nullptr;
 
@@ -42,16 +72,24 @@ public:
 
 	[[nodiscard]] bool SaveCanvasToFile(const std::wstring);
 
-	void AddNewObject(int, AvailablePatterns, PatternProperties, std::wstring);
-	void SetLastObjectPattern(AvailablePatterns, PatternProperties);
-	void SetObjectPattern(int, AvailablePatterns, PatternProperties);
+	#ifdef _GUI
+	void AddNewObject(int, PatternDesign, PatternProperties, std::wstring);
+	bool SetObjectPattern(int, PatternDesign, PatternProperties);
+    void ReplaceTexture(int, std::wstring);
+	#endif
+
+	bool SetLastObjectPattern(PatternDesign, PatternProperties);
+
+	#ifdef _GUI
+	void MakeCopyOfObjectAt(int);
+	#endif
 
 	void ToString();
 
 	void SaveScene(std::wstring);
 
 	#ifdef _GUI
-	void World::DefaultScene();
+	void DefaultScene();
 	#endif
 
 	#ifdef _DEBUG

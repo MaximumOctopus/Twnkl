@@ -16,6 +16,7 @@
 #include "Colour.h"
 #include "Constants.h"
 #include "Object.h"
+#include "Pattern.h"
 #include "Quaternion.h"
 #include "TransformConfiguration.h"
 
@@ -27,24 +28,27 @@ class SceneLoader
 		PatternChecker = 8, PatternGradient = 9, PatternGradient2 = 10, PatternRing = 11, PatternStripey = 12, PatternPerlin = 13, PatternPerlin2 = 14, PatternPerlin3 = 15, PatternTexture = 16,
 		PatternFractal = 17, PatternSimplex = 18,
 		Material = 30, Transform = 31, PointLight = 32, AreaLight = 33,
-		Camera = 40
+		Camera = 40,
+		Project = 50
 	};
 
-	static const int BlockTitlesCount = 23;
+	static const int BlockTitlesCount = 24;
 
-	const std::wstring BlockTitles[BlockTitlesCount] = 
+	const std::wstring BlockTitles[BlockTitlesCount] =
 		{ L"objectsphere", L"objectplane", L"objectcube", L"objectcone", L"objectcylinder", L"objectmodel", L"objectmodelsmooth",
-		L"material", 
+		L"material",
 		L"patternchecker", L"patterngradient", L"patterngradient2", L"patternring", L"patternstripey", L"patternperlin", L"patternperlin2", L"patternperlin3", L"patterntexture",
 		L"patternfractal", L"patternsimplex",
-		L"transform", L"pointlight", L"arealight", L"camera"};
+		L"transform", L"pointlight", L"arealight", L"camera",
+		L"project" };
 
-	const Chunk BlockChunk[BlockTitlesCount] = { 
+	const Chunk BlockChunk[BlockTitlesCount] = {
 		Chunk::ObjectSphere, Chunk::ObjectPlane, Chunk::ObjectCube, Chunk::ObjectCone, Chunk::ObjectCylinder, Chunk::ObjectModel, Chunk::ObjectModelSmooth,
-		Chunk::Material, 
+		Chunk::Material,
 		Chunk::PatternChecker, Chunk::PatternGradient, Chunk::PatternGradient2, Chunk::PatternRing, Chunk::PatternStripey, Chunk::PatternPerlin, Chunk::PatternPerlin2, Chunk::PatternPerlin3, Chunk::PatternTexture,
 		Chunk::PatternFractal, Chunk::PatternSimplex,
-		Chunk::Transform, Chunk::PointLight, Chunk::AreaLight, Chunk::Camera
+		Chunk::Transform, Chunk::PointLight, Chunk::AreaLight, Chunk::Camera,
+		Chunk::Project
 	};
 		
 	enum class FileProperty {
@@ -57,10 +61,12 @@ class SceneLoader
 		UVector = 45, VVector = 46,
 		TextureWidth = 47, TextureHeight = 48,
 		FileName = 49, Process = 50, Scale = 51, Phase = 52,
-		Frequency = 53, Amplitude = 54, Lacunarity = 55, Persistence = 56, Simple = 57
+		Frequency = 53, Amplitude = 54, Lacunarity = 55, Persistence = 56, Simple = 57,
+		Noise = 58, NPScale = 59, NScale = 60,
+		LightSamples = 61, Description = 62
 	};
 
-	static const int kPropertyListCount = 60;
+	static const int kPropertyListCount = 66;
 
 	const std::wstring FilePropertyList[kPropertyListCount] = {
 		__SceneChunkCamera, __SceneChunkPointLight, __SceneChunkAreaLight,
@@ -69,26 +75,30 @@ class SceneLoader
 		__SceneChunkChecker, __SceneChunkGradient, __SceneChunkGradient2, __SceneChunkRing, __SceneChunkStripey, __SceneChunkPerlin, __SceneChunkPerlin2, __SceneChunkPerlin3,
 		__SceneChunkTexture,
 		__SceneChunkFractal, __SceneChunkSimplex,
+		__SceneChunkProject,
 		L"}",
 		L"colour", L"color", L"position", L"name",
 		L"ambient", L"diffuse", L"reflectivity", L"refractiveindex", L"shininess", L"specular", L"transparency",
 		L"type", L"angle", L"xyz",
 		L"focallength", L"from", L"to", L"up",
-		L"width", L"height", 
+		L"width", L"height",
 		L"minimum", L"maximum", L"closed",
 		L"uvector", L"vvector",
 		L"u", L"v",
 		L"filename", L"process", L"scale", L"phase",
-		L"frequency", L"amplitude", L"lacunarity", L"persistence", L"simple"
+		L"frequency", L"amplitude", L"lacunarity", L"persistence", L"simple",
+		L"noise", L"npscale", L"nscale",
+		L"samples", L"description"
 	};
 
 	const FileProperty FilePropertyReference[kPropertyListCount] = {
 		FileProperty::DataBegin, FileProperty::DataBegin, FileProperty::DataBegin,
 		FileProperty::DataBegin, FileProperty::DataBegin, FileProperty::DataBegin, FileProperty::DataBegin, FileProperty::DataBegin, FileProperty::DataBegin, FileProperty::DataBegin,
-		FileProperty::DataBegin, FileProperty::DataBegin, 
-		FileProperty::DataBegin, FileProperty::DataBegin, FileProperty::DataBegin, FileProperty::DataBegin, FileProperty::DataBegin, FileProperty::DataBegin, FileProperty::DataBegin, FileProperty::DataBegin, 
+		FileProperty::DataBegin, FileProperty::DataBegin,
+		FileProperty::DataBegin, FileProperty::DataBegin, FileProperty::DataBegin, FileProperty::DataBegin, FileProperty::DataBegin, FileProperty::DataBegin, FileProperty::DataBegin, FileProperty::DataBegin,
 		FileProperty::DataBegin,
 		FileProperty::DataBegin, FileProperty::DataBegin,
+        FileProperty::DataBegin,
 		FileProperty::DataEnd,
 		FileProperty::Colour, FileProperty::Colour, FileProperty::Position, FileProperty::Name,
 		FileProperty::Ambience,FileProperty::Diffuse, FileProperty::Reflectivity, FileProperty::RefractiveIndex, FileProperty::Shininess, FileProperty::Specular, FileProperty::Transparency,
@@ -99,7 +109,9 @@ class SceneLoader
 		FileProperty::UVector, FileProperty::VVector,
 		FileProperty::TextureWidth, FileProperty::TextureHeight,
 		FileProperty::FileName, FileProperty::Process, FileProperty::Scale, FileProperty::Phase,
-		FileProperty::Frequency, FileProperty::Amplitude, FileProperty::Lacunarity, FileProperty::Persistence, FileProperty::Simple
+		FileProperty::Frequency, FileProperty::Amplitude, FileProperty::Lacunarity, FileProperty::Persistence, FileProperty::Simple,
+		FileProperty::Noise, FileProperty::NPScale, FileProperty::NScale,
+        FileProperty::LightSamples, FileProperty::Description
 	};
 
 	struct MaterialProperties
@@ -130,7 +142,7 @@ class SceneLoader
 	[[nodiscard]] Quaternion XYZFrom(const std::wstring, int);
 	void AddObject(Chunk, std::wstring, std::wstring, int, int, bool);
 	
-	AvailablePatterns PatternFromObject(Chunk, Chunk);
+	PatternDesign PatternFromObject(Chunk, Chunk);
 	[[nodiscard]] FileProperty GetInputProperty(std::wstring);
 
 	bool ValidateParameter(bool, std::wstring, int);
@@ -138,13 +150,17 @@ class SceneLoader
 public:
 
 	bool Loaded = false;
+	
+	#ifdef _GUI
+	std::vector<std::wstring> Errors;
+	#endif
 
 	SceneLoader();
 
 	SceneLoader(const std::wstring, int);
 
 	#ifdef _GUI
-	AvailablePatterns PatternFromObject2(PrimitiveType, int);
+	PatternDesign PatternFromObject2(PrimitiveType, int);
 	#endif
 
 	std::pair<int, int> ResizeForDisplay(double, double, double, double);

@@ -467,6 +467,9 @@
     <ClInclude Include="CubeMultiTexture.h">
       <Filter>Header Files\Patterns\Mapped\Cube</Filter>
     </ClInclude>
+    <ClInclude Include="Project.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Twnkl.rc">

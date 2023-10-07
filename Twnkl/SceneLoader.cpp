@@ -4,10 +4,12 @@
 // (c) Paul Alan Freshney 2023
 //
 // paul@freshney.org
-// 
+//
 // https://github.com/MaximumOctopus/Twnkl
-// 
-// 
+//
+//
+
+//#include <Vcl.Dialogs.hpp>
 
 #include <fstream>
 #include <iostream>
@@ -17,8 +19,6 @@
 
 #include "AreaLight.h"
 #include "PointLight.h"
-
-
 
 #include "Cone.h"
 #include "Cube.h"
@@ -131,7 +131,6 @@ Colour SceneLoader::ColourFrom(const std::wstring input)
 }
 
 
-
 SceneLoader::Chunk SceneLoader::GetDataBlockChunkFrom(const std::wstring name)
 {
 	for (int t = 0; t < BlockTitlesCount; t++)
@@ -142,8 +141,6 @@ SceneLoader::Chunk SceneLoader::GetDataBlockChunkFrom(const std::wstring name)
 		}
 	}
 
-	std::wcout << name << L"\n";
-	
 	return Chunk::None;
 }
 
@@ -182,116 +179,124 @@ Quaternion SceneLoader::XYZFrom(const std::wstring input, int w)
 
 
 // returns the correct pattern for the object type
-AvailablePatterns SceneLoader::PatternFromObject(Chunk object, Chunk pattern)
+PatternDesign SceneLoader::PatternFromObject(Chunk object, Chunk pattern)
 {
 	switch (pattern)
 	{
 	case Chunk::PatternChecker:
 		switch (object)
 		{
+		case Chunk::None:
+			break;
 		case Chunk::ObjectCone:
 		case Chunk::ObjectCylinder:
-			return AvailablePatterns::CylinderChecker;
+			return PatternDesign::CylinderCheckerboard;
 		case Chunk::ObjectCube:
-			return AvailablePatterns::CubeChecker;
+			return PatternDesign::CubeCheckerboard;
 		case Chunk::ObjectPlane:
-			return AvailablePatterns::Checker;
+			return PatternDesign::Checkerboard;
 		case Chunk::ObjectSphere:
-			return AvailablePatterns::SphericalChecker;
+			return PatternDesign::SphericalCheckerboard;
 		}
 		break;
 	case Chunk::PatternGradient:
-		return AvailablePatterns::Gradient;
+		return PatternDesign::Gradient;
 	case Chunk::PatternGradient2:
-		return AvailablePatterns::Gradient2;
+		return PatternDesign::Gradient2;
 	case Chunk::PatternRing:
-		return AvailablePatterns::Ring;
+		return PatternDesign::Ring;
 	case Chunk::PatternStripey:
-		return AvailablePatterns::Stripey;
+		return PatternDesign::Stripey;
 	case Chunk::PatternPerlin:
-		return AvailablePatterns::Perlin;
+		return PatternDesign::Perlin1;
 	case Chunk::PatternPerlin2:
-		return AvailablePatterns::Perlin2;
+		return PatternDesign::Perlin2;
 	case Chunk::PatternPerlin3:
-		return AvailablePatterns::Perlin3;
+		return PatternDesign::Perlin3;
 	case Chunk::PatternFractal:
-		return AvailablePatterns::Fractal;
+		return PatternDesign::Fractal;
 	case Chunk::PatternSimplex:
-		return AvailablePatterns::Simplex;
+		return PatternDesign::Simplex;
 	case Chunk::PatternTexture:
 		switch (object)
 		{
+		case Chunk::None:
+			break;
 		case Chunk::ObjectCone:
 		case Chunk::ObjectCylinder:
-			return AvailablePatterns::CylinderTexture;
+			return PatternDesign::CylinderTexture;
 		case Chunk::ObjectCube:
-			return AvailablePatterns::CubicTexture;
+			return PatternDesign::CubeTexture;
 		case Chunk::ObjectPlane:
-			return AvailablePatterns::PlanarTexture;
+			return PatternDesign::PlanarTexture;
 		case Chunk::ObjectSphere:
-			return AvailablePatterns::SphericalTexture;
+			return PatternDesign::SphericalTexture;
 		}
 		break;
 	}
 	
-	return AvailablePatterns::None;
+	return PatternDesign::None;
 }
 
 
 #ifdef _GUI
-AvailablePatterns SceneLoader::PatternFromObject2(PrimitiveType object, int pattern)
+PatternDesign SceneLoader::PatternFromObject2(PrimitiveType object, int pattern)
 {
 	switch (pattern)
 	{
 	case 1:
 		switch (object)
 		{
+		case PrimitiveType::None:
+			break;
 		case PrimitiveType::Cone:
 		case PrimitiveType::Cylinder:
-			return AvailablePatterns::CylinderChecker;
+			return PatternDesign::CylinderCheckerboard;
 		case PrimitiveType::Cube:
-			return AvailablePatterns::CubeChecker;
+			return PatternDesign::CubeCheckerboard;
 		case PrimitiveType::Plane:
-			return AvailablePatterns::Checker;
+			return PatternDesign::Checkerboard;
 		case PrimitiveType::Sphere:
-			return AvailablePatterns::SphericalChecker;
+			return PatternDesign::SphericalCheckerboard;
 		}
 		break;
 	case 3:
-		return AvailablePatterns::Gradient;
+		return PatternDesign::Gradient;
 	case 4:
-		return AvailablePatterns::Gradient2;
+		return PatternDesign::Gradient2;
 	case 8:
-		return AvailablePatterns::Ring;
+		return PatternDesign::Ring;
 	case 10:
-		return AvailablePatterns::Stripey;
+		return PatternDesign::Stripey;
 	case 5:
-		return AvailablePatterns::Perlin;
+		return PatternDesign::Perlin1;
 	case 6:
-		return AvailablePatterns::Perlin2;
+		return PatternDesign::Perlin2;
 	case 7:
-		return AvailablePatterns::Perlin3;
+		return PatternDesign::Perlin3;
 	case 2:
-		return AvailablePatterns::Fractal;
+		return PatternDesign::Fractal;
 	case 9:
-		return AvailablePatterns::Simplex;
+		return PatternDesign::Simplex;
 	case 11:
 		switch (object)
 		{
+		case PrimitiveType::None:
+			break;
 		case PrimitiveType::Cone:
 		case PrimitiveType::Cylinder:
-			return AvailablePatterns::CylinderTexture;
+			return PatternDesign::CylinderTexture;
 		case PrimitiveType::Cube:
-			return AvailablePatterns::CubicTexture;
+			return PatternDesign::CubeTexture;
 		case PrimitiveType::Plane:
-			return AvailablePatterns::PlanarTexture;
+			return PatternDesign::PlanarTexture;
 		case PrimitiveType::Sphere:
-			return AvailablePatterns::SphericalTexture;
+			return PatternDesign::SphericalTexture;
 		}
 		break;
 	}
 
-	return AvailablePatterns::None;
+	return PatternDesign::None;
 }
 #endif
 
@@ -314,6 +319,9 @@ void SceneLoader::AddObject(Chunk chunk, std::wstring name, std::wstring file_na
 {
 	switch (chunk)
 	{
+	case Chunk::None:
+		break;
+
 	case Chunk::ObjectSphere:
 		GWorld->Objects.push_back(new Sphere(name));
 		break;
@@ -373,6 +381,11 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail)
 
 	if (file)
 	{
+		#if _GUI
+		Errors.clear();
+		Errors.push_back(L"Loading: " + file_name);
+		#endif
+
 		int Line = 1;
 
 		int MaterialCount = 0;
@@ -436,7 +449,11 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail)
 					case FileProperty::None:
 						break;
 					case FileProperty::NotFound:
+						#ifdef _GUI
+						Errors.push_back(L"Unknown property key \"" + key + L"\" on line " + std::to_wstring(Line) + L" of scene file.\n");
+						#else
 						std::wcout << L"Unknown property key \"" << key << L"\" on line " << Line << L" of scene file.\n";
+						#endif
 						break;
 					case FileProperty::DataBegin:
 					{
@@ -483,6 +500,8 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail)
 							break;
 						case Chunk::Camera:
 							break;
+						case Chunk::Project:
+                            break;
 						case Chunk::None:
 							//last_object = mode;
 							break;
@@ -493,6 +512,8 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail)
 					{
 						switch (mode)
 						{
+						case Chunk::None:
+							break;
 						case Chunk::ObjectSphere:
 						case Chunk::ObjectPlane:
 						case Chunk::ObjectCone:
@@ -521,12 +542,21 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail)
 							pattern_properties.Colour2 = Colours[1];
 							pattern_properties.FileName = FileName;
 
-							GWorld->SetLastObjectPattern(PatternFromObject(last_object, mode), pattern_properties);
+							if (!GWorld->SetLastObjectPattern(PatternFromObject(last_object, mode), pattern_properties))
+							{
+								#ifdef _GUI
+								Errors.push_back(GWorld->LastError);
+								#else
+                                std::wcout << GWorld->LastError << "\n";
+								#endif
+                            }
 							break;
 						case Chunk::Transform:
 						{
 							switch (tt)
 							{
+							case TransformType::None:
+                                break;
 							case TransformType::Scale:
 								Transform = Matrix4(0, XYZ.x, XYZ.y, XYZ.z);
 								break;
@@ -547,6 +577,8 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail)
 							// are there transforms to add to the last object?
 							switch (last_chunk)
 							{
+							case Chunk::None:
+                                break;
 							case Chunk::ObjectSphere:
 							case Chunk::ObjectPlane:
 							case Chunk::ObjectCone:
@@ -599,6 +631,14 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail)
 						case Chunk::AreaLight:
 						{
 							AreaLight* l = new AreaLight(Name, Colours[0].r, Colours[0].g, Colours[0].b, XYZ.x, XYZ.y, XYZ.z);
+
+							if (shadow_detail < 1)
+							{
+								shadow_detail = 8;
+								#ifdef _GUI
+                                Errors.push_back(L"Arealight \"" + Name + L"\" shadow_detail set to 0; invalid, set to default, 8");
+								#endif
+							}
 
 							l->SetDimensions(UVector, VVector, shadow_detail);
 
@@ -810,7 +850,8 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail)
 						}
 						break;
 					case FileProperty::Scale:
-						if (ValidateParameter(mode == Chunk::PatternPerlin || mode == Chunk::PatternPerlin2 || mode == Chunk::PatternPerlin3, L"scale", Line))
+						if (ValidateParameter(mode == Chunk::PatternPerlin || mode == Chunk::PatternPerlin2 || mode == Chunk::PatternPerlin3
+							 || mode == Chunk::PatternTexture, L"scale", Line))
 						{
 							pattern_properties.scale = stod(value);
 						}
@@ -822,35 +863,72 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail)
 						}
 						break;
 					case FileProperty::Frequency:
-						if (ValidateParameter(mode == Chunk::PatternFractal, L"frequency", Line))
+						if (ValidateParameter(mode == Chunk::PatternFractal || mode == Chunk::PatternStripey || mode == Chunk::PatternChecker
+							 || mode == Chunk::PatternTexture, L"frequency", Line))
 						{
 							pattern_properties.frequency = stod(value);
 						}
 						break;
 					case FileProperty::Amplitude:
-						if (ValidateParameter(mode == Chunk::PatternFractal, L"amplitude", Line))
+						if (ValidateParameter(mode == Chunk::PatternFractal || mode == Chunk::PatternStripey || mode == Chunk::PatternChecker
+							 || mode == Chunk::PatternTexture, L"amplitude", Line))
 						{
 							pattern_properties.amplitude = stod(value);
 						}
 						break;
 					case FileProperty::Lacunarity:
-						if (ValidateParameter(mode == Chunk::PatternFractal, L"lacunarity", Line))
+						if (ValidateParameter(mode == Chunk::PatternFractal || mode == Chunk::PatternStripey || mode == Chunk::PatternChecker
+							 || mode == Chunk::PatternTexture, L"lacunarity", Line))
 						{
 							pattern_properties.lacunarity = stod(value);
 						}
 						break;
 					case FileProperty::Persistence:
-						if (ValidateParameter(mode == Chunk::PatternFractal, L"persistence", Line))
+						if (ValidateParameter(mode == Chunk::PatternFractal || mode == Chunk::PatternStripey || mode == Chunk::PatternChecker
+							 || mode == Chunk::PatternTexture, L"persistence", Line))
 						{
 							pattern_properties.persistence = stod(value);
 						}
 						break;
 					case FileProperty::Simple:
-						if (ValidateParameter(mode == Chunk::PatternFractal, L"simple", Line))
+						if (ValidateParameter(mode == Chunk::PatternFractal || mode == Chunk::PatternChecker, L"simple", Line))
 						{
 							pattern_properties.simple = true;
 						}
 						break;
+					case FileProperty::Noise:
+						if (ValidateParameter(mode == Chunk::PatternStripey || mode == Chunk::PatternChecker || mode == Chunk::PatternTexture, L"noise", Line))
+						{
+							if (value == L"true")
+							{
+								pattern_properties.noise = true;
+							}
+						}
+						break;
+					case FileProperty::NPScale:
+						if (ValidateParameter(mode == Chunk::PatternStripey || mode == Chunk::PatternChecker || mode == Chunk::PatternTexture, L"npscale", Line))
+						{
+							pattern_properties.npscale = stod(value);
+						}
+						break;
+					case FileProperty::NScale:
+						if (ValidateParameter(mode == Chunk::PatternStripey || mode == Chunk::PatternChecker || mode == Chunk::PatternTexture, L"nscale", Line))
+						{
+							pattern_properties.nscale = stod(value);
+						}
+						break;
+					case FileProperty::LightSamples:
+						if (ValidateParameter(mode == Chunk::AreaLight, L"samples", Line))
+						{
+                            shadow_detail = stoi(value);
+						}
+						break;
+					case FileProperty::Description:
+						if (ValidateParameter(mode == Chunk::Project, L"description", Line))
+						{
+                            GWorld->Project.Description = value;
+						}
+                        break;
 					}
 
 				}
@@ -859,7 +937,11 @@ bool SceneLoader::LoadScene(const std::wstring file_name, int shadow_detail)
 			Line++;
 		}
 
-		std::wcout << L"  Loaded              : " << GWorld->Objects.size() << " objects, " << GWorld->Lights.size() << L" lights, " << MaterialCount << L" materials, " << TransformCount << L" transforms.\n";
+		#if _GUI
+		Errors.push_back(L"Loaded : " + std::to_wstring(GWorld->Objects.size()) + L" objects, " + std::to_wstring(GWorld->Lights.size()) + L" lights, " + std::to_wstring(MaterialCount) + L" materials, " +std::to_wstring(TransformCount) + L" transforms.");
+		#else
+		std::wcout << L"  Loaded              : " << GWorld->Objects.size() << L" objects, " << GWorld->Lights.size() << L" lights, " << MaterialCount << L" materials, " << TransformCount << L" transforms.\n";
+		#endif
 
 		file.close();
 

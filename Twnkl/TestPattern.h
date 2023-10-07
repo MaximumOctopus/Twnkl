@@ -18,7 +18,7 @@ class TestPattern : public Pattern
 
 public:
 
-	TestPattern(std::wstring);
+	TestPattern(bool, std::wstring);
 
 	[[nodiscard]] Colour ColourAt(Object*, Quaternion&) override;
 

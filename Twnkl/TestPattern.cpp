@@ -12,8 +12,10 @@
 #include "TestPattern.h"
 
 
-TestPattern::TestPattern(std::wstring name) : Pattern(name)
+TestPattern::TestPattern(bool noise, std::wstring name) : Pattern(noise, name)
 {
+	IncludeNoise = noise;
+
 	Name = name;
 }
 

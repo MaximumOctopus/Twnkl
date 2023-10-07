@@ -223,6 +223,7 @@
     <ClInclude Include="Perlin2.h" />
     <ClInclude Include="Perlin3.h" />
     <ClInclude Include="PointLight.h" />
+    <ClInclude Include="Project.h" />
     <ClInclude Include="SceneLoader.h" />
     <ClInclude Include="Fractal.h" />
     <ClInclude Include="Simplex.h" />

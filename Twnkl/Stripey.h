@@ -13,12 +13,13 @@
 
 #include "Pattern.h"
 
+
 class Stripey : public Pattern
 {
 
 public:
 
-	Stripey(std::wstring);
+	Stripey(bool, std::wstring);
 
 	[[nodiscard]] Colour ColourAt(Object*, Quaternion&) override;
 

@@ -23,7 +23,7 @@ public:
 
     bool Simple = false;
 
-    Simplex(std::wstring);
+    Simplex(bool, std::wstring);
     ~Simplex();
 
     [[nodiscard]] Colour ColourAt(Object*, Quaternion&) override;

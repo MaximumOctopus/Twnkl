@@ -15,14 +15,12 @@
 
 class SphericalCheckerboard : public Pattern
 {
+
 	Colour UVColourAt(double, double);
 
 public:
 
-	double Width = 0;
-	double Height = 0;
-
-	SphericalCheckerboard(std::wstring);
+	SphericalCheckerboard(bool, std::wstring);
 
 	void SetDimensions(double, double);
 
