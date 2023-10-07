@@ -1,7 +1,7 @@
-// spherical perlin test
+// spherical mapped noisey checkerboard test
 //
 {project
-description=spherical perlin test
+description=spherical checkerboard pattern with noise test
 author=PAF
 }
 {camera
@@ -28,32 +28,36 @@ angle=0.31415
 specular=0
 reflectivity=0.4
 }
-{patternperlin2
-colour=0.9, 0.0, 0.9
+{patternchecker
+colour=0.35, 0.35, 0.35
+colour=0.65, 0.65, 0.65
 }
 {objectsphere
 name=ball1
 }
 {transform
 type=translate
-xyz=0.6, 1.0, 1.0
+xyz=1.0, 1.0, 0.1
 }
-{transform
-type=rotatey
-angle=5
-}
+#{transform
+#type=scale
+#xyz=0.4, 0.4, 0.4
+#}
 {material
 colour=0.8, 0.5, 0.3
 shininess=50
 reflectivity=0.1
 }
-{patternperlin3
-colour=1.0, 1.0, 1.0
-u=200
-v=100
-phase=5
-}
-{transform
-type=scale
-xyz=0.5, 0.5, 0.5
+{patternchecker
+colour=0.8, 0.4, 0.0
+colour=0.2, 0.1, 0.0
+u=16
+v=8
+noise=true
+frequency=3.0
+amplitude=2.0
+lacunarity=1.0
+persistence=0.5
+npscale=0.5
+nscale=2
 }

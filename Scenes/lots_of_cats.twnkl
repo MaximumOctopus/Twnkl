@@ -1,9 +1,9 @@
-// cubic texture test
+// dual cube texture test
 //
 {project
-description=cube texture test (featuring my cute octopus)
-author=PAF
-}
+description=lots of cats (featuring Rutherford and Freeman)
+author=PAF}
+
 {camera
 width=800
 height=400
@@ -33,11 +33,11 @@ colour=0.35, 0.35, 0.35
 colour=0.65, 0.65, 0.65
 }
 {objectcube
-name=cube
+name=cube right
 }
 {transform
 type=translate
-xyz=0.6, 1.0, 1.0
+xyz=3.1, 1.0, 0.4
 }
 {transform
 type=rotatey
@@ -49,5 +49,24 @@ shininess=50
 reflectivity=0.1
 }
 {patterntexture
-filename=C:\Users\iamru\Documents\Software Development\CBuilder\TwnklX\Win64\Debug\Textures\max.ppm
+filename=Textures\2cats.ppm
+}
+{objectcube
+name=cube left
+}
+{transform
+type=translate
+xyz=-1, 1.0, 1.2
+}
+{transform
+type=rotatey
+angle=6
+}
+{material
+colour=0.8, 0.5, 0.3
+shininess=50
+reflectivity=0.1
+}
+{patterntexture
+filename=Textures\thermalcat_s256.ppm
 }

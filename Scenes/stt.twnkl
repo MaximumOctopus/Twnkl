@@ -1,5 +1,9 @@
 // spherical texture test
 //
+{project
+description=spherical texture test
+author=PAF
+}
 {camera
 width=400
 height=200

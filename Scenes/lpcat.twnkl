@@ -1,6 +1,10 @@
 // low poly cat texture test
 // https://thangs.com/designer/%C3%81rnost%20Mr%C3%A1zek/3d-model/Low%20Poly%20Cat-426527
 //
+{project
+description=low poly cat object test
+author=PAF
+}
 {camera
 width=400
 height=200

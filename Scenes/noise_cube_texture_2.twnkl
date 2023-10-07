@@ -1,7 +1,7 @@
-// spherical perlin test
+// cubic texture test
 //
 {project
-description=spherical perlin test
+description=cube texture with noise test
 author=PAF
 }
 {camera
@@ -28,11 +28,12 @@ angle=0.31415
 specular=0
 reflectivity=0.4
 }
-{patternperlin2
-colour=0.9, 0.0, 0.9
+{patternchecker
+colour=0.35, 0.35, 0.35
+colour=0.65, 0.65, 0.65
 }
-{objectsphere
-name=ball1
+{objectcube
+name=cube
 }
 {transform
 type=translate
@@ -47,13 +48,13 @@ colour=0.8, 0.5, 0.3
 shininess=50
 reflectivity=0.1
 }
-{patternperlin3
-colour=1.0, 1.0, 1.0
-u=200
-v=100
-phase=5
-}
-{transform
-type=scale
-xyz=0.5, 0.5, 0.5
+{patterntexture
+filename=textures\thermalcat_s256.ppm
+noise=true
+frequency=0.02
+amplitude=1
+lacunarity=0.01
+persistence=0.1
+npscale=1
+nscale=25
 }

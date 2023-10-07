@@ -1,5 +1,9 @@
 // demo from bonus chapter, rendering soft shadows
 //  http://raytracerchallenge.com/bonus/area-light.html
+{project
+description=soft shadow render test, based on the bonus chapter scene
+author=PAF
+}
 {camera
 width=400
 height=160
@@ -14,6 +18,7 @@ colour=1.5, 1.5, 1.5
 position=-1, 2, 4
 uvector=2, 0, 0
 vvector=0, 2, 0
+samples=32
 }
 {objectplane
 name=floor

@@ -1,7 +1,7 @@
-// spherical perlin test
+// planar texture noise test
 //
 {project
-description=spherical perlin test
+description=planar texture with noise test
 author=PAF
 }
 {camera
@@ -28,32 +28,25 @@ angle=0.31415
 specular=0
 reflectivity=0.4
 }
-{patternperlin2
-colour=0.9, 0.0, 0.9
+{patterntexture
+filename=textures\thermalcat_s256.ppm
+noise=true
+frequency=0.8
+amplitude=0.1
+lacunarity=0.5
+persistence=0.1
+npscale=1
+nscale=10
 }
 {objectsphere
 name=ball1
 }
 {transform
 type=translate
-xyz=0.6, 1.0, 1.0
-}
-{transform
-type=rotatey
-angle=5
+xyz=0.6, 0.5, 1.0
 }
 {material
 colour=0.8, 0.5, 0.3
 shininess=50
-reflectivity=0.1
-}
-{patternperlin3
-colour=1.0, 1.0, 1.0
-u=200
-v=100
-phase=5
-}
-{transform
-type=scale
-xyz=0.5, 0.5, 0.5
+reflectivity=0.3
 }

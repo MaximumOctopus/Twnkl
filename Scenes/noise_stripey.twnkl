@@ -1,7 +1,7 @@
-// spherical perlin test
+// stripey pattern with noise test
 //
 {project
-description=spherical perlin test
+description=stripey pattern with noise test
 author=PAF
 }
 {camera
@@ -28,8 +28,9 @@ angle=0.31415
 specular=0
 reflectivity=0.4
 }
-{patternperlin2
-colour=0.9, 0.0, 0.9
+{patternchecker
+colour=0.35, 0.35, 0.35
+colour=0.65, 0.65, 0.65
 }
 {objectsphere
 name=ball1
@@ -47,11 +48,16 @@ colour=0.8, 0.5, 0.3
 shininess=50
 reflectivity=0.1
 }
-{patternperlin3
-colour=1.0, 1.0, 1.0
-u=200
-v=100
-phase=5
+{patternstripey
+colour=1.0, 1.0, 1.00
+colour=0, 0, 0
+noise=true
+frequency=2.0
+amplitude=2.0
+lacunarity=2.0
+persistence=0.5
+npscale=0.1
+nscale=3
 }
 {transform
 type=scale

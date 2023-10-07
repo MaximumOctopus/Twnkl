@@ -1,7 +1,7 @@
-// spherical perlin test
+// cylinder noisy checkerboard test
 //
 {project
-description=spherical perlin test
+description=cylinder checkerboard test pattern with noise test
 author=PAF
 }
 {camera
@@ -28,32 +28,35 @@ angle=0.31415
 specular=0
 reflectivity=0.4
 }
-{patternperlin2
-colour=0.9, 0.0, 0.9
+{patternchecker
+colour=0.35, 0.35, 0.35
+colour=0.65, 0.65, 0.65
 }
-{objectsphere
-name=ball1
+{objectcylinder
+name=cylly
+minimum=0
+maximum=2
+closed=yes
 }
 {transform
 type=translate
-xyz=0.6, 1.0, 1.0
-}
-{transform
-type=rotatey
-angle=5
+xyz=0.6, 0.0, 1.0
 }
 {material
 colour=0.8, 0.5, 0.3
 shininess=50
 reflectivity=0.1
 }
-{patternperlin3
-colour=1.0, 1.0, 1.0
-u=200
-v=100
-phase=5
-}
-{transform
-type=scale
-xyz=0.5, 0.5, 0.5
+{patternchecker
+colour=0.85, 0.0, 0.0
+colour=0.0, 0.0, 0.85
+u=8
+v=2
+noise=true
+frequency=0.5
+amplitude=1
+lacunarity=-1
+persistence=0.1
+npscale=1
+nscale=10
 }

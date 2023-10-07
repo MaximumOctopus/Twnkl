@@ -1,5 +1,9 @@
 // spherical simplex (perlin) test
 //
+{project
+description=spherical simplex perlin noise test
+author=PAF
+}
 {camera
 width=400
 height=200

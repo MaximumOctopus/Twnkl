@@ -1,5 +1,9 @@
 // twnkl file for the scene found on the official forums
 // https://forum.raytracerchallenge.com/thread/4/reflection-refraction-scene-description
+{project
+description=demo scene based on the demo from the official Ray Tracer Challenge forum
+author=PAF
+}
 {camera
 width=400
 height=200

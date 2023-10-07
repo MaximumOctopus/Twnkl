@@ -1,9 +1,13 @@
 // ============================================
 // Twnkl scene specification
 //
-// August 11th 2023
+// October 7th 2023
 // ============================================
 
+{project
+description=
+author=
+}
 
 // ============================================
 // camera
@@ -26,6 +30,7 @@ up=x, y, z
 name=
 colour=r, g, b
 position=x, y, z
+samples=n							// detail, must be > 0 (default is 8)
 }
 
 {pointlight
@@ -140,6 +145,15 @@ transparency=						// 0.0 to 1.0
 {patternchecker
 colour=r, g, b
 colour=r, g, b
+u=									// only for cube/cylinder/spherical objects
+v=									// only for cube/cylinder/spherical objects
+noise=true							// if true, the following six options become available
+frequency=							// default is 1.0
+amplitude=							// default is 1.0
+lacunarity=							// default is 2.0
+persistence=						// default is 0.5
+npscale=                            // default is 0.9
+nscale=                             // default is 0.1
 }
 
 // modified perlin
@@ -156,11 +170,25 @@ persistence=						// default is 0.5
 {patterngradient
 colour=r, g, b
 colour=r, g, b
+noise=true							// if true, the following four options become available
+frequency=							// default is 1.0
+amplitude=							// default is 1.0
+lacunarity=							// default is 2.0
+persistence=						// default is 0.5
+npscale=                            // default is 0.9
+nscale=                             // default is 0.1
 }
 
 {patterngradient2
 colour=r, g, b
 colour=r, g, b
+noise=true							// if true, the following four options become available
+frequency=							// default is 1.0
+amplitude=							// default is 1.0
+lacunarity=							// default is 2.0
+persistence=						// default is 0.5
+npscale=                            // default is 0.9
+nscale=                             // default is 0.1
 }
 
 // for sphere, works best when texture width (u) is 2x height (v) (eg 256x128)
@@ -203,13 +231,13 @@ simple=yes
 {patternstripey
 colour=r, g, b
 colour=r, g, b
-}
-
-{patternchecker
-colour=r, g, b
-colour=r, g, b
-u=
-v=
+noise=true							// if true, the following four options become available
+frequency=							// default is 1.0
+amplitude=							// default is 1.0
+lacunarity=							// default is 2.0
+persistence=						// default is 0.5
+npscale=                            // default is 0.9
+nscale=                             // default is 0.1
 }
 
 // for sphere, plane, cylinder, cone, cube (texture is repeated on each side)
@@ -217,10 +245,24 @@ v=
 {patterntexture
 process=greyscale
 filename=
+noise=true							// if true, the following four options become available
+frequency=							// default is 1.0
+amplitude=							// default is 1.0
+lacunarity=							// default is 2.0
+persistence=						// default is 0.5
+npscale=                            // default is 0.9
+nscale=                             // default is 0.1
 }
 
 // multi-texture for cubes (each side has a separate texture)
 // expects 6 textures, where an * in the file path is replaced with the numbers 1 to 6
 {patterntexture
 filename=texture_*.ppm
+noise=true							// if true, the following four options become available
+frequency=							// default is 1.0
+amplitude=							// default is 1.0
+lacunarity=							// default is 2.0
+persistence=						// default is 0.5
+npscale=                            // default is 0.9
+nscale=                             // default is 0.1
 }

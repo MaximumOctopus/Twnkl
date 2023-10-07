@@ -1,12 +1,12 @@
-// twnkl file for the scene found on the official forums
-// https://forum.raytracerchallenge.com/thread/4/reflection-refraction-scene-description
+// cube multi-texture test
+//
 {project
-description=demo based on the official Ray Tracer Challenge demo project
+description=cube multi-texture pattern with noise test
 author=PAF
 }
 {camera
-width=400
-height=200
+width=800
+height=400
 focallength=1.152
 from=-2.6, 1.5, -3.9
 to=-0.6, 1, -0.8
@@ -182,117 +182,25 @@ xyz=0.25, 0.25, 0.25
 type=rotatey
 angle=1.5708
 }
-{objectsphere
-name=ball1
+{objectcube
+name=cube
 }
 {transform
 type=translate
-xyz=4.6, 0.4, 1.0
-}
-{transform
-type=scale
-xyz=0.4, 0.4, 0.4
+xyz=1.6, 1.0, 1.0
 }
 {material
-colour=0.8, 0.5, 0.3
-shininess=50
+colour=0.8, 0.2, 0.3
+shininess=100
+reflectivity=0.4
 }
-{objectsphere
-name=ball2
-}
-{transform
-type=translate
-xyz=4.7, 0.3, 0.4
-}
-{transform
-type=scale
-xyz=0.3, 0.3, 0.3
-}
-{material
-colour=0.9, 0.4, 0.5
-shininess=50
-}
-{objectsphere
-name=ball3
-}
-{transform
-type=translate
-xyz=-1.0, 0.5, 4.5
-}
-{transform
-type=scale
-xyz=0.5, 0.5, 0.5
-}
-{material
-colour=0.4, 0.9, 0.6
-shininess=50
-}
-{objectsphere
-name=ball4
-}
-{transform
-type=translate
-xyz=-1.7, 0.3, 4.7
-}
-{transform
-type=scale
-xyz=0.3, 0.3, 0.3
-}
-{material
-colour=0.4, 0.6, 0.9
-shininess=50
-}
-{objectsphere
-name=red
-}
-{transform
-type=translate
-xyz=-0.6, 1.0, 0.6
-}
-{material
-colour=1.0, 0.3, 0.2
-shininess=5.0
-specular=0.4
-}
-{objectsphere
-name=blue
-}
-{transform
-type=translate
-xyz=0.6, 0.7, -0.6
-}
-{transform
-type=scale
-xyz=0.7, 0.7, 0.7
-}
-{material
-colour=0, 0, 0.2
-ambient=0
-diffuse=0.4
-reflectivity=0.9
-refractiveindex=1.5
-shininess=300
-specular=0.9
-transparency=0.9
-}
-{objectsphere
-name=green
-}
-{transform
-type=translate
-xyz=-0.7, 0.5, -0.8
-}
-{transform
-type=scale
-xyz=0.5, 0.5, 0.5
-}
-{material
-colour=0, 0.2, 0
-ambient=0
-diffuse=0.4
-reflectivity=0.9
-refractiveindex=1.5
-shininess=300
-specular=0.9
-transparency=0.9
+{patterntexture
+filename=textures\cube*.ppm
+noise=true
+frequency=0.02
+amplitude=1
+lacunarity=0.01
+persistence=0.1
+npscale=1
+nscale=25
 }

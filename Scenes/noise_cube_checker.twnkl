@@ -1,21 +1,21 @@
-// spherical perlin test
+// cubic noisey checkerboard test
 //
 {project
-description=spherical perlin test
+description=cube noisey checkerboard test
 author=PAF
 }
 {camera
-width=400
-height=200
+width=800
+height=400
 focallength=1.152
 from=-2.6, 1.5, -3.9
 to=-0.6, 1, -0.8
 up=0.0, 1.0, 0.0
 }
 {pointlight
-name=PointLight
+name=AreaLight
 colour=1.0, 1.0, 1.0
-position=-4.9, 4.9, -1
+position=-4.9, 1.9, -1
 }
 {objectplane
 name=Floor
@@ -28,11 +28,12 @@ angle=0.31415
 specular=0
 reflectivity=0.4
 }
-{patternperlin2
-colour=0.9, 0.0, 0.9
+{patternchecker
+colour=0.35, 0.35, 0.35
+colour=0.65, 0.65, 0.65
 }
-{objectsphere
-name=ball1
+{objectcube
+name=cube
 }
 {transform
 type=translate
@@ -47,13 +48,14 @@ colour=0.8, 0.5, 0.3
 shininess=50
 reflectivity=0.1
 }
-{patternperlin3
-colour=1.0, 1.0, 1.0
-u=200
-v=100
-phase=5
-}
-{transform
-type=scale
-xyz=0.5, 0.5, 0.5
+{patternchecker
+colour=0.35, 0.35, 0.35
+colour=0.65, 0.65, 0.65
+noise=true
+frequency=2.0
+amplitude=2.0
+lacunarity=2.0
+persistence=0.5
+npscale=0.1
+nscale=0.5
 }

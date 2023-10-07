@@ -1,5 +1,9 @@
 // planar texture test
 //
+{project
+description=planar texture test (featuring Rutherford the cat)
+author=PAF
+}
 {camera
 width=400
 height=200

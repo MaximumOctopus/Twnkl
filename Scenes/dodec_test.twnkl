@@ -1,5 +1,9 @@
 // obj loader and render test
 // 
+{project
+description=object loader and render test
+author=PAF
+}
 {camera
 width=400
 height=200

@@ -1,5 +1,9 @@
 // cubic texture test
 //
+{project
+description=cube texture test
+author=PAF
+}
 {camera
 width=400
 height=200
@@ -8,10 +12,10 @@ from=-2.6, 1.5, -3.9
 to=-0.6, 1, -0.8
 up=0.0, 1.0, 0.0
 }
-{arealight
-name=AreaLight
+{pointlight
+name=PointLight
 colour=1.0, 1.0, 1.0
-position=4.9, 1.9, -1
+position=-4.9, 4.9, -1
 }
 {objectplane
 name=Floor
